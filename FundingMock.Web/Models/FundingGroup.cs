@@ -45,6 +45,8 @@ namespace FundingMock.Web.Models
         /// </summary>
         public DateTimeOffset? PaymentDate { get; set; }
 
+        public FundingValue FundingValue { get; set; }
+
         public IEnumerable<Fundings> Fundings { get; set; }
 
     }

@@ -4,25 +4,24 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FundingMock.Web.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        [HttpGet("fundings")]
-        [Produces(typeof(IEnumerable<BaseModel>))]
-        public IActionResult Get()
+        [HttpGet("api/feed")]
+        [Produces(typeof(BaseModel))]
+        public IActionResult GetFeed()
         {
             return Ok();
         }
 
-        [HttpGet("{periods}")]
+        [HttpGet("api/periods")]
         [Produces(typeof(IEnumerable<FundingPeriod>))]
         public IActionResult GetFundingperiods()
         {
             return Ok();
         }
 
-        [HttpGet("{fundingstreams}")]
+        [HttpGet("api/fundingstreams")]
         [Produces(typeof(IEnumerable<FundingStream>))]
         public IActionResult GetFundingStreams()
         {
