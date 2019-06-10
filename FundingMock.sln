@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28922.388
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FundingMock.Web", "FundingMock.Web\FundingMock.Web.csproj", "{BE701557-61E9-4039-A8AA-385B42E2D6B5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BE701557-61E9-4039-A8AA-385B42E2D6B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE701557-61E9-4039-A8AA-385B42E2D6B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE701557-61E9-4039-A8AA-385B42E2D6B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE701557-61E9-4039-A8AA-385B42E2D6B5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B6881443-22E5-43BA-9DA7-7613FCB7F543}
+	EndGlobalSection
+EndGlobal
