@@ -1,0 +1,20 @@
+﻿using System.Collections.Generic;
+
+namespace FundingMock.Web.Models
+{
+    /// <summary>
+    /// The total amount paid, and the periods/envelopes that it was composed of.
+    /// </summary>
+    public class FundingValue
+    {
+        /// <summary>
+        /// The funding value amount in pence. (QUESTION should it be FundingValueTotal for naming consistency?)
+        /// </summary>
+        public int TotalValue { get; set; }
+
+        /// <summary>
+        /// An array showing the amounts by the periods (envelopes) they are paid in (e.g. for PE + Sport there are 2 periods per year, with a 7/5 split).
+        /// </summary>
+        public IEnumerable<FundingValueByDistributionPeriod> DistributionPeriods { get; set; }
+    }
+}

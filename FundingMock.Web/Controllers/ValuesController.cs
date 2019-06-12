@@ -1,52 +1,51 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using FundingMock.Web.Models;
+using FundingMock.Web.Samples;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace FundingMock.Web.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        /// <summary>
+        /// Get all fundings.
+        /// </summary>
+        /// <returns>An array of fundings.</returns>
         [HttpGet("api/feed")]
-        [Produces(typeof(BaseModel))]
-        public IActionResult GetFeed()
+        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(IEnumerable<FeedBaseModel>))]
+        [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(FeedBaseModelExample))]
+        public IActionResult Get()
         {
             return Ok();
         }
 
+        /// <summary>
+        /// Get all periods.
+        /// </summary>
+        /// <returns>An array of periods.</returns>
         [HttpGet("api/periods")]
-        [Produces(typeof(IEnumerable<FundingPeriod>))]
-        public IActionResult GetFundingperiods()
+        [Produces(typeof(IEnumerable<PeriodExtended>))]
+        public IActionResult GetPeriods()
         {
             return Ok();
         }
 
+        /// <summary>
+        /// Get all funding streams.
+        /// </summary>
+        /// <returns>An array of funding streams.</returns>
         [HttpGet("api/fundingstreams")]
-        [Produces(typeof(IEnumerable<FundingStream>))]
+        [Produces(typeof(IEnumerable<StreamExtended>))]
         public IActionResult GetFundingStreams()
         {
             return Ok();
         }
-
-
-
-
-        //// POST api/values
-        //[HttpPost]
-        //public void Post([FromBody] string value)
-        //{
-        //}
-
-        //// PUT api/values/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        //// DELETE api/values/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
     }
 }
