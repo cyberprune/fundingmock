@@ -22,15 +22,13 @@
 
         /// <summary>
         /// The funding stream the funding relates to.
-        /// QUESTION - At this level should we just have stream code for brevity?
         /// </summary>
-        public Stream Stream { get; set; }
+        public string StreamCode { get; set; }
 
         /// <summary>
         /// The funding period the funding relates to.
-        /// QUESTION - At this level should we just have period code for brevity?
         /// </summary>
-        public Period Period { get; set; }
+        public string PeriodCode { get; set; }
 
         /// <summary>
         /// Funding value.

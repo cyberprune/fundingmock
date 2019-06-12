@@ -94,10 +94,7 @@ namespace FundingMock.Web.Samples
                             {
                                 new FundingValueByDistributionPeriod
                                 {
-                                    Code = financialYearPeriod1920.Code,
-                                    Name = financialYearPeriod1920.Name,
-                                    StartDate = financialYearPeriod1920.StartDate,
-                                    EndDate = financialYearPeriod1920.EndDate,
+                                    PeriodCode = financialYearPeriod1920.Code,
                                     Value = 1400,
                                     FundingLines = new List<FundingLine>
                                     {
@@ -116,7 +113,7 @@ namespace FundingMock.Web.Samples
                                                     TypeValue = "October",
                                                     ProfilingValue = 1400,
                                                     Type = FundingLinePeriodType.CalendarMonth,
-                                                    Period = financialYearPeriod1920
+                                                    PeriodCode = financialYearPeriod1920.Code
                                                 }
                                             },
                                             IsProfiled = false,
@@ -148,10 +145,7 @@ namespace FundingMock.Web.Samples
                                 },
                                 new FundingValueByDistributionPeriod
                                 {
-                                    Code = financialYearPeriod2021.Code,
-                                    Name = financialYearPeriod2021.Name,
-                                    StartDate = financialYearPeriod2021.StartDate,
-                                    EndDate = financialYearPeriod2021.EndDate,
+                                    PeriodCode = financialYearPeriod2021.Code,
                                     Value = 1000,
                                     FundingLines = new List<FundingLine>
                                     {
@@ -170,7 +164,7 @@ namespace FundingMock.Web.Samples
                                                     TypeValue = "April",
                                                     ProfilingValue = 1000,
                                                     Type = FundingLinePeriodType.CalendarMonth,
-                                                    Period = financialYearPeriod2021
+                                                    PeriodCode = financialYearPeriod2021.Code
                                                 }
                                             }
                                         }
@@ -186,8 +180,8 @@ namespace FundingMock.Web.Samples
                                 Id = $"{id}/Example School 1",
                                 FundingVersion = fundingVersion,
 
-                                Period = period,
-                                Stream = stream,
+                                PeriodCode = period.Code,
+                                StreamCode = stream.Code,
                                 Organisation = new Organisation
                                 {
                                     Name = "Example School 1",
@@ -213,10 +207,7 @@ namespace FundingMock.Web.Samples
                                     {
                                         new FundingValueByDistributionPeriod
                                         {
-                                            Code = financialYearPeriod1920.Code,
-                                            Name = financialYearPeriod1920.Name,
-                                            StartDate = financialYearPeriod1920.StartDate,
-                                            EndDate = financialYearPeriod1920.EndDate,
+                                            PeriodCode = financialYearPeriod1920.Code,
                                             Value = 700,
                                             FundingLines = new List<FundingLine>
                                             {
@@ -235,7 +226,7 @@ namespace FundingMock.Web.Samples
                                                             TypeValue = "October",
                                                             ProfilingValue = 700,
                                                             Type = FundingLinePeriodType.CalendarMonth,
-                                                            Period = financialYearPeriod1920
+                                                            PeriodCode = financialYearPeriod1920.Code
                                                         }
                                                     }
                                                 }
@@ -243,10 +234,7 @@ namespace FundingMock.Web.Samples
                                         },
                                         new FundingValueByDistributionPeriod
                                         {
-                                            Code = financialYearPeriod2021.Code,
-                                            Name = financialYearPeriod2021.Name,
-                                            StartDate = financialYearPeriod2021.StartDate,
-                                            EndDate = financialYearPeriod2021.EndDate,
+                                            PeriodCode = financialYearPeriod2021.Code,
                                             Value = 500,
                                             FundingLines = new List<FundingLine>
                                             {
@@ -265,7 +253,7 @@ namespace FundingMock.Web.Samples
                                                             TypeValue = "April",
                                                             ProfilingValue = 500,
                                                             Type = FundingLinePeriodType.CalendarMonth,
-                                                            Period = financialYearPeriod2021
+                                                            PeriodCode = financialYearPeriod2021.Code
                                                         }
                                                     }
                                                 }
@@ -279,8 +267,8 @@ namespace FundingMock.Web.Samples
                                 Id = $"{id}/Example School 2",
                                 FundingVersion = fundingVersion,
 
-                                Period = period,
-                                Stream = stream,
+                                PeriodCode = period.Code,
+                                StreamCode = stream.Code,
                                 Organisation = new Organisation
                                 {
                                     Name = "Example School 2",
@@ -306,10 +294,7 @@ namespace FundingMock.Web.Samples
                                     {
                                         new FundingValueByDistributionPeriod
                                         {
-                                            Code = financialYearPeriod1920.Code,
-                                            Name = financialYearPeriod1920.Name,
-                                            StartDate = financialYearPeriod1920.StartDate,
-                                            EndDate = financialYearPeriod1920.EndDate,
+                                            PeriodCode = financialYearPeriod1920.Code,
                                             Value = 700,
                                             FundingLines = new List<FundingLine>
                                             {
@@ -328,7 +313,7 @@ namespace FundingMock.Web.Samples
                                                             TypeValue = "October",
                                                             ProfilingValue = 700,
                                                             Type = FundingLinePeriodType.CalendarMonth,
-                                                            Period = financialYearPeriod1920
+                                                            PeriodCode = financialYearPeriod1920.Code
                                                         }
                                                     }
                                                 }
@@ -336,10 +321,7 @@ namespace FundingMock.Web.Samples
                                         },
                                         new FundingValueByDistributionPeriod
                                         {
-                                            Code = financialYearPeriod2021.Code,
-                                            Name = financialYearPeriod2021.Name,
-                                            StartDate = financialYearPeriod2021.StartDate,
-                                            EndDate = financialYearPeriod2021.EndDate,
+                                            PeriodCode = financialYearPeriod2021.Code,
                                             Value = 500,
                                             FundingLines = new List<FundingLine>
                                             {
@@ -358,7 +340,7 @@ namespace FundingMock.Web.Samples
                                                             TypeValue = "April",
                                                             ProfilingValue = 500,
                                                             Type = FundingLinePeriodType.CalendarMonth,
-                                                            Period = financialYearPeriod2021
+                                                            PeriodCode = financialYearPeriod2021.Code
                                                         }
                                                     }
                                                 }

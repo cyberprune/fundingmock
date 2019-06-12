@@ -46,9 +46,44 @@ namespace FundingMock.Web.Enums
         GroupID,
 
         /// <summary>
-        /// ?
+        /// Name of the RSC Region.
         /// </summary>
-        RegionCode,
+        RSCRegionName,
+
+        /// <summary>
+        /// Name of the government office.
+        /// </summary>
+        GovernmentOfficeRegion,
+
+        /// <summary>
+        /// Name of the district.
+        /// </summary>
+        DistrictName,
+
+        /// <summary>
+        /// Name of the ward.
+        /// </summary>
+        WardName,
+
+        /// <summary>
+        /// Name of the census ward.
+        /// </summary>
+        CensusWardName,
+
+        /// <summary>
+        /// Middle Super Output Area code.
+        /// </summary>
+        MiddleSuperOutputAreaCode,
+
+        /// <summary>
+        /// Lower Super Output Area code.
+        /// </summary>
+        LowerSuperOutputAreaCode,
+
+        /// <summary>
+        /// Name of the parlimentary constituency.
+        /// </summary>
+        ParliamentaryConstituencyName,
 
         /// <summary>
         /// The DfE number.

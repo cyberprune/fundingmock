@@ -34,9 +34,8 @@ namespace FundingMock.Web.Models
         public int ProfilingValue { get; set; }
 
         /// <summary>
-        /// Information about the period.
-        /// QUESTION - should this be just PeriodCode at this level? It becomes quite heavy to have it here, and there is an API to look them up
+        /// The code for the period.
         /// </summary>
-        public Period Period { get; set; }
+        public string PeriodCode { get; set; }
     }
 }
