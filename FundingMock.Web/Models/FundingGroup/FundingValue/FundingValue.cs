@@ -8,7 +8,7 @@ namespace FundingMock.Web.Models
     public class FundingValue
     {
         /// <summary>
-        /// The funding value amount in pence. (QUESTION should it be FundingValueTotal for naming consistency?)
+        /// The funding value amount in pence.
         /// </summary>
         public int TotalValue { get; set; }
 

@@ -15,7 +15,7 @@ namespace FundingMock.Web.Controllers
     public class ValuesController : ControllerBase
     {
         /// <summary>
-        /// Get all fundings.
+        /// Get all fundings as a feed format.
         /// </summary>
         /// <returns>An array of fundings.</returns>
         [HttpGet("api/feed")]

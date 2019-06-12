@@ -9,7 +9,7 @@ namespace FundingMock.Web.Models
     public class FundingLine
     {
         /// <summary>
-        /// 
+        /// The name of a funding line (e.g. "Total funding line").
         /// </summary>
         public string Name { get; set; }
 
@@ -36,7 +36,7 @@ namespace FundingMock.Web.Models
         public IEnumerable<FundingLinePeriod> Periods { get; set; }
 
         /// <summary>
-        /// 
+        /// Calculations that make up this funding line.
         /// </summary>
         public IEnumerable<Calculation> Calculations { get; set; }
 

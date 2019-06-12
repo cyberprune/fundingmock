@@ -11,8 +11,7 @@ namespace FundingMock.Web.Models
     public class FundingGroup
     {
         /// <summary>
-        /// Unique identifier of this business event (e.g. GAG-1920-ACADEMIES ENTERPRISE TRUST-version1).
-        /// QUESTION - How is this built up? "PE1920-Camden-v1" doesnt seem to be a composition of fields we can access
+        /// Unique identifier of this funding group / business event (in format $"schema:v{schemaVersion}/{stream.Code}/template:v{templateVersion}/{groupingOrg.Name}/{period.Code}/funding:v{fundingVersion}").
         /// </summary>
         public string Id { get; set; }
 

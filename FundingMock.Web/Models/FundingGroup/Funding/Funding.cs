@@ -6,12 +6,12 @@
     public class Funding
     {
         /// <summary>
-        /// QUESTION - How is this built up? "PE1920-Camden-v1" doesnt seem to be a composition of fields we can access
+        /// A unique id for this funding. In format 'schema:v{schemaVersion}/{stream.Code}/template:v{templateVersion}/{groupingOrg.Name}/{period.Code}/funding:v{fundingVersion}/{organisation.Name}'.
         /// </summary>
         public string Id { get; set; }
 
         /// <summary>
-        /// //...
+        /// The version of this funding (i.e. for this provider).
         /// </summary>
         public int FundingVersion { get; set; }
 

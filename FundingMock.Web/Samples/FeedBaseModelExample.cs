@@ -113,7 +113,7 @@ namespace FundingMock.Web.Samples
                                                 {
                                                     Occurence = 1,
                                                     Year = 2019,
-                                                    Value = "October",
+                                                    TypeValue = "October",
                                                     ProfilingValue = 1400,
                                                     Type = FundingLinePeriodType.CalendarMonth,
                                                     Period = financialYearPeriod1920
@@ -167,7 +167,7 @@ namespace FundingMock.Web.Samples
                                                 {
                                                     Occurence = 1,
                                                     Year = 2020,
-                                                    Value = "April",
+                                                    TypeValue = "April",
                                                     ProfilingValue = 1000,
                                                     Type = FundingLinePeriodType.CalendarMonth,
                                                     Period = financialYearPeriod2021
@@ -232,7 +232,7 @@ namespace FundingMock.Web.Samples
                                                         {
                                                             Occurence = 1,
                                                             Year = 2019,
-                                                            Value = "October",
+                                                            TypeValue = "October",
                                                             ProfilingValue = 700,
                                                             Type = FundingLinePeriodType.CalendarMonth,
                                                             Period = financialYearPeriod1920
@@ -262,7 +262,7 @@ namespace FundingMock.Web.Samples
                                                         {
                                                             Occurence = 1,
                                                             Year = 2020,
-                                                            Value = "April",
+                                                            TypeValue = "April",
                                                             ProfilingValue = 500,
                                                             Type = FundingLinePeriodType.CalendarMonth,
                                                             Period = financialYearPeriod2021
@@ -325,7 +325,7 @@ namespace FundingMock.Web.Samples
                                                         {
                                                             Occurence = 1,
                                                             Year = 2019,
-                                                            Value = "October",
+                                                            TypeValue = "October",
                                                             ProfilingValue = 700,
                                                             Type = FundingLinePeriodType.CalendarMonth,
                                                             Period = financialYearPeriod1920
@@ -355,7 +355,7 @@ namespace FundingMock.Web.Samples
                                                         {
                                                             Occurence = 1,
                                                             Year = 2020,
-                                                            Value = "April",
+                                                            TypeValue = "April",
                                                             ProfilingValue = 500,
                                                             Type = FundingLinePeriodType.CalendarMonth,
                                                             Period = financialYearPeriod2021

@@ -31,7 +31,7 @@ namespace FundingMock.Web.Enums
         Weighting,
 
         /// <summary>
-        /// ?
+        /// ? QUESTION
         /// </summary>
         Scope,
 
@@ -41,7 +41,7 @@ namespace FundingMock.Web.Enums
         Information,
 
         /// <summary>
-        /// ?
+        /// ? QUESTION
         /// </summary>
         Drilldown,
     }
