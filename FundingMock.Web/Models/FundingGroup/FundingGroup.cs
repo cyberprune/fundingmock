@@ -16,14 +16,9 @@ namespace FundingMock.Web.Models
         public string Id { get; set; }
 
         /// <summary>
-        /// The version of the template (e.g. this is Version 2 of PE and sport template).
-        /// </summary>
-        public int TemplateVersion { get; set; }
-
-        /// <summary>
         /// Version number of the published data. If there are changes to the funding for this organisation in this period, this number would increase.
         /// </summary>
-        public int FundingVersion { get; set; }
+        public string FundingVersion { get; set; }
 
         /// <summary>
         /// The funding status (i.e. published).
@@ -34,7 +29,7 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// The funding stream the funding relates to.
         /// </summary>
-        public Stream Stream { get; set; }
+        public StreamWithTemplateVersion FundingStream { get; set; }
 
         /// <summary>
         /// The funding period the funding relates to.
@@ -42,12 +37,12 @@ namespace FundingMock.Web.Models
         public Period Period { get; set; }
 
         /// <summary>
-        /// The grouped organisation (e.g. if we are grouping by LA, the organisation may be Camden).
+        /// The grouped organisation or region (e.g. if we are grouping by LA, the organisation may be Camden).
         /// </summary>
-        public GroupingOrganisation GroupingOrganisation { get; set; }
+        public GroupingOrganisation GroupedBy { get; set; }
 
         /// <summary>
-        /// Funding value (if it is paid at this level - null if not). QUESTION is my assumption in brackets true?
+        /// Funding value breakdown
         /// </summary>
         public FundingValue FundingValue { get; set; }
 
@@ -58,13 +53,12 @@ namespace FundingMock.Web.Models
 
         /// <summary>
         /// Does the grouping reflect how the money is paid ('Payment') or is it just useful to show it this way? ('Informational'). 
-        /// QUESTION - is GroupingType better?
         /// </summary>
         [EnumDataType(typeof(GroupingReason))]
         public GroupingReason GroupingReason { get; set; }
 
         /// <summary>
-        /// The date the funding was published by a business user. (QUESTION naming - Ryan + Jaspal thought this was best).
+        /// The date the funding was published by a business user.
         /// </summary>
         public DateTimeOffset StatusChangedDate { get; set; }
 

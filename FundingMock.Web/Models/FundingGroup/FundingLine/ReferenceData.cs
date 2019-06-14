@@ -22,11 +22,6 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// The reference data value.
         /// </summary>
-        public decimal Value { get; set; }
-
-        /// <summary>
-        /// The sequence number. Used to define ordering. Lower first.
-        /// </summary>
-        public int Sequence { get; set; }
+        public string Value { get; set; }
     }
 }

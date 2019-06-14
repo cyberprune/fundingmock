@@ -10,6 +10,16 @@ namespace FundingMock.Web.Models
     public enum FundingStatus
     {
         /// <summary>
+        /// Approved.
+        /// </summary>
+        Approved,
+
+        /// <summary>
+        /// Updated.
+        /// </summary>
+        Updated,
+
+        /// <summary>
         /// Published.
         /// </summary>
         Published,

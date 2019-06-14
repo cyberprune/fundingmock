@@ -15,6 +15,6 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// An array showing the amounts by the periods (envelopes) they are paid in (e.g. for PE + Sport there are 2 periods per year, with a 7/5 split).
         /// </summary>
-        public IEnumerable<FundingValueByDistributionPeriod> DistributionPeriods { get; set; }
+        public IEnumerable<FundingValueByDistributionPeriod> FundingValueByDistributionPeriod { get; set; }
     }
 }

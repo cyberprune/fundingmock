@@ -29,9 +29,9 @@ namespace FundingMock.Web.Models
         public int Occurence { get; set; }
 
         /// <summary>
-        /// The amount of the profiling value, in pence.
+        /// The amount of the profiled value, in pence.
         /// </summary>
-        public int ProfilingValue { get; set; }
+        public int ProfiledValue { get; set; }
 
         /// <summary>
         /// The code for the period.

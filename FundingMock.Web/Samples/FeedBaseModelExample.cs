@@ -10,7 +10,7 @@ namespace FundingMock.Web.Samples
         public object GetExamples()
         {
             var ukOffset = new TimeSpan(0, 0, 0);
-            var fundingVersion = 1;
+            var fundingVersion = "1.4";
 
             var period = new Period
             {
@@ -21,14 +21,17 @@ namespace FundingMock.Web.Samples
                 EndDate = new DateTimeOffset(2020, 8, 31, 0, 0, 0, ukOffset)
             };
 
-            var stream = new Stream
+            var templateVersion = "2.1";
+
+            var stream = new StreamWithTemplateVersion
             {
                 Code = "PESports",
-                Name = "PE + Sport Premium"
+                Name = "PE + Sport Premium",
+                TemplateVersion = templateVersion,
             };
 
-            var schemaVersion = 1;
-            var templateVersion = 1;
+            var schemaVersion = "1.0";
+
             var groupingOrg = new GroupingOrganisation()
             {
                 Type = Enums.OrganisationType.LocalAuthority,
@@ -37,7 +40,7 @@ namespace FundingMock.Web.Samples
                 {
                     new OrganisationIdentifier
                     {
-                        Type = Enums.OrganisationIdentifierType.LECode,
+                        Type = Enums.OrganisationIdentifierType.LACode,
                         Value = "203"
                     },
                     new OrganisationIdentifier
@@ -72,13 +75,13 @@ namespace FundingMock.Web.Samples
             {
                 new FeedBaseModel
                 {
+                    SchemaUri = "http://example.org/#schema",
                     SchemaVersion = schemaVersion,
                     FundingGroup = new FundingGroup
                     {
-                        TemplateVersion = templateVersion,
-                        Stream = stream,
+                        FundingStream = stream,
                         Period = period,
-                        GroupingOrganisation = groupingOrg,
+                        GroupedBy = groupingOrg,
                         Id = id,
                         FundingVersion = fundingVersion,
 
@@ -90,11 +93,11 @@ namespace FundingMock.Web.Samples
                         GroupingReason = GroupingReason.Payment,
                         FundingValue = new FundingValue
                         {
-                            DistributionPeriods = new List<FundingValueByDistributionPeriod>
+                            FundingValueByDistributionPeriod = new List<FundingValueByDistributionPeriod>
                             {
                                 new FundingValueByDistributionPeriod
                                 {
-                                    PeriodCode = financialYearPeriod1920.Code,
+                                    DistributionPeriodCode = financialYearPeriod1920.Code,
                                     Value = 1400,
                                     FundingLines = new List<FundingLine>
                                     {
@@ -111,21 +114,19 @@ namespace FundingMock.Web.Samples
                                                     Occurence = 1,
                                                     Year = 2019,
                                                     TypeValue = "October",
-                                                    ProfilingValue = 1400,
+                                                    ProfiledValue = 1400,
                                                     Type = FundingLinePeriodType.CalendarMonth,
                                                     PeriodCode = financialYearPeriod1920.Code
                                                 }
                                             },
-                                            IsProfiled = false,
                                             Calculations = new List<Calculation>
                                             {
                                                 new Calculation
                                                 {
                                                     Name = "Number of pupils",
                                                     Type = Enums.CalculationType.PupilNumber,
-                                                    Sequence = 1,
                                                     TemplateCalculationId = 1,
-                                                    Value = 456,
+                                                    Value = "456",
                                                     ValueFormat = Enums.ValueFormat.Number,
                                                     FormulaText = "Something * something",
                                                     ReferenceData = new List<ReferenceData>
@@ -133,9 +134,8 @@ namespace FundingMock.Web.Samples
                                                         new ReferenceData
                                                         {
                                                             Name = "Academic year 2018 to 2019 pupil number on roll",
-                                                            Value = 1,
-                                                            Format = Enums.ValueFormat.Number,
-                                                            Sequence = 1
+                                                            Value = "1",
+                                                            Format = Enums.ValueFormat.Number
                                                         }
                                                     }
                                                 }
@@ -145,7 +145,7 @@ namespace FundingMock.Web.Samples
                                 },
                                 new FundingValueByDistributionPeriod
                                 {
-                                    PeriodCode = financialYearPeriod2021.Code,
+                                    DistributionPeriodCode = financialYearPeriod2021.Code,
                                     Value = 1000,
                                     FundingLines = new List<FundingLine>
                                     {
@@ -162,7 +162,7 @@ namespace FundingMock.Web.Samples
                                                     Occurence = 1,
                                                     Year = 2020,
                                                     TypeValue = "April",
-                                                    ProfilingValue = 1000,
+                                                    ProfiledValue = 1000,
                                                     Type = FundingLinePeriodType.CalendarMonth,
                                                     PeriodCode = financialYearPeriod2021.Code
                                                 }
@@ -178,7 +178,7 @@ namespace FundingMock.Web.Samples
                             new Funding
                             {
                                 Id = $"{id}/Example School 1",
-                                FundingVersion = fundingVersion,
+                                //FundingVersion = fundingVersion,
 
                                 PeriodCode = period.Code,
                                 StreamCode = stream.Code,
@@ -203,11 +203,11 @@ namespace FundingMock.Web.Samples
                                 FundingValue = new FundingValue
                                 {
                                     TotalValue = 1200,
-                                    DistributionPeriods = new List<FundingValueByDistributionPeriod>
+                                    FundingValueByDistributionPeriod = new List<FundingValueByDistributionPeriod>
                                     {
                                         new FundingValueByDistributionPeriod
                                         {
-                                            PeriodCode = financialYearPeriod1920.Code,
+                                            DistributionPeriodCode = financialYearPeriod1920.Code,
                                             Value = 700,
                                             FundingLines = new List<FundingLine>
                                             {
@@ -224,7 +224,7 @@ namespace FundingMock.Web.Samples
                                                             Occurence = 1,
                                                             Year = 2019,
                                                             TypeValue = "October",
-                                                            ProfilingValue = 700,
+                                                            ProfiledValue = 700,
                                                             Type = FundingLinePeriodType.CalendarMonth,
                                                             PeriodCode = financialYearPeriod1920.Code
                                                         }
@@ -234,7 +234,7 @@ namespace FundingMock.Web.Samples
                                         },
                                         new FundingValueByDistributionPeriod
                                         {
-                                            PeriodCode = financialYearPeriod2021.Code,
+                                            DistributionPeriodCode = financialYearPeriod2021.Code,
                                             Value = 500,
                                             FundingLines = new List<FundingLine>
                                             {
@@ -251,7 +251,7 @@ namespace FundingMock.Web.Samples
                                                             Occurence = 1,
                                                             Year = 2020,
                                                             TypeValue = "April",
-                                                            ProfilingValue = 500,
+                                                            ProfiledValue = 500,
                                                             Type = FundingLinePeriodType.CalendarMonth,
                                                             PeriodCode = financialYearPeriod2021.Code
                                                         }
@@ -265,7 +265,7 @@ namespace FundingMock.Web.Samples
                             new Funding
                             {
                                 Id = $"{id}/Example School 2",
-                                FundingVersion = fundingVersion,
+                                //FundingVersion = fundingVersion,
 
                                 PeriodCode = period.Code,
                                 StreamCode = stream.Code,
@@ -290,11 +290,11 @@ namespace FundingMock.Web.Samples
                                 FundingValue = new FundingValue
                                 {
                                     TotalValue = 1200,
-                                    DistributionPeriods = new List<FundingValueByDistributionPeriod>
+                                    FundingValueByDistributionPeriod = new List<FundingValueByDistributionPeriod>
                                     {
                                         new FundingValueByDistributionPeriod
                                         {
-                                            PeriodCode = financialYearPeriod1920.Code,
+                                            DistributionPeriodCode = financialYearPeriod1920.Code,
                                             Value = 700,
                                             FundingLines = new List<FundingLine>
                                             {
@@ -311,7 +311,7 @@ namespace FundingMock.Web.Samples
                                                             Occurence = 1,
                                                             Year = 2019,
                                                             TypeValue = "October",
-                                                            ProfilingValue = 700,
+                                                            ProfiledValue = 700,
                                                             Type = FundingLinePeriodType.CalendarMonth,
                                                             PeriodCode = financialYearPeriod1920.Code
                                                         }
@@ -321,7 +321,7 @@ namespace FundingMock.Web.Samples
                                         },
                                         new FundingValueByDistributionPeriod
                                         {
-                                            PeriodCode = financialYearPeriod2021.Code,
+                                            DistributionPeriodCode = financialYearPeriod2021.Code,
                                             Value = 500,
                                             FundingLines = new List<FundingLine>
                                             {
@@ -338,7 +338,7 @@ namespace FundingMock.Web.Samples
                                                             Occurence = 1,
                                                             Year = 2020,
                                                             TypeValue = "April",
-                                                            ProfilingValue = 500,
+                                                            ProfiledValue = 500,
                                                             Type = FundingLinePeriodType.CalendarMonth,
                                                             PeriodCode = financialYearPeriod2021.Code
                                                         }

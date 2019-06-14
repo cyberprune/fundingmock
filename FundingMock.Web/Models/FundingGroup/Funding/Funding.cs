@@ -11,12 +11,7 @@
         public string Id { get; set; }
 
         /// <summary>
-        /// The version of this funding (i.e. for this provider).
-        /// </summary>
-        public int FundingVersion { get; set; }
-
-        /// <summary>
-        /// QUESTION - is this always provider at this level? Should we rename it?
+        /// The organisation for which the funding is for.
         /// </summary>
         public Organisation Organisation { get; set; }
 

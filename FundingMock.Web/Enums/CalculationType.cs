@@ -10,13 +10,12 @@ namespace FundingMock.Web.Enums
     public enum CalculationType
     {
         /// <summary>
-        /// A monetary amount.
+        /// A lump value, not multipled by anything.
         /// </summary>
         Cash,
 
         /// <summary>
-        /// A monetary amount. 
-        /// QUESTION - how is this different to cash?
+        /// Cash per paid X.
         /// </summary>
         Rate,
 
@@ -31,7 +30,7 @@ namespace FundingMock.Web.Enums
         Weighting,
 
         /// <summary>
-        /// ? QUESTION
+        /// Work out eligibility (0 or 1).
         /// </summary>
         Scope,
 
@@ -41,8 +40,23 @@ namespace FundingMock.Web.Enums
         Information,
 
         /// <summary>
-        /// ? QUESTION
+        /// 
         /// </summary>
         Drilldown,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        PerPupilFunding,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        LumpSum,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        ProviderLedFunding,
     }
 }

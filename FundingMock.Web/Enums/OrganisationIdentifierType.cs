@@ -16,9 +16,8 @@ namespace FundingMock.Web.Enums
 
         /// <summary>
         /// The code of the local education authority.
-        /// QUESTION - LA Code?
         /// </summary>
-        LECode,
+        LACode,
 
         /// <summary>
         ///  Unique provider identification number. A 6 digit number to represent a provider.

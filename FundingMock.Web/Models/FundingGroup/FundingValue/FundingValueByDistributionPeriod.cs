@@ -4,7 +4,6 @@ namespace FundingMock.Web.Models
 {
     /// <summary>
     /// Funding values grouped by the distribution period (envelope) they are paid in.
-    /// QUESTION - This used to inherit from Period, but took it away to make the JSON more concise.
     /// </summary>
     public class FundingValueByDistributionPeriod
     {
@@ -21,6 +20,6 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// The funding period the funding relates to.
         /// </summary>
-        public string PeriodCode { get; set; }
+        public string DistributionPeriodCode { get; set; }
     }
 }

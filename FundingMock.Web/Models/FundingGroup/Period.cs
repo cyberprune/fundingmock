@@ -31,7 +31,7 @@ namespace FundingMock.Web.Models
         public DateTimeOffset StartDate { get; set; }
 
         /// <summary>
-        /// The end date for the p
+        /// The end date for the period.
         public DateTimeOffset EndDate { get; set; }
     }
 }

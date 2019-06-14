@@ -13,8 +13,7 @@ namespace FundingMock.Web.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// Provider type (e.g. School, Academy, Special School) - not enumerated as this isn't controlled by CFS, but passed through from the Provider info (GIAS). #ThanksGav
-        /// (Originally we had this as an enum - public enum ProviderType { School }
+        /// Provider type (e.g. School, Academy, Special School) - not enumerated as this isn't controlled by CFS, but passed through from the Provider info (GIAS)
         /// </summary>
         public string ProviderType { get; set; }
 

@@ -16,7 +16,7 @@ namespace FundingMock.Web.Models
 
         /// <summary>
         /// The value of this identifier type (e.g. if the type is UKPRN, then the value may be 12345678. 
-        /// If the type is LECode, the value may be 'LE 203').
+        /// If the type is LECode, the value may be 'LA 203').
         /// </summary>
         public string Value { get; set; }
     }

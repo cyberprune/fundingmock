@@ -31,7 +31,8 @@ namespace FundingMock.Web.Controllers
         /// </summary>
         /// <returns>An array of periods.</returns>
         [HttpGet("api/periods")]
-        [Produces(typeof(IEnumerable<PeriodExtended>))]
+        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(IEnumerable<PeriodExtended>))]
+        [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(PeriodExtendedExample))]
         public IActionResult GetPeriods()
         {
             return Ok();

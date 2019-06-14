@@ -20,14 +20,9 @@ namespace FundingMock.Web.Models
         public int TemplateCalculationId { get; set; }
 
         /// <summary>
-        /// QUESTION is this neeeded? Lines and periods don't have a sequence
-        /// </summary>
-        public int Sequence { get; set; }
-
-        /// <summary>
         /// The value the calculation is resulting in.
         /// </summary>
-        public decimal Value { get; set; }
+        public string Value { get; set; }
 
         /// <summary>
         /// The way the value should show.

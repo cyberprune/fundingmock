@@ -25,7 +25,6 @@ namespace FundingMock.Web.Models
 
         /// <summary>
         /// The type of the funding line (e.g. paid on this basis, or informational only).
-        /// QUESTION - This has the same types as GroupingReason. Are they the same thing? Is there a generic name for both we could use?
         /// </summary>
         [EnumDataType(typeof(FundingLineType))]
         public FundingLineType Type { get; set; }
@@ -40,9 +39,10 @@ namespace FundingMock.Web.Models
         /// </summary>
         public IEnumerable<Calculation> Calculations { get; set; }
 
+
         /// <summary>
-        /// QUESTION what is this for?
+        /// Sub funding lines that make up this funding line.
         /// </summary>
-        public bool IsProfiled { get; set; }
+        public IEnumerable<FundingLine> FundingLines { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using Newtonsoft.Json.Converters;
 namespace FundingMock.Web.Models
 {
     /// <summary>
-    /// The funding line type (actual payment, Aggregate or informational only).
+    /// The funding line type (actual payment or informational only).
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
     public enum FundingLineType
@@ -15,13 +15,8 @@ namespace FundingMock.Web.Models
         Payment,
 
         /// <summary>
-        /// QUESTION - is this different to aggregate?
+        /// ,
         /// </summary>
         Information,
-
-        /// <summary>
-        /// QUESTION - is this different to information?
-        /// </summary>
-        Aggregate,
     }
 }
