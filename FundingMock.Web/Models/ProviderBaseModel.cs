@@ -5,7 +5,7 @@ namespace FundingMock.Web.Models
     /// <summary>
     /// Base model for the feed method.
     /// </summary>
-    public class FeedBaseModel
+    public class LogicalBaseModel
     {
         /// <summary>
         /// Schema URI to validate against.
@@ -21,6 +21,6 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// The funding group (a parent grouping organisation - such as an LA, MAT, Region etc...).
         /// </summary>
-        public FundingGroupFeed FundingGroup { get; set; }
+        public FundingGroupProvider FundingGroup { get; set; }
     }
 }

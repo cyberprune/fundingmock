@@ -27,6 +27,30 @@ namespace FundingMock.Web.Controllers
         }
 
         /// <summary>
+        /// Get all fundings as a feed format - full logical format, this API won't be produced, it's purely for documentation
+        /// </summary>
+        /// <returns>An array of fundings.</returns>
+        [HttpGet("api/logical")]
+        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(IEnumerable<LogicalBaseModel>))]
+        [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(LogicalBaseModelExample))]
+        public IActionResult GetLogicalFeed(string providerFundingFeedId)
+        {
+            return Ok();
+        }
+
+        /// <summary>
+        /// Get all fundings as a feed format.
+        /// </summary>
+        /// <returns>An array of fundings.</returns>
+        [HttpGet("api/provider/{providerFundingFeedId}")]
+        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(Funding))]
+        [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(FundingModelExample))]
+        public IActionResult GetProviderFunding(string providerFundingFeedId)
+        {
+            return Ok();
+        }
+
+        /// <summary>
         /// Get all periods.
         /// </summary>
         /// <returns>An array of periods.</returns>

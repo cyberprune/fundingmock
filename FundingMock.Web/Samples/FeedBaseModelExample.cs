@@ -1,7 +1,7 @@
-﻿using FundingMock.Web.Models;
-using Swashbuckle.AspNetCore.Filters;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using FundingMock.Web.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace FundingMock.Web.Samples
 {
@@ -77,7 +77,7 @@ namespace FundingMock.Web.Samples
                 {
                     SchemaUri = "http://example.org/#schema",
                     SchemaVersion = schemaVersion,
-                    FundingGroup = new FundingGroup
+                    FundingGroup = new FundingGroupFeed
                     {
                         FundingStream = stream,
                         Period = period,
@@ -173,183 +173,11 @@ namespace FundingMock.Web.Samples
                             },
                             TotalValue = 2400
                         },
-                        Fundings = new List<Funding>
+                        Fundings = new List<string>
                         {
-                            new Funding
-                            {
-                                Id = $"{id}/Example School 1",
-                                //FundingVersion = fundingVersion,
-
-                                PeriodCode = period.Code,
-                                StreamCode = stream.Code,
-                                Organisation = new Organisation
-                                {
-                                    Name = "Example School 1",
-                                    ProviderType = "School",
-                                    Identifiers = new List<OrganisationIdentifier>
-                                    {
-                                        new OrganisationIdentifier
-                                        {
-                                            Type = Enums.OrganisationIdentifierType.URN,
-                                            Value = "123453"
-                                        },
-                                        new OrganisationIdentifier
-                                        {
-                                            Type = Enums.OrganisationIdentifierType.UKPRN,
-                                            Value = "87654321"
-                                        }
-                                    }
-                                },
-                                FundingValue = new FundingValue
-                                {
-                                    TotalValue = 1200,
-                                    FundingValueByDistributionPeriod = new List<FundingValueByDistributionPeriod>
-                                    {
-                                        new FundingValueByDistributionPeriod
-                                        {
-                                            DistributionPeriodCode = financialYearPeriod1920.Code,
-                                            Value = 700,
-                                            FundingLines = new List<FundingLine>
-                                            {
-                                                new FundingLine
-                                                {
-                                                    Name = "Total funding line",
-                                                    TemplateLineId = 1,
-                                                    Type = FundingLineType.Payment,
-                                                    Value = 700,
-                                                    Periods = new List<FundingLinePeriod>
-                                                    {
-                                                        new FundingLinePeriod
-                                                        {
-                                                            Occurence = 1,
-                                                            Year = 2019,
-                                                            TypeValue = "October",
-                                                            ProfiledValue = 700,
-                                                            Type = FundingLinePeriodType.CalendarMonth,
-                                                            PeriodCode = financialYearPeriod1920.Code
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        new FundingValueByDistributionPeriod
-                                        {
-                                            DistributionPeriodCode = financialYearPeriod2021.Code,
-                                            Value = 500,
-                                            FundingLines = new List<FundingLine>
-                                            {
-                                                new FundingLine
-                                                {
-                                                    Name = "Total funding line",
-                                                    TemplateLineId = 1,
-                                                    Type = FundingLineType.Payment,
-                                                    Value = 500,
-                                                    Periods = new List<FundingLinePeriod>
-                                                    {
-                                                        new FundingLinePeriod
-                                                        {
-                                                            Occurence = 1,
-                                                            Year = 2020,
-                                                            TypeValue = "April",
-                                                            ProfiledValue = 500,
-                                                            Type = FundingLinePeriodType.CalendarMonth,
-                                                            PeriodCode = financialYearPeriod2021.Code
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            new Funding
-                            {
-                                Id = $"{id}/Example School 2",
-                                //FundingVersion = fundingVersion,
-
-                                PeriodCode = period.Code,
-                                StreamCode = stream.Code,
-                                Organisation = new Organisation
-                                {
-                                    Name = "Example School 2",
-                                    ProviderType = "School",
-                                    Identifiers = new List<OrganisationIdentifier>
-                                    {
-                                        new OrganisationIdentifier
-                                        {
-                                            Type = Enums.OrganisationIdentifierType.URN,
-                                            Value = "123453"
-                                        },
-                                        new OrganisationIdentifier
-                                        {
-                                            Type = Enums.OrganisationIdentifierType.UKPRN,
-                                            Value = "87654321"
-                                        }
-                                    }
-                                },
-                                FundingValue = new FundingValue
-                                {
-                                    TotalValue = 1200,
-                                    FundingValueByDistributionPeriod = new List<FundingValueByDistributionPeriod>
-                                    {
-                                        new FundingValueByDistributionPeriod
-                                        {
-                                            DistributionPeriodCode = financialYearPeriod1920.Code,
-                                            Value = 700,
-                                            FundingLines = new List<FundingLine>
-                                            {
-                                                new FundingLine
-                                                {
-                                                    Name = "Total funding line",
-                                                    TemplateLineId = 1,
-                                                    Type = FundingLineType.Payment,
-                                                    Value = 700,
-                                                    Periods = new List<FundingLinePeriod>
-                                                    {
-                                                        new FundingLinePeriod
-                                                        {
-                                                            Occurence = 1,
-                                                            Year = 2019,
-                                                            TypeValue = "October",
-                                                            ProfiledValue = 700,
-                                                            Type = FundingLinePeriodType.CalendarMonth,
-                                                            PeriodCode = financialYearPeriod1920.Code
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        new FundingValueByDistributionPeriod
-                                        {
-                                            DistributionPeriodCode = financialYearPeriod2021.Code,
-                                            Value = 500,
-                                            FundingLines = new List<FundingLine>
-                                            {
-                                                new FundingLine
-                                                {
-                                                    Name = "Total funding line",
-                                                    TemplateLineId = 1,
-                                                    Type = FundingLineType.Payment,
-                                                    Value = 500,
-                                                    Periods = new List<FundingLinePeriod>
-                                                    {
-                                                        new FundingLinePeriod
-                                                        {
-                                                            Occurence = 1,
-                                                            Year = 2020,
-                                                            TypeValue = "April",
-                                                            ProfiledValue = 500,
-                                                            Type = FundingLinePeriodType.CalendarMonth,
-                                                            PeriodCode = financialYearPeriod2021.Code
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                            "one",
+                            "two",
+                        },
                     }
                 }
             };

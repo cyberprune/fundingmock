@@ -1,4 +1,6 @@
-﻿namespace FundingMock.Web.Models
+﻿using System.Collections.Generic;
+
+namespace FundingMock.Web.Models
 {
     /// <summary>
     /// A funding item.
@@ -29,5 +31,10 @@
         /// Funding value.
         /// </summary>
         public FundingValue FundingValue { get; set; }
+
+        /// <summary>
+        /// Other parent grouping types
+        /// </summary>
+        public IEnumerable<ParentGrouping> ParentGroupings { get; set; }
     }
 }
