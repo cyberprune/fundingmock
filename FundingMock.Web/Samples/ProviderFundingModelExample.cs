@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using FundingMock.Web.Enums;
 using FundingMock.Web.Models;
+using FundingMock.Web.Models.Providers;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace FundingMock.Web.Samples
@@ -85,17 +87,19 @@ namespace FundingMock.Web.Samples
                 {
                     Name = "Example School 1",
                     SearchableName = "ExampleSchool1",
-                    DateClosed = null,
-                    DateOpened = new DateTimeOffset(2012, 12, 2, 0, 0, 0, 0, TimeSpan.Zero),
-                    PhaseOfEducation = "Secondary",
+                    OrganisationDetails = new OrganisationDetails()
+                    {
+                        DateClosed = null,
+                        DateOpened = new DateTimeOffset(2012, 12, 2, 0, 0, 0, 0, TimeSpan.Zero),
+                        PhaseOfEducation = "Secondary",
+                        Status = "Open",
+                        OpenReason = Enums.ProviderOpenReason.AcademyConverter,
+                        CloseReason = null,
+                        TrustName = "Trust Name",
+                        TrustStatus = TrustStatus.SupportedByASingleAacademyTrust,
+                    },
                     ProviderType = "Academies",
                     ProviderSubType = "Academy alternative provision converter",
-                    Status = "Open",
-                    ReasonEstablishmentOpened = "Academy Converter",
-                    ReasonEstablishmentClosed = null,
-                    Successor = null,
-                    TrustName = "Trust Name",
-                    TrustStatus = Models.Providers.TrustStatus.SupportedByASingleAacademyTrust,
                     ProviderVersionId = "3",
                     Identifiers = new List<OrganisationIdentifier>
                                     {
@@ -115,6 +119,22 @@ namespace FundingMock.Web.Samples
                                             Value = "2705",
                                         }
                                     }
+                },
+                Variations = new Variations()
+                {
+                    VariationReasons = new List<VariationReason>()
+                    {
+                        VariationReason.NameFieldUpdated,
+                        VariationReason.FundingUpdated,
+                    },
+                    Successors = new List<ProviderInformationModel>()
+                    {
+                        new ProviderInformationModel()
+                        {
+                            ProviderVersionId = "pes2",
+                            Ukprn = "2345333",
+                        },
+                    },
                 },
                 FundingValue = new FundingValue
                 {

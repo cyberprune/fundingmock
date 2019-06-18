@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using FundingMock.Web.Models.Providers;
+﻿using System.Collections.Generic;
 
 namespace FundingMock.Web.Models
 {
@@ -38,46 +35,8 @@ namespace FundingMock.Web.Models
         public string ProviderSubType { get; set; }
 
         /// <summary>
-        /// Date Opened
+        /// Organisation Details. This property is optional
         /// </summary>
-        public DateTimeOffset? DateOpened { get; set; }
-
-        /// <summary>
-        /// Date Closed
-        /// </summary>
-        public DateTimeOffset? DateClosed { get; set; }
-
-        public string Status { get; set; }
-
-        /// <summary>
-        /// TODO: Find out if this is required in the logical model
-        /// </summary>
-        public string PhaseOfEducation { get; set; }
-
-        /// <summary>
-        /// TODO: Find out if this is required in the logical model - used for variations
-        /// </summary>
-        public string ReasonEstablishmentOpened { get; set; }
-
-        /// <summary>
-        /// TODO: Find out if this is required in the logical model - used for variations
-        /// </summary>
-        public string ReasonEstablishmentClosed { get; set; }
-
-        /// <summary>
-        /// TODO: Find out if this is required in the logical model - used for variations
-        /// </summary>
-        public string Successor { get; set; }
-
-        /// <summary>
-        /// TODO: Find out if this is required in the logical model
-        /// </summary>
-        [EnumDataType(typeof(TrustStatus))]
-        public TrustStatus TrustStatus { get; set; }
-
-        /// <summary>
-        /// TODO: Find out if this is required in the logical model
-        /// </summary>
-        public string TrustName { get; set; }
+        public OrganisationDetails OrganisationDetails { get; set; }
     }
 }

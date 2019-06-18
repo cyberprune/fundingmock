@@ -15,6 +15,8 @@
         /// </summary>
         public Organisation Organisation { get; set; }
 
+        public Variations Variations { get; set; }
+
         /// <summary>
         /// The funding stream the funding relates to.
         /// </summary>
@@ -29,5 +31,6 @@
         /// Funding value.
         /// </summary>
         public FundingValue FundingValue { get; set; }
+
     }
 }
