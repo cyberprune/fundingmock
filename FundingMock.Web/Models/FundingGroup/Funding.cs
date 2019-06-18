@@ -38,7 +38,7 @@ namespace FundingMock.Web.Models
         /// The funding period the funding relates to.
         /// </summary>
         [JsonProperty(Order = 5)]
-        public Period Period { get; set; }
+        public FundingPeriod FundingPeriod { get; set; }
 
         /// <summary>
         /// The grouped organisation or region (e.g. if we are grouping by LA, the organisation may be Camden).

@@ -1,13 +1,13 @@
-﻿using FundingMock.Web.Enums;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using FundingMock.Web.Enums;
 
 namespace FundingMock.Web.Models
 {
     /// <summary>
     /// Details about the period.
     /// </summary>
-    public class Period
+    public class FundingPeriod
     {
         /// <summary>
         /// The code for the period (e.g. AY1920).
@@ -32,6 +32,7 @@ namespace FundingMock.Web.Models
 
         /// <summary>
         /// The end date for the period.
+        /// </summary>
         public DateTimeOffset EndDate { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace FundingMock.Web.Samples
             var ukOffset = new TimeSpan(0, 0, 0);
             var fundingVersion = "1.0";
 
-            var period = new Period
+            var period = new FundingPeriod
             {
                 Code = "AY1920",
                 Name = "Academic year 2019-20",
@@ -31,8 +31,6 @@ namespace FundingMock.Web.Samples
                 Name = "PE + Sport Premium",
                 TemplateVersion = templateVersion,
             };
-
-            var schemaVersion = "1.0";
 
             string providerId = "12345678";
 
@@ -58,7 +56,7 @@ namespace FundingMock.Web.Samples
 
             var id = $"{stream.Code}_{period.Code}_{providerId}_{fundingVersion}";
 
-            var financialYearPeriod1920 = new Period
+            var financialYearPeriod1920 = new FundingPeriod
             {
                 Code = "FY1920",
                 Name = "Financial Year 2019-20",
@@ -67,7 +65,7 @@ namespace FundingMock.Web.Samples
                 EndDate = new DateTimeOffset(2020, 3, 30, 0, 0, 0, ukOffset)
             };
 
-            var financialYearPeriod2021 = new Period
+            var financialYearPeriod2021 = new FundingPeriod
             {
                 Code = "FY2021",
                 Name = "Financial Year 2020-21",

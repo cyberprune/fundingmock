@@ -21,6 +21,6 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// The funding group (a parent grouping organisation - such as an LA, MAT, Region etc...).
         /// </summary>
-        public FundingProvider FundingGroup { get; set; }
+        public FundingProvider Funding { get; set; }
     }
 }
