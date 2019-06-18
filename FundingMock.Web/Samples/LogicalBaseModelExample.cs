@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using FundingMock.Web.Enums;
 using FundingMock.Web.Models;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -16,7 +17,7 @@ namespace FundingMock.Web.Samples
             {
                 Code = "AY1920",
                 Name = "Academic year 2019-20",
-                Type = Enums.PeriodType.AcademicYear,
+                Type = PeriodType.AcademicYear,
                 StartDate = new DateTimeOffset(2019, 9, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2020, 8, 31, 0, 0, 0, ukOffset)
             };
@@ -34,19 +35,19 @@ namespace FundingMock.Web.Samples
 
             var groupingOrg = new GroupedBy()
             {
-                Type = Enums.OrganisationType.LocalAuthority,
+                Type = OrganisationType.LocalAuthority,
                 Name = "Camden",
                 SearchableName = "Camden",
                 Identifiers = new List<OrganisationIdentifier>
                 {
                     new OrganisationIdentifier
                     {
-                        Type = Enums.OrganisationIdentifierType.LACode,
+                        Type = OrganisationIdentifierType.LACode,
                         Value = "203"
                     },
                     new OrganisationIdentifier
                     {
-                        Type = Enums.OrganisationIdentifierType.UKPRN,
+                        Type = OrganisationIdentifierType.UKPRN,
                         Value = "12345678"
                     }
                 }
@@ -58,7 +59,7 @@ namespace FundingMock.Web.Samples
             {
                 Code = "FY1920",
                 Name = "Financial Year 2019-20",
-                Type = Enums.PeriodType.FinancialYear,
+                Type = PeriodType.FinancialYear,
                 StartDate = new DateTimeOffset(2019, 4, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2020, 3, 30, 0, 0, 0, ukOffset)
             };
@@ -67,7 +68,7 @@ namespace FundingMock.Web.Samples
             {
                 Code = "FY2021",
                 Name = "Financial Year 2020-21",
-                Type = Enums.PeriodType.FinancialYear,
+                Type = PeriodType.FinancialYear,
                 StartDate = new DateTimeOffset(2020, 4, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2021, 3, 30, 0, 0, 0, ukOffset)
             };
@@ -77,7 +78,7 @@ namespace FundingMock.Web.Samples
             {
                 SchemaUri = "http://example.org/#schema",
                 SchemaVersion = schemaVersion,
-                FundingGroup = new FundingGroupProvider
+                FundingGroup = new FundingProvider
                 {
                     FundingStream = stream,
                     Period = period,
@@ -119,27 +120,6 @@ namespace FundingMock.Web.Samples
                                                     PeriodCode = financialYearPeriod1920.Code
                                                 }
                                             },
-                                            Calculations = new List<Calculation>
-                                            {
-                                                new Calculation
-                                                {
-                                                    Name = "Number of pupils",
-                                                    Type = Enums.CalculationType.PupilNumber,
-                                                    TemplateCalculationId = 1,
-                                                    Value = "456",
-                                                    ValueFormat = Enums.ValueFormat.Number,
-                                                    FormulaText = "Something * something",
-                                                    ReferenceData = new List<ReferenceData>
-                                                    {
-                                                        new ReferenceData
-                                                        {
-                                                            Name = "Academic year 2018 to 2019 pupil number on roll",
-                                                            Value = "1",
-                                                            Format = Enums.ValueFormat.Number
-                                                        }
-                                                    }
-                                                }
-                                            }
                                         }
                                     }
                                 },
@@ -191,12 +171,12 @@ namespace FundingMock.Web.Samples
                                     {
                                         new OrganisationIdentifier
                                         {
-                                            Type = Enums.OrganisationIdentifierType.URN,
+                                            Type = OrganisationIdentifierType.URN,
                                             Value = "123453"
                                         },
                                         new OrganisationIdentifier
                                         {
-                                            Type = Enums.OrganisationIdentifierType.UKPRN,
+                                            Type = OrganisationIdentifierType.UKPRN,
                                             Value = "87654321"
                                         }
                                     }
@@ -229,7 +209,48 @@ namespace FundingMock.Web.Samples
                                                             Type = FundingLinePeriodType.CalendarMonth,
                                                             PeriodCode = financialYearPeriod1920.Code
                                                         }
-                                                    }
+                                                    },
+                                                    Calculations = new List<Calculation>
+                                                    {
+                                                        new Calculation
+                                                        {
+                                                            Name = "Number of pupils",
+                                                            Type = CalculationType.PupilNumber,
+                                                            TemplateCalculationId = 1,
+                                                            Value = "456",
+                                                            ValueFormat = ValueFormat.Number,
+                                                            FormulaText = "Something * something",
+                                                            ReferenceData = new List<ReferenceData>
+                                                            {
+                                                                new ReferenceData
+                                                                {
+                                                                    Name = "Academic year 2018 to 2019 pupil number on roll",
+                                                                    Value = "1",
+                                                                    Format = ValueFormat.Number,
+                                                                    TemplateReferenceId = 1,
+                                                                }
+                                                            }
+                                                        },
+                                                        new Calculation
+                                                        {
+                                                            Name = "Number of pupils",
+                                                            Type = CalculationType.PupilNumber,
+                                                            TemplateCalculationId = 1,
+                                                            Value = "456",
+                                                            ValueFormat = ValueFormat.Number,
+                                                            FormulaText = "Something * something",
+                                                            ReferenceData = new List<ReferenceData>
+                                                            {
+                                                                new ReferenceData
+                                                                {
+                                                                    Name = "Academic year 2018 to 2019 pupil number on roll",
+                                                                    Value = "1",
+                                                                    Format = ValueFormat.Number,
+                                                                    TemplateReferenceId = 2,
+                                                                }
+                                                            }
+                                                        }
+                                                    },
                                                 }
                                             }
                                         },
@@ -279,12 +300,12 @@ namespace FundingMock.Web.Samples
                                     {
                                         new OrganisationIdentifier
                                         {
-                                            Type = Enums.OrganisationIdentifierType.URN,
+                                            Type = OrganisationIdentifierType.URN,
                                             Value = "123453"
                                         },
                                         new OrganisationIdentifier
                                         {
-                                            Type = Enums.OrganisationIdentifierType.UKPRN,
+                                            Type = OrganisationIdentifierType.UKPRN,
                                             Value = "87654322"
                                         }
                                     }

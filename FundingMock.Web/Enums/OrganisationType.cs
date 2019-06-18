@@ -58,5 +58,10 @@ namespace FundingMock.Web.Enums
         /// Parlimentry constituency (e.g. Mansfield).
         /// </summary>
         ParliamentaryConstituency,
+
+        /// <summary>
+        /// Provider
+        /// </summary>
+        Provider,
     }
 }

@@ -7,7 +7,7 @@ namespace FundingMock.Web.Models
     /// <summary>
     /// A funding group (a parent grouping organisation - such as an LA, MAT, Region etc...).
     /// </summary>
-    public abstract class FundingGroup
+    public abstract class Funding
     {
         /// <summary>
         /// Unique identifier of this funding group / business event (in format $"schema:v{schemaVersion}/{stream.Code}/template:v{templateVersion}/{groupingOrg.Name}/{period.Code}/funding:v{fundingVersion}").

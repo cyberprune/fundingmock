@@ -18,7 +18,7 @@ namespace FundingMock.Web.Samples
             {
                 Code = "AY1920",
                 Name = "Academic year 2019-20",
-                Type = Enums.PeriodType.AcademicYear,
+                Type = PeriodType.AcademicYear,
                 StartDate = new DateTimeOffset(2019, 9, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2020, 8, 31, 0, 0, 0, ukOffset)
             };
@@ -38,18 +38,18 @@ namespace FundingMock.Web.Samples
 
             var groupingOrg = new GroupedBy()
             {
-                Type = Enums.OrganisationType.LocalAuthority,
+                Type = OrganisationType.LocalAuthority,
                 Name = "Camden",
                 Identifiers = new List<OrganisationIdentifier>
                 {
                     new OrganisationIdentifier
                     {
-                        Type = Enums.OrganisationIdentifierType.LACode,
+                        Type = OrganisationIdentifierType.LACode,
                         Value = "203"
                     },
                     new OrganisationIdentifier
                     {
-                        Type = Enums.OrganisationIdentifierType.UKPRN,
+                        Type = OrganisationIdentifierType.UKPRN,
                         Value = providerId
                     }
                 }
@@ -62,7 +62,7 @@ namespace FundingMock.Web.Samples
             {
                 Code = "FY1920",
                 Name = "Financial Year 2019-20",
-                Type = Enums.PeriodType.FinancialYear,
+                Type = PeriodType.FinancialYear,
                 StartDate = new DateTimeOffset(2019, 4, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2020, 3, 30, 0, 0, 0, ukOffset)
             };
@@ -71,7 +71,7 @@ namespace FundingMock.Web.Samples
             {
                 Code = "FY2021",
                 Name = "Financial Year 2020-21",
-                Type = Enums.PeriodType.FinancialYear,
+                Type = PeriodType.FinancialYear,
                 StartDate = new DateTimeOffset(2020, 4, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2021, 3, 30, 0, 0, 0, ukOffset)
             };
@@ -93,7 +93,7 @@ namespace FundingMock.Web.Samples
                         DateOpened = new DateTimeOffset(2012, 12, 2, 0, 0, 0, 0, TimeSpan.Zero),
                         PhaseOfEducation = "Secondary",
                         Status = "Open",
-                        OpenReason = Enums.ProviderOpenReason.AcademyConverter,
+                        OpenReason = ProviderOpenReason.AcademyConverter,
                         CloseReason = null,
                         TrustName = "Trust Name",
                         TrustStatus = TrustStatus.SupportedByASingleAacademyTrust,
@@ -102,23 +102,23 @@ namespace FundingMock.Web.Samples
                     ProviderSubType = "Academy alternative provision converter",
                     ProviderVersionId = "3",
                     Identifiers = new List<OrganisationIdentifier>
+                                {
+                                    new OrganisationIdentifier
                                     {
-                                        new OrganisationIdentifier
-                                        {
-                                            Type = Enums.OrganisationIdentifierType.URN,
-                                            Value = "123453"
-                                        },
-                                        new OrganisationIdentifier
-                                        {
-                                            Type = Enums.OrganisationIdentifierType.UKPRN,
-                                            Value = providerId
-                                        },
-                                        new OrganisationIdentifier
-                                        {
-                                            Type = Enums.OrganisationIdentifierType.AcademyTrustCode,
-                                            Value = "2705",
-                                        }
+                                        Type = OrganisationIdentifierType.URN,
+                                        Value = "123453"
+                                    },
+                                    new OrganisationIdentifier
+                                    {
+                                        Type = OrganisationIdentifierType.UKPRN,
+                                        Value = providerId
+                                    },
+                                    new OrganisationIdentifier
+                                    {
+                                        Type = OrganisationIdentifierType.AcademyTrustCode,
+                                        Value = "2705",
                                     }
+                                },
                 },
                 Variations = new Variations()
                 {
@@ -163,6 +163,47 @@ namespace FundingMock.Web.Samples
                                                             ProfiledValue = 700,
                                                             Type = FundingLinePeriodType.CalendarMonth,
                                                             PeriodCode = financialYearPeriod1920.Code
+                                                        }
+                                                    },
+                                                    Calculations = new List<Calculation>
+                                                    {
+                                                        new Calculation
+                                                        {
+                                                            Name = "Number of pupils",
+                                                            Type = CalculationType.PupilNumber,
+                                                            TemplateCalculationId = 1,
+                                                            Value = "456",
+                                                            ValueFormat = ValueFormat.Number,
+                                                            FormulaText = "Something * something",
+                                                            ReferenceData = new List<ReferenceData>
+                                                            {
+                                                                new ReferenceData
+                                                                {
+                                                                    Name = "Academic year 2018 to 2019 pupil number on roll",
+                                                                    Value = "1",
+                                                                    Format = ValueFormat.Number,
+                                                                    TemplateReferenceId = 1,
+                                                                }
+                                                            }
+                                                        },
+                                                        new Calculation
+                                                        {
+                                                            Name = "Number of pupils",
+                                                            Type = CalculationType.PupilNumber,
+                                                            TemplateCalculationId = 1,
+                                                            Value = "456",
+                                                            ValueFormat = ValueFormat.Number,
+                                                            FormulaText = "Something * something",
+                                                            ReferenceData = new List<ReferenceData>
+                                                            {
+                                                                new ReferenceData
+                                                                {
+                                                                    Name = "Academic year 2018 to 2019 pupil number on roll",
+                                                                    Value = "1",
+                                                                    Format = ValueFormat.Number,
+                                                                    TemplateReferenceId = 2,
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }

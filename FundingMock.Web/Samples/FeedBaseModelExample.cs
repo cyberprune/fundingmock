@@ -78,7 +78,7 @@ namespace FundingMock.Web.Samples
                 {
                     SchemaUri = "http://example.org/#schema",
                     SchemaVersion = schemaVersion,
-                    FundingGroup = new FundingGroupFeed
+                    Funding = new FundingFeed
                     {
                         FundingStream = stream,
                         Period = period,
