@@ -10,7 +10,7 @@ namespace FundingMock.Web.Samples
         public object GetExamples()
         {
             var ukOffset = new TimeSpan(0, 0, 0);
-            var fundingVersion = "1.4";
+            var fundingVersion = "1.0";
 
             var period = new Period
             {
@@ -32,10 +32,11 @@ namespace FundingMock.Web.Samples
 
             var schemaVersion = "1.0";
 
-            var groupingOrg = new GroupingOrganisation()
+            var groupingOrg = new GroupedBy()
             {
                 Type = Enums.OrganisationType.LocalAuthority,
                 Name = "Camden",
+                SearchableName = "Camden",
                 Identifiers = new List<OrganisationIdentifier>
                 {
                     new OrganisationIdentifier
@@ -51,7 +52,7 @@ namespace FundingMock.Web.Samples
                 }
             };
 
-            var id = $"schema:v{schemaVersion}/{stream.Code}/template:v{templateVersion}/{groupingOrg.Name}/{period.Code}/funding:v{fundingVersion}";
+            var id = $"{stream.Code}_{period.Code}_{groupingOrg.Type}_{groupingOrg.Name}_{fundingVersion}";
 
             var financialYearPeriod1920 = new Period
             {
@@ -172,11 +173,11 @@ namespace FundingMock.Web.Samples
                             },
                         TotalValue = 2400
                     },
-                    Fundings = new List<Funding>
+                    ProviderFundings = new List<ProviderFunding>
                         {
-                            new Funding
+                            new ProviderFunding
                             {
-                                Id = $"{id}/Example School 1",
+                                Id = $"{stream.Code}_{period.Code}_87654321_{fundingVersion}",
                                 //FundingVersion = fundingVersion,
 
                                 PeriodCode = period.Code,
@@ -184,6 +185,7 @@ namespace FundingMock.Web.Samples
                                 Organisation = new Organisation
                                 {
                                     Name = "Example School 1",
+                                    SearchableName = "ExampleSchool1",
                                     ProviderType = "School",
                                     Identifiers = new List<OrganisationIdentifier>
                                     {
@@ -259,11 +261,11 @@ namespace FundingMock.Web.Samples
                                             }
                                         }
                                     }
-                                }
+                                },
                             },
-                            new Funding
+                            new ProviderFunding
                             {
-                                Id = $"{id}/Example School 2",
+                                Id = $"{stream.Code}_{period.Code}_87654322_{fundingVersion}",
                                 //FundingVersion = fundingVersion,
 
                                 PeriodCode = period.Code,
@@ -271,6 +273,7 @@ namespace FundingMock.Web.Samples
                                 Organisation = new Organisation
                                 {
                                     Name = "Example School 2",
+                                    SearchableName = "ExampleSchool2",
                                     ProviderType = "School",
                                     Identifiers = new List<OrganisationIdentifier>
                                     {
@@ -282,7 +285,7 @@ namespace FundingMock.Web.Samples
                                         new OrganisationIdentifier
                                         {
                                             Type = Enums.OrganisationIdentifierType.UKPRN,
-                                            Value = "87654321"
+                                            Value = "87654322"
                                         }
                                     }
                                 },

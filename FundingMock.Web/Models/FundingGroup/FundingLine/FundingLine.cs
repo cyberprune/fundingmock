@@ -21,7 +21,7 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// A unique ID (in terms of template, not data) for this funding line (e.g. 345).
         /// </summary>
-        public int TemplateLineId { get; set; }
+        public uint TemplateLineId { get; set; }
 
         /// <summary>
         /// The type of the funding line (e.g. paid on this basis, or informational only).

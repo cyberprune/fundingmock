@@ -8,7 +8,7 @@ namespace FundingMock.Web.Models
     public class FundingValueByDistributionPeriod
     {
         /// <summary>
-        /// The overall value for the distribution period.
+        /// The overall value for the distribution period in pence. Rolled up from all child Funding Lines where Type = Payment
         /// </summary>
         public int Value { get; set; }
 

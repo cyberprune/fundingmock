@@ -87,6 +87,11 @@ namespace FundingMock.Web.Enums
         /// <summary>
         /// The DfE number.
         /// </summary>
-        DfeNumber
+        DfeNumber,
+
+        /// <summary>
+        /// Academy trust code
+        /// </summary>
+        AcademyTrustCode,
     }
 }

@@ -10,7 +10,7 @@ namespace FundingMock.Web.Samples
         public object GetExamples()
         {
             var ukOffset = new TimeSpan(0, 0, 0);
-            var fundingVersion = "1.4";
+            var fundingVersion = "1.0";
 
             var period = new Period
             {
@@ -32,10 +32,11 @@ namespace FundingMock.Web.Samples
 
             var schemaVersion = "1.0";
 
-            var groupingOrg = new GroupingOrganisation()
+            var groupingOrg = new GroupedBy()
             {
                 Type = Enums.OrganisationType.LocalAuthority,
                 Name = "Camden",
+                SearchableName = "Camden",
                 Identifiers = new List<OrganisationIdentifier>
                 {
                     new OrganisationIdentifier
@@ -51,7 +52,7 @@ namespace FundingMock.Web.Samples
                 }
             };
 
-            var id = $"schema:v{schemaVersion}/{stream.Code}/template:v{templateVersion}/{groupingOrg.Name}/{period.Code}/funding:v{fundingVersion}";
+            var id = $"{stream.Code}_{period.Code}_{groupingOrg.Type}_{groupingOrg.Name}_{fundingVersion}";
 
             var financialYearPeriod1920 = new Period
             {
@@ -173,10 +174,11 @@ namespace FundingMock.Web.Samples
                             },
                             TotalValue = 2400
                         },
-                        Fundings = new List<string>
+                        ProviderFundings = new List<string>
                         {
-                            "one",
-                            "two",
+                              $"{stream.Code}_{period.Code}_12345678_{fundingVersion}",
+                              $"{stream.Code}_{period.Code}_12345679_2.0",
+                              $"{stream.Code}_{period.Code}_12345680_{fundingVersion}",
                         },
                     }
                 }

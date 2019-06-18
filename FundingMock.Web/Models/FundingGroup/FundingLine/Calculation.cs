@@ -1,6 +1,6 @@
-﻿using FundingMock.Web.Enums;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using FundingMock.Web.Enums;
 
 namespace FundingMock.Web.Models
 {
@@ -10,19 +10,24 @@ namespace FundingMock.Web.Models
     public class Calculation
     {
         /// <summary>
-        /// The name of the calculation.
+        /// The name of the calculation. Used as a description within the model.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
         /// The template calculation id (i.e. a way to get to this property in the template).
+        /// This value can be the same for multiple calculations within the hierarchy. 
+        /// This indicates they will return the same value from the output.
+        /// It allows input template to link calculations together, so a single calculation implemenation will be created instead of multiple depending on the hierarchy.
+        /// 
+        /// When templates are versioned, template IDs should be kept the same if they refer to the same thing, otherwise a new, unused ID should be used.
         /// </summary>
-        public int TemplateCalculationId { get; set; }
+        public uint TemplateCalculationId { get; set; }
 
         /// <summary>
         /// The value the calculation is resulting in.
         /// </summary>
-        public string Value { get; set; }
+        public object Value { get; set; }
 
         /// <summary>
         /// The way the value should show.

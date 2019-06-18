@@ -10,7 +10,7 @@ namespace FundingMock.Web.Enums
     public enum CalculationType
     {
         /// <summary>
-        /// A lump value, not multipled by anything.
+        /// A monetry value, not multipled by anything.
         /// </summary>
         Cash,
 

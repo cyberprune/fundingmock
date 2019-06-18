@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace FundingMock.Web.Models
 {
@@ -10,6 +11,7 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// The fundings (child organisation level lines, e.g. providers under an LA) that are grouped into this funding group.
         /// </summary>
-        public IEnumerable<Funding> Fundings { get; set; }
+        [JsonProperty(Order = 8)]
+        public IEnumerable<ProviderFunding> ProviderFundings { get; set; }
     }
 }

@@ -5,12 +5,12 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace FundingMock.Web.Samples
 {
-    public class FundingModelExample : IExamplesProvider
+    public class ProviderFundingModelExample : IExamplesProvider
     {
         public object GetExamples()
         {
             var ukOffset = new TimeSpan(0, 0, 0);
-            var fundingVersion = "1.4";
+            var fundingVersion = "1.0";
 
             var period = new Period
             {
@@ -32,7 +32,9 @@ namespace FundingMock.Web.Samples
 
             var schemaVersion = "1.0";
 
-            var groupingOrg = new GroupingOrganisation()
+            string providerId = "12345678";
+
+            var groupingOrg = new GroupedBy()
             {
                 Type = Enums.OrganisationType.LocalAuthority,
                 Name = "Camden",
@@ -46,12 +48,13 @@ namespace FundingMock.Web.Samples
                     new OrganisationIdentifier
                     {
                         Type = Enums.OrganisationIdentifierType.UKPRN,
-                        Value = "12345678"
+                        Value = providerId
                     }
                 }
             };
 
-            var id = $"schema:v{schemaVersion}/{stream.Code}/template:v{templateVersion}/{groupingOrg.Name}/{period.Code}/funding:v{fundingVersion}";
+
+            var id = $"{stream.Code}_{period.Code}_{providerId}_{fundingVersion}";
 
             var financialYearPeriod1920 = new Period
             {
@@ -71,9 +74,9 @@ namespace FundingMock.Web.Samples
                 EndDate = new DateTimeOffset(2021, 3, 30, 0, 0, 0, ukOffset)
             };
 
-            return new Funding
+            return new ProviderFunding
             {
-                Id = $"{id}/Example School 1",
+                Id = id,
                 //FundingVersion = fundingVersion,
 
                 PeriodCode = period.Code,
@@ -81,7 +84,19 @@ namespace FundingMock.Web.Samples
                 Organisation = new Organisation
                 {
                     Name = "Example School 1",
-                    ProviderType = "School",
+                    SearchableName = "ExampleSchool1",
+                    DateClosed = null,
+                    DateOpened = new DateTimeOffset(2012, 12, 2, 0, 0, 0, 0, TimeSpan.Zero),
+                    PhaseOfEducation = "Secondary",
+                    ProviderType = "Academies",
+                    ProviderSubType = "Academy alternative provision converter",
+                    Status = "Open",
+                    ReasonEstablishmentOpened = "Academy Converter",
+                    ReasonEstablishmentClosed = null,
+                    Successor = null,
+                    TrustName = "Trust Name",
+                    TrustStatus = Models.Providers.TrustStatus.SupportedByASingleAacademyTrust,
+                    ProviderVersionId = "3",
                     Identifiers = new List<OrganisationIdentifier>
                                     {
                                         new OrganisationIdentifier
@@ -92,7 +107,12 @@ namespace FundingMock.Web.Samples
                                         new OrganisationIdentifier
                                         {
                                             Type = Enums.OrganisationIdentifierType.UKPRN,
-                                            Value = "87654321"
+                                            Value = providerId
+                                        },
+                                        new OrganisationIdentifier
+                                        {
+                                            Type = Enums.OrganisationIdentifierType.AcademyTrustCode,
+                                            Value = "2705",
                                         }
                                     }
                 },

@@ -8,7 +8,7 @@ namespace FundingMock.Web.Models
     public class FundingValue
     {
         /// <summary>
-        /// The funding value amount in pence.
+        /// The funding value amount in pence. Rolled up from all child Funding Lines where Type = Payment
         /// </summary>
         public int TotalValue { get; set; }
 

@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-
-namespace FundingMock.Web.Models
+﻿namespace FundingMock.Web.Models
 {
     /// <summary>
     /// A funding item.
     /// </summary>
-    public class Funding
+    public class ProviderFunding
     {
         /// <summary>
         /// A unique id for this funding. In format 'schema:v{schemaVersion}/{stream.Code}/template:v{templateVersion}/{groupingOrg.Name}/{period.Code}/funding:v{fundingVersion}/{organisation.Name}'.
@@ -31,10 +29,5 @@ namespace FundingMock.Web.Models
         /// Funding value.
         /// </summary>
         public FundingValue FundingValue { get; set; }
-
-        /// <summary>
-        /// Other parent grouping types
-        /// </summary>
-        public IEnumerable<ParentGrouping> ParentGroupings { get; set; }
     }
 }

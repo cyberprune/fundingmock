@@ -43,8 +43,8 @@ namespace FundingMock.Web.Controllers
         /// </summary>
         /// <returns>An array of fundings.</returns>
         [HttpGet("api/provider/{providerFundingFeedId}")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(Funding))]
-        [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(FundingModelExample))]
+        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(ProviderFunding))]
+        [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(ProviderFundingModelExample))]
         public IActionResult GetProviderFunding(string providerFundingFeedId)
         {
             return Ok();
