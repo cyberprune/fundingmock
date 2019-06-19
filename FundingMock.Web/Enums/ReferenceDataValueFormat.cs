@@ -10,7 +10,7 @@ namespace FundingMock.Web.Enums
     public enum ReferenceDataValueFormat
     {
         /// <summary>
-        /// A number (e.g. a pupil number). eg 5, the return value should be 5 and 2.7334 should return 2.7334
+        /// A number (e.g. a pupil number). eg 5, the return value should be 5 and 2.7334 should return 2.7334. Values are a represented as a decimal
         /// </summary>
         Number,
 
@@ -20,7 +20,7 @@ namespace FundingMock.Web.Enums
         Percentage,
 
         /// <summary>
-        /// A currency. for example for £5.83, the return value should be 583
+        /// A currency. for example for £5.83, the return value should be 5.83. Values are a represented as a decimal
         /// </summary>
         Currency,
     }
