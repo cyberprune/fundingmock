@@ -44,7 +44,7 @@ namespace FundingMock.Web.Models
         /// The grouped organisation or region (e.g. if we are grouping by LA, the organisation may be Camden).
         /// </summary>
         [JsonProperty(Order = 6)]
-        public GroupedBy GroupedBy { get; set; }
+        public OrganisationGroup OrganisationGroup { get; set; }
 
         /// <summary>
         /// Funding value breakdown

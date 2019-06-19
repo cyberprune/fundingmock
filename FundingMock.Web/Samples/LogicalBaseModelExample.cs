@@ -33,7 +33,7 @@ namespace FundingMock.Web.Samples
 
             var schemaVersion = "1.0";
 
-            var groupingOrg = new GroupedBy()
+            var groupingOrg = new OrganisationGroup()
             {
                 Type = OrganisationType.LocalAuthority,
                 Name = "Camden",
@@ -82,7 +82,7 @@ namespace FundingMock.Web.Samples
                 {
                     FundingStream = stream,
                     FundingPeriod = period,
-                    GroupedBy = groupingOrg,
+                    OrganisationGroup = groupingOrg,
                     Id = id,
                     FundingVersion = fundingVersion,
 

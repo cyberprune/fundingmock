@@ -34,7 +34,7 @@ namespace FundingMock.Web.Samples
 
             string providerId = "12345678";
 
-            var groupingOrg = new GroupedBy()
+            var groupingOrg = new OrganisationGroup()
             {
                 Type = OrganisationType.LocalAuthority,
                 Name = "Camden",

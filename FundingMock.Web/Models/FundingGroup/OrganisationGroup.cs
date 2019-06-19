@@ -7,7 +7,7 @@ namespace FundingMock.Web.Models
     /// <summary>
     /// A grouping organistion (e.g. 'Camden', an LA).
     /// </summary>
-    public class GroupedBy
+    public class OrganisationGroup
     {
         /// <summary>
         /// The name of the grouping organisation (e.g. in the case of the type being LA, this could be 'Camden').

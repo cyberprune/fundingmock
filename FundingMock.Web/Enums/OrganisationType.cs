@@ -63,5 +63,15 @@ namespace FundingMock.Web.Enums
         /// Provider
         /// </summary>
         Provider,
+
+        /// <summary>
+        /// Region
+        /// </summary>
+        Region,
+
+        /// <summary>
+        /// Country eg GB
+        /// </summary>
+        Country,
     }
 }
