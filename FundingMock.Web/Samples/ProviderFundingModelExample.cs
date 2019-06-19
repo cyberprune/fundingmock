@@ -171,7 +171,7 @@ namespace FundingMock.Web.Samples
                                                             Type = CalculationType.PupilNumber,
                                                             TemplateCalculationId = 1,
                                                             Value = "456",
-                                                            ValueFormat = ValueFormat.Number,
+                                                            ValueFormat = CalculationValueFormat.Number,
                                                             FormulaText = "Something * something",
                                                             ReferenceData = new List<ReferenceData>
                                                             {
@@ -179,7 +179,7 @@ namespace FundingMock.Web.Samples
                                                                 {
                                                                     Name = "Academic year 2018 to 2019 pupil number on roll",
                                                                     Value = "1",
-                                                                    Format = ValueFormat.Number,
+                                                                    Format = ReferenceDataValueFormat.Number,
                                                                     TemplateReferenceId = 1,
                                                                 }
                                                             }
@@ -190,7 +190,7 @@ namespace FundingMock.Web.Samples
                                                             Type = CalculationType.PupilNumber,
                                                             TemplateCalculationId = 1,
                                                             Value = "456",
-                                                            ValueFormat = ValueFormat.Number,
+                                                            ValueFormat = CalculationValueFormat.Number,
                                                             FormulaText = "Something * something",
                                                             ReferenceData = new List<ReferenceData>
                                                             {
@@ -198,7 +198,7 @@ namespace FundingMock.Web.Samples
                                                                 {
                                                                     Name = "Academic year 2018 to 2019 pupil number on roll",
                                                                     Value = "1",
-                                                                    Format = ValueFormat.Number,
+                                                                    Format = ReferenceDataValueFormat.Number,
                                                                     TemplateReferenceId = 2,
                                                                 }
                                                             }

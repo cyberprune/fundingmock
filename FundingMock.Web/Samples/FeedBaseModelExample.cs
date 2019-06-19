@@ -128,7 +128,7 @@ namespace FundingMock.Web.Samples
                                                     Type = Enums.CalculationType.PupilNumber,
                                                     TemplateCalculationId = 1,
                                                     Value = "456",
-                                                    ValueFormat = Enums.ValueFormat.Number,
+                                                    ValueFormat = Enums.CalculationValueFormat.Number,
                                                     FormulaText = "Something * something",
                                                     ReferenceData = new List<ReferenceData>
                                                     {
@@ -136,7 +136,7 @@ namespace FundingMock.Web.Samples
                                                         {
                                                             Name = "Academic year 2018 to 2019 pupil number on roll",
                                                             Value = "1",
-                                                            Format = Enums.ValueFormat.Number
+                                                            Format = Enums.ReferenceDataValueFormat.Number
                                                         }
                                                     }
                                                 }

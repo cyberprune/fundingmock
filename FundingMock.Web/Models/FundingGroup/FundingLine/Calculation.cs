@@ -32,8 +32,8 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// The way the value should show.
         /// </summary>
-        [EnumDataType(typeof(ValueFormat))]
-        public ValueFormat ValueFormat { get; set; }
+        [EnumDataType(typeof(CalculationValueFormat))]
+        public CalculationValueFormat ValueFormat { get; set; }
 
         /// <summary>
         /// The type of calculation.

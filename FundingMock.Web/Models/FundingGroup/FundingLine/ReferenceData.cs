@@ -26,8 +26,8 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// The format of the reference data value (e.g. Percentage).
         /// </summary>
-        [EnumDataType(typeof(ValueFormat))]
-        public ValueFormat Format { get; set; }
+        [EnumDataType(typeof(ReferenceDataValueFormat))]
+        public ReferenceDataValueFormat Format { get; set; }
 
         /// <summary>
         /// The reference data value.
