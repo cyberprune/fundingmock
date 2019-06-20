@@ -163,7 +163,7 @@ namespace FundingMock.Web.Samples
                                 //FundingVersion = fundingVersion,
 
                                 PeriodCode = period.Code,
-                                StreamCode = stream.Code,
+                                FundingStreamCode = stream.Code,
                                 Organisation = new Organisation
                                 {
                                     Name = "Example School 1",
@@ -294,7 +294,7 @@ namespace FundingMock.Web.Samples
                                 //FundingVersion = fundingVersion,
 
                                 PeriodCode = period.Code,
-                                StreamCode = stream.Code,
+                                FundingStreamCode = stream.Code,
                                 Organisation = new Organisation
                                 {
                                     Name = "Example School 2",

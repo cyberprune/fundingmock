@@ -20,7 +20,7 @@
         /// <summary>
         /// The funding stream the funding relates to.
         /// </summary>
-        public string StreamCode { get; set; }
+        public string FundingStreamCode { get; set; }
 
         /// <summary>
         /// The funding period the funding relates to.
