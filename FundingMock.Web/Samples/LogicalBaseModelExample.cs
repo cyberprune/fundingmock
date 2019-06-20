@@ -89,7 +89,7 @@ namespace FundingMock.Web.Samples
                     ExternalPublicationDate = new DateTimeOffset(2019, 9, 1, 0, 0, 0, new TimeSpan(1, 0, 0)),
                     PaymentDate = DateTimeOffset.Now,
 
-                    Status = FundingStatus.Published,
+                    Status = FundingStatus.Released,
                     StatusChangedDate = DateTimeOffset.Now,
                     GroupingReason = GroupingReason.Payment,
                     FundingValue = new FundingValue
