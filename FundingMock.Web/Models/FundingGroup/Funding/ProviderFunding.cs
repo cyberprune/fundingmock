@@ -15,6 +15,9 @@
         /// </summary>
         public Organisation Organisation { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Variations Variations { get; set; }
 
         /// <summary>
@@ -25,7 +28,7 @@
         /// <summary>
         /// The funding period the funding relates to.
         /// </summary>
-        public string PeriodCode { get; set; }
+        public string FundingPeriodCode { get; set; }
 
         /// <summary>
         /// Funding value.

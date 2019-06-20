@@ -2,6 +2,7 @@
 using System.Net;
 using FundingMock.Web.Models;
 using FundingMock.Web.Samples;
+using FundingMock.Web.Tools;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
@@ -67,10 +68,21 @@ namespace FundingMock.Web.Controllers
         /// </summary>
         /// <returns>An array of funding streams.</returns>
         [HttpGet("api/fundingstreams")]
-        [Produces(typeof(IEnumerable<StreamExtended>))]
+        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(IEnumerable<StreamExtended>))]
+        [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(StreamExtendedExample))]
         public IActionResult GetFundingStreams()
         {
             return Ok();
+        }
+
+        /// <summary>
+        /// Generate DSG funding model with real data.
+        /// </summary>
+        /// <returns>An array of funding streams.</returns>
+        [HttpGet("api/dsgmodel")]
+        public IActionResult GetDSGModel()
+        {
+            return Ok(GenerateDSGFunding.Generate());
         }
     }
 }

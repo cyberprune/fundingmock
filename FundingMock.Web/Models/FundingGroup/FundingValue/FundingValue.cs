@@ -10,7 +10,7 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// The funding value amount in pence. Rolled up from all child Funding Lines where Type = Payment
         /// </summary>
-        public int TotalValue { get; set; }
+        public long TotalValue { get; set; }
 
         /// <summary>
         /// An array showing the amounts by the periods (envelopes) they are paid in (e.g. for PE + Sport there are 2 periods per year, with a 7/5 split).

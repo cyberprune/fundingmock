@@ -31,7 +31,7 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// The amount of the profiled value, in pence.
         /// </summary>
-        public int ProfiledValue { get; set; }
+        public long ProfiledValue { get; set; }
 
         /// <summary>
         /// The code for the period.
