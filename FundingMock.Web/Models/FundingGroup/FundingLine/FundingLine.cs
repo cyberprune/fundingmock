@@ -14,6 +14,12 @@ namespace FundingMock.Web.Models
         public string Name { get; set; }
 
         /// <summary>
+        /// Funding Line Code - unique code within the template to lookup this specific funding line.
+        /// Used to map this funding line in consuming systems (eg nav for payment)
+        /// </summary>
+        public string FundingLineCode { get; set; }
+
+        /// <summary>
         /// The funding value in pence.
         /// </summary>
         public int Value { get; set; }

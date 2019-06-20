@@ -105,6 +105,7 @@ namespace FundingMock.Web.Samples
                                         new FundingLine
                                         {
                                             Name = "Total funding line",
+                                            FundingLineCode = "TotalFundingLine",
                                             TemplateLineId = 1,
                                             Type = FundingLineType.Payment,
                                             Value = 1400,
@@ -153,6 +154,7 @@ namespace FundingMock.Web.Samples
                                         new FundingLine
                                         {
                                             Name = "Total funding line",
+                                            FundingLineCode = "TotalFundingLine2",
                                             TemplateLineId = 1,
                                             Type = FundingLineType.Payment,
                                             Value = 1000,
