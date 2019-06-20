@@ -53,6 +53,12 @@ namespace FundingMock.Web.Models
         public string FormulaText { get; set; }
 
         /// <summary>
+        /// How the calculation should aggregate.
+        /// </summary>
+        [EnumDataType(typeof(AggregationType))]
+        public AggregationType AggregationType { get; set; }
+
+        /// <summary>
         /// Sub level calculations.
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -62,11 +68,5 @@ namespace FundingMock.Web.Models
         /// Reference data this these calculations depend on.
         /// </summary>
         public IEnumerable<ReferenceData> ReferenceData { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [EnumDataType(typeof(AggregationType))]
-        public AggregationType AggregationType { get; set; }
     }
 }

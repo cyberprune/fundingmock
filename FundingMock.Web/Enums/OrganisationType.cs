@@ -73,5 +73,10 @@ namespace FundingMock.Web.Enums
         /// Country eg GB
         /// </summary>
         Country,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        LocalGovernmentGroup,
     }
 }

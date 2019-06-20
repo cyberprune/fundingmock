@@ -40,7 +40,7 @@ namespace FundingMock.Web.Models
         public object Value { get; set; }
 
         /// <summary>
-        /// 
+        /// How the reference data should aggregate.
         /// </summary>
         [EnumDataType(typeof(AggregationType))]
         public AggregationType AggregationType { get; set; }

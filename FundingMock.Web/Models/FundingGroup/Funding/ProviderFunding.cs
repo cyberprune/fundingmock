@@ -1,4 +1,6 @@
-﻿namespace FundingMock.Web.Models
+﻿using Newtonsoft.Json;
+
+namespace FundingMock.Web.Models
 {
     /// <summary>
     /// A funding item.
@@ -18,6 +20,7 @@
         /// <summary>
         /// 
         /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public Variations Variations { get; set; }
 
         /// <summary>
