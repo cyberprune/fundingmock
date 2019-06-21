@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using FundingMock.Web.Enums;
+using Newtonsoft.Json;
 
 namespace FundingMock.Web.Models
 {
@@ -9,6 +10,11 @@ namespace FundingMock.Web.Models
     /// </summary>
     public class Calculation
     {
+        public Calculation()
+        {
+            AggregationType = AggregationType.Sum;
+        }
+
         /// <summary>
         /// The name of the calculation. Used as a description within the model.
         /// </summary>
@@ -47,8 +53,15 @@ namespace FundingMock.Web.Models
         public string FormulaText { get; set; }
 
         /// <summary>
+        /// How the calculation should aggregate.
+        /// </summary>
+        [EnumDataType(typeof(AggregationType))]
+        public AggregationType AggregationType { get; set; }
+
+        /// <summary>
         /// Sub level calculations.
         /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public IEnumerable<Calculation> Calculations { get; set; }
 
         /// <summary>

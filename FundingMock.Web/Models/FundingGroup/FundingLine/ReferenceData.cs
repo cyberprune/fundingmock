@@ -8,6 +8,11 @@ namespace FundingMock.Web.Models
     /// </summary>
     public class ReferenceData
     {
+        public ReferenceData()
+        {
+            AggregationType = AggregationType.Sum;
+        }
+
         /// <summary>
         /// The name of this reference data (e.g. 'Academic year 2018 to 2019 pupil number on roll').
         /// </summary>
@@ -33,5 +38,11 @@ namespace FundingMock.Web.Models
         /// The reference data value.
         /// </summary>
         public object Value { get; set; }
+
+        /// <summary>
+        /// How the reference data should aggregate.
+        /// </summary>
+        [EnumDataType(typeof(AggregationType))]
+        public AggregationType AggregationType { get; set; }
     }
 }

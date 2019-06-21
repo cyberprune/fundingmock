@@ -2,6 +2,7 @@
 using System.Net;
 using FundingMock.Web.Models;
 using FundingMock.Web.Samples;
+using FundingMock.Web.Tools;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
@@ -47,6 +48,11 @@ namespace FundingMock.Web.Controllers
         [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(ProviderFundingModelExample))]
         public IActionResult GetProviderFunding(string providerFundingFeedId)
         {
+            if (providerFundingFeedId.StartsWith("DSG_"))
+            {
+                return Ok(GenerateDSGFunding.GenerateProviderFunding(providerFundingFeedId));
+            }
+
             return Ok();
         }
 
@@ -67,10 +73,26 @@ namespace FundingMock.Web.Controllers
         /// </summary>
         /// <returns>An array of funding streams.</returns>
         [HttpGet("api/fundingstreams")]
-        [Produces(typeof(IEnumerable<StreamExtended>))]
+        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(IEnumerable<StreamExtended>))]
+        [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(StreamExtendedExample))]
         public IActionResult GetFundingStreams()
         {
             return Ok();
+        }
+
+        /// <summary>
+        /// Generate DSG funding model with real data.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="laCode"></param>
+        /// <param name="regionName"></param>
+        /// <param name="maxResults"></param>
+        /// <param name="skip"></param>
+        /// <returns>An array of funding streams.</returns>
+        [HttpGet("api/dsgmodel")]
+        public IActionResult GetDSGModel(string type, string laCode, string regionName, int maxResults = 10, int skip = 0)
+        {
+            return Ok(GenerateDSGFunding.GenerateFeed(type, laCode, regionName, maxResults, skip));
         }
     }
 }

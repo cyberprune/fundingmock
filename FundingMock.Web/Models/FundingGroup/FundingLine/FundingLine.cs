@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace FundingMock.Web.Models
@@ -17,12 +18,13 @@ namespace FundingMock.Web.Models
         /// Funding Line Code - unique code within the template to lookup this specific funding line.
         /// Used to map this funding line in consuming systems (eg nav for payment)
         /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string FundingLineCode { get; set; }
 
         /// <summary>
         /// The funding value in pence.
         /// </summary>
-        public int Value { get; set; }
+        public long Value { get; set; }
 
         /// <summary>
         /// A unique ID (in terms of template, not data) for this funding line (e.g. 345).
@@ -38,17 +40,20 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// The periods that this funding line where paid in / are due to be paid in.
         /// </summary>
-        public IEnumerable<FundingLinePeriod> Periods { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public IEnumerable<FundingLinePeriod> ProfilePeriods { get; set; }
 
         /// <summary>
         /// Calculations that make up this funding line.
         /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public IEnumerable<Calculation> Calculations { get; set; }
 
 
         /// <summary>
         /// Sub funding lines that make up this funding line.
         /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public IEnumerable<FundingLine> FundingLines { get; set; }
     }
 }

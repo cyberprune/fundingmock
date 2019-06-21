@@ -1,4 +1,6 @@
-﻿namespace FundingMock.Web.Models
+﻿using Newtonsoft.Json;
+
+namespace FundingMock.Web.Models
 {
     /// <summary>
     /// A funding item.
@@ -15,6 +17,10 @@
         /// </summary>
         public Organisation Organisation { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public Variations Variations { get; set; }
 
         /// <summary>
@@ -25,7 +31,7 @@
         /// <summary>
         /// The funding period the funding relates to.
         /// </summary>
-        public string PeriodCode { get; set; }
+        public string FundingPeriodCode { get; set; }
 
         /// <summary>
         /// Funding value.

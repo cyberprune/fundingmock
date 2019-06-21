@@ -79,7 +79,7 @@ namespace FundingMock.Web.Samples
                 Id = id,
                 //FundingVersion = fundingVersion,
 
-                PeriodCode = period.Code,
+                FundingPeriodCode = period.Code,
                 FundingStreamCode = stream.Code,
                 Organisation = new Organisation
                 {
@@ -152,7 +152,7 @@ namespace FundingMock.Web.Samples
                                                     TemplateLineId = 1,
                                                     Type = FundingLineType.Payment,
                                                     Value = 700,
-                                                    Periods = new List<FundingLinePeriod>
+                                                    ProfilePeriods = new List<FundingLinePeriod>
                                                     {
                                                         new FundingLinePeriod
                                                         {
@@ -221,7 +221,7 @@ namespace FundingMock.Web.Samples
                                                     TemplateLineId = 1,
                                                     Type = FundingLineType.Payment,
                                                     Value = 500,
-                                                    Periods = new List<FundingLinePeriod>
+                                                    ProfilePeriods = new List<FundingLinePeriod>
                                                     {
                                                         new FundingLinePeriod
                                                         {
