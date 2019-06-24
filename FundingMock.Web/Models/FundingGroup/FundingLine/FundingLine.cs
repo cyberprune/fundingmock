@@ -9,6 +9,11 @@ namespace FundingMock.Web.Models
     /// </summary>
     public class FundingLine
     {
+        public FundingLine()
+        {
+            Type = FundingLineType.Information;
+        }
+
         /// <summary>
         /// The name of a funding line (e.g. "Total funding line").
         /// </summary>

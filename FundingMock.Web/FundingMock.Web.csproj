@@ -6,6 +6,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Samples\PeAndSportsExample2.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Samples\CsvFiles\Academies.csv" />
+    <None Remove="Samples\CsvFiles\MaintainedSchools.csv" />
+    <None Remove="Samples\CsvFiles\NonMaintainedSpecialSchools.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Samples\CsvFiles\Academies.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Samples\CsvFiles\MaintainedSchools.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Samples\CsvFiles\NonMaintainedSpecialSchools.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="SchemaDefinition\BaseModel.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
