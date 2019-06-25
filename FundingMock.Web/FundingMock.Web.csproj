@@ -6,33 +6,33 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Samples\PeAndSportsExample2.cs" />
+    <Compile Remove="Examples\PeAndSportsExample2.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Samples\CsvFiles\Academies.csv" />
-    <None Remove="Samples\CsvFiles\DSG_2019-20_Mar_Tables_Values.xls" />
-    <None Remove="Samples\CsvFiles\MaintainedSchools.csv" />
-    <None Remove="Samples\CsvFiles\NonMaintainedSpecialSchools.csv" />
+    <None Remove="Tools\CsvFiles\Academies.csv" />
+    <None Remove="Tools\CsvFiles\DSG_2019-20_Mar_Tables_Values.xls" />
+    <None Remove="Tools\CsvFiles\MaintainedSchools.csv" />
+    <None Remove="Tools\CsvFiles\NonMaintainedSpecialSchools.csv" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Samples\CsvFiles\Academies.csv">
+    <EmbeddedResource Include="Tools\CsvFiles\Academies.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Samples\CsvFiles\DSG_2019-20_Mar_Tables_Values.xls">
+    <EmbeddedResource Include="Tools\CsvFiles\DSG_2019-20_Mar_Tables_Values.xls">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Samples\CsvFiles\MaintainedSchools.csv">
+    <EmbeddedResource Include="Tools\CsvFiles\MaintainedSchools.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Samples\CsvFiles\NonMaintainedSpecialSchools.csv">
+    <EmbeddedResource Include="Tools\CsvFiles\NonMaintainedSpecialSchools.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="SchemaDefinition\BaseModel.json">
+    <None Include="SchemaDefinition\LogicalModel.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
