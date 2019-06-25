@@ -11,12 +11,16 @@
 
   <ItemGroup>
     <None Remove="Samples\CsvFiles\Academies.csv" />
+    <None Remove="Samples\CsvFiles\DSG_2019-20_Mar_Tables_Values.xls" />
     <None Remove="Samples\CsvFiles\MaintainedSchools.csv" />
     <None Remove="Samples\CsvFiles\NonMaintainedSpecialSchools.csv" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Samples\CsvFiles\Academies.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Samples\CsvFiles\DSG_2019-20_Mar_Tables_Values.xls">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Samples\CsvFiles\MaintainedSchools.csv">

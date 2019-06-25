@@ -84,12 +84,12 @@ namespace FundingMock.Web.Samples
         private List<LineValue> GetDataFromFile(string fileName)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var emailBodyPath = Assembly.GetExecutingAssembly().GetManifestResourceNames().Single(str => str.EndsWith("." + fileName));
+            var stringBodyPath = Assembly.GetExecutingAssembly().GetManifestResourceNames().Single(str => str.EndsWith("." + fileName));
 
-            var result = new List<LineValue>();
-            var cnt = 0;
+            var lines = new List<LineValue>();
+            var lineNumber = 0;
 
-            using (var stream = assembly.GetManifestResourceStream(emailBodyPath))
+            using (var stream = assembly.GetManifestResourceStream(stringBodyPath))
             {
                 using (var reader = new StreamReader(stream))
                 {
@@ -97,23 +97,23 @@ namespace FundingMock.Web.Samples
                     {
                         var line = reader.ReadLine();
 
-                        if (cnt != 0)
+                        if (lineNumber != 0)
                         {
                             var lv = new LineValue();
                             var myLine = lv.FromCsvLineToLineValue(line);
 
                             if (myLine != null)
                             {
-                                result.Add(myLine);
+                                lines.Add(myLine);
                             }
                         }
 
-                        cnt += 1;
+                        lineNumber += 1;
                     }
                 }
             }
 
-            return result;
+            return lines;
         }
 
     }

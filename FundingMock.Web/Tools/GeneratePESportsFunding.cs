@@ -467,7 +467,7 @@ namespace FundingMock.Web.Samples
                                         new Calculation
                                         {
                                             Name = "Total Allocation",
-                                            Type = Enums.CalculationType.Cash,
+                                            Type = CalculationType.Cash,
                                             TemplateCalculationId = 1,
                                             Value = provider.TotalAllocation, //"16200",  //  "Maintained Schools" 
                                             ValueFormat = CalculationValueFormat.Currency,

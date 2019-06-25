@@ -3,10 +3,10 @@ using FundingMock.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Text;
 using System.Linq;
 using FundingMock.Web.Enums;
+using System.Reflection;
 
 namespace FundingMock.Web.Tools
 {
@@ -111,8 +111,8 @@ namespace FundingMock.Web.Tools
                 var groupingOrg = new OrganisationGroup
                 {
                     Name = organisation.Name,
-                    Type = organisation.Type == Type.LA ? Enums.OrganisationType.LocalAuthority 
-                        : (organisation.Type  == Type.LocalGovernmentGroup ? Enums.OrganisationType.LocalGovernmentGroup : Enums.OrganisationType.Region),
+                    Type = organisation.Type == Type.LA ? OrganisationType.LocalAuthority 
+                        : (organisation.Type  == Type.LocalGovernmentGroup ? OrganisationType.LocalGovernmentGroup : OrganisationType.Region),
                     SearchableName = organisation.Name,
                     Identifiers = identifiers
                 };
@@ -123,7 +123,7 @@ namespace FundingMock.Web.Tools
                 var fundingValue = GetFundingValue(spreadsheet, organisation, periods);
 
                 var primaryId = organisation.Type == Type.Region || organisation.Type == Type.LocalGovernmentGroup ? organisation.Name :
-                    groupingOrg.Identifiers.FirstOrDefault(id => id.Type == Enums.OrganisationIdentifierType.UKPRN)?.Value;
+                    groupingOrg.Identifiers.FirstOrDefault(id => id.Type == OrganisationIdentifierType.UKPRN)?.Value;
 
                 var providerFundings = new List<string>();
 
@@ -219,7 +219,7 @@ namespace FundingMock.Web.Tools
                 identifiers.Add(
                     new OrganisationIdentifier
                     {
-                        Type = Enums.OrganisationIdentifierType.LACode,
+                        Type = OrganisationIdentifierType.LACode,
                         Value = organisation.Code
                     }
                 );
@@ -227,7 +227,7 @@ namespace FundingMock.Web.Tools
                 identifiers.Add(
                     new OrganisationIdentifier
                     {
-                        Type = Enums.OrganisationIdentifierType.UKPRN,
+                        Type = OrganisationIdentifierType.UKPRN,
                         Value = organisation.UKPRN
                     }
                 );
@@ -239,7 +239,7 @@ namespace FundingMock.Web.Tools
             {
                 Code = "FY1920",
                 Name = "Financial year 2019-20",
-                Type = Enums.PeriodType.FinancialYear,
+                Type = PeriodType.FinancialYear,
                 StartDate = new DateTimeOffset(2019, 4, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2020, 3, 31, 0, 0, 0, ukOffset)
             };
@@ -277,12 +277,13 @@ namespace FundingMock.Web.Tools
 
         private static DataSet GetSpreadsheet()
         {
-            var filePath = @"C:\Users\foxdi\Downloads\DSG_2019-20_Mar_Tables_Values.xls";
-
             DataSet spreadsheet;
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-            using (var fileStream = File.Open(filePath, FileMode.Open, FileAccess.Read))
+            var assembly = Assembly.GetExecutingAssembly();
+            var stringBodyPath = Assembly.GetExecutingAssembly().GetManifestResourceNames().Single(str => str.EndsWith("DSG_2019-20_Mar_Tables_Values.xls"));
+
+            using (var fileStream = assembly.GetManifestResourceStream(stringBodyPath))
             {
                 using (var reader = ExcelReaderFactory.CreateReader(fileStream))
                 {
@@ -473,9 +474,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "2019-20 mobility and premises funding",
-                                                        Type = Enums.CalculationType.LumpSum,
+                                                        Type = CalculationType.LumpSum,
                                                         Value = GetDataFromMillions(spreadsheet, 2, org.RowNumber, 7),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -483,7 +484,7 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "2019-20 funding through the premises and mobility factors",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataFromMillions(spreadsheet, 2, org.RowNumber, 7),
                                                             }
@@ -500,9 +501,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "2019-20 growth funding",
-                                                        Type = Enums.CalculationType.LumpSum,
+                                                        Type = CalculationType.LumpSum,
                                                         Value = GetDataFromMillions(spreadsheet, 2, org.RowNumber, 8),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -510,7 +511,7 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "2019-20 schools block primary unit of funding",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataFromMillions(spreadsheet, 2, org.RowNumber, 8)
                                                             }
@@ -529,9 +530,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "Primary Pupil funding",
-                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                        Type = CalculationType.PerPupilFunding,
                                                         Value = GetData(spreadsheet, 2, org.RowNumber, 4) * GetDataInPence(spreadsheet, 2, org.RowNumber, 2),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "= RefData1 * RefData2",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -539,14 +540,14 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "2019-20 schools block primary pupils (headcount)",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetData(spreadsheet, 2, org.RowNumber, 4)
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "2019-20 schools block primary unit of funding",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataInPence(spreadsheet, 2, org.RowNumber, 2)
                                                             }
@@ -555,9 +556,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "Secondary Pupil funding",
-                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                        Type = CalculationType.PerPupilFunding,
                                                         Value = GetData(spreadsheet, 2, org.RowNumber, 5) * GetDataInPence(spreadsheet, 2, org.RowNumber, 3),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "= RefData1 * RefData2",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -565,14 +566,14 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "2019-20 schools block secondary pupils (headcount)",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetData(spreadsheet, 2, org.RowNumber, 5)
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "2019-20 schools block secondary unit of funding",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataInPence(spreadsheet, 2, org.RowNumber, 3)
                                                             }
@@ -600,9 +601,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "CSSB Pupil funding",
-                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                        Type = CalculationType.PerPupilFunding,
                                                         Value = GetData(spreadsheet, 2, org.RowNumber, 12) * GetDataInPence(spreadsheet, 2, org.RowNumber, 11),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -610,14 +611,14 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "2019-20 CSSB pupils (headcount)",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetData(spreadsheet, 2, org.RowNumber, 12)
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "2019-20 CSSB unit of funding (£s)",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataInPence(spreadsheet, 2, org.RowNumber, 11)
                                                             }
@@ -635,9 +636,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "2019-20 CSSB funding for historic commitments",
-                                                        Type = Enums.CalculationType.LumpSum,
+                                                        Type = CalculationType.LumpSum,
                                                         Value = GetDataFromMillions(spreadsheet, 2, org.RowNumber, 13),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -645,7 +646,7 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "2019-20 CSSB funding for historic commitments",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataFromMillions(spreadsheet, 2, org.RowNumber, 13)
                                                             }
@@ -673,9 +674,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "HN Block Before Basic Entitlement and Import and Export Adjustments",
-                                                        Type = Enums.CalculationType.LumpSum,
+                                                        Type = CalculationType.LumpSum,
                                                         Value = GetDataFromMillions(spreadsheet, 3, org.RowNumber, 2),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -683,7 +684,7 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "HN Block Before Basic Entitlement and Import and Export Adjustments",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataFromMillions(spreadsheet, 3, org.RowNumber, 2)
                                                             }
@@ -701,9 +702,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "HN Block Before Basic Entitlement and Import and Export Adjustments",
-                                                        Type = Enums.CalculationType.LumpSum,
+                                                        Type = CalculationType.LumpSum,
                                                         Value = GetDataInPence(spreadsheet, 3, org.RowNumber, 3) * GetData(spreadsheet, 3, org.RowNumber, 4),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -711,14 +712,14 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Basic Entitlement Pupils",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetData(spreadsheet, 3, org.RowNumber, 4)
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "2019-20 ACA-weighted basic entitlement factor unit rate",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataInPence(spreadsheet, 3, org.RowNumber, 3)
                                                             }
@@ -736,9 +737,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "Import/Export Adjustment",
-                                                        Type = Enums.CalculationType.LumpSum,
+                                                        Type = CalculationType.LumpSum,
                                                         Value = GetDataFromMillions(spreadsheet, 3, org.RowNumber, 5),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -746,7 +747,7 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Import/Export Adjustment Rate",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataFromMillions(spreadsheet, 3, org.RowNumber, 5)
                                                             }
@@ -764,9 +765,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "ONS Population Projection",
-                                                        Type = Enums.CalculationType.PupilNumber,
+                                                        Type = CalculationType.PupilNumber,
                                                         Value = GetData(spreadsheet, 3, org.RowNumber, 6),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -774,7 +775,7 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Basic Entitlement Pupils",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetData(spreadsheet, 3, org.RowNumber, 6)
                                                             }
@@ -792,9 +793,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "Additional High Needs Funding",
-                                                        Type = Enums.CalculationType.LumpSum,
+                                                        Type = CalculationType.LumpSum,
                                                         Value = GetDataFromMillions(spreadsheet, 3, org.RowNumber, 7),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -802,7 +803,7 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Additional High Needs",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataFromMillions(spreadsheet, 3, org.RowNumber, 7)
                                                             }
@@ -830,9 +831,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "HN Block Before Basic Entitlement and Import and Export Adjustments",
-                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                        Type = CalculationType.PerPupilFunding,
                                                         Value = GetData(spreadsheet, 5, org.RowNumber, 3) *  GetDataInPence(spreadsheet, 5, org.RowNumber, 2) * 15 * 38,
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -840,21 +841,21 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Total 3 and 4 Year Olds (PTE)",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetData(spreadsheet, 5, org.RowNumber, 3)
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "Early Years Universal Entitlement for 3 and 4 Year Olds Rate",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataInPence(spreadsheet, 5, org.RowNumber, 2)
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "PTE Funded Hours",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = 15
                                                             }
@@ -872,9 +873,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "HN Block Before Basic Entitlement and Import and Export Adjustment",
-                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                        Type = CalculationType.PerPupilFunding,
                                                         Value = GetData(spreadsheet, 5, org.RowNumber, 5) *  GetDataInPence(spreadsheet, 5, org.RowNumber, 2) * 15 * 38,
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -882,21 +883,21 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Total 3 and 4 Year Old for Additional Hours for Working Parents (PTE)",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetData(spreadsheet, 5, org.RowNumber, 5)
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "Early Years Universal Entitlement for 3 and 4 Year Olds Rate",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataInPence(spreadsheet, 5, org.RowNumber, 2)
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "PTE Funded Hours",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = 15
                                                             }
@@ -914,9 +915,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "Per Pupil Funding for 2 year old entitlement",
-                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                        Type = CalculationType.PerPupilFunding,
                                                         Value = GetData(spreadsheet, 5, org.RowNumber, 8) *  GetDataInPence(spreadsheet, 5, org.RowNumber, 7) * 15 * 38,
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -924,21 +925,21 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Total 2 Year Olds (PTE)",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetData(spreadsheet, 5, org.RowNumber, 8)
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "LA hourly rate for 2 year old entitlement",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataInPence(spreadsheet, 5, org.RowNumber, 7)
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "PTE Funded Hours",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = 15
                                                             }
@@ -956,9 +957,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "Early Years Pupil Premium lumpsum",
-                                                        Type = Enums.CalculationType.LumpSum,
+                                                        Type = CalculationType.LumpSum,
                                                         Value = GetDataFromMillions(spreadsheet, 2, org.RowNumber, 10),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -966,7 +967,7 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Early Years Pupil Premium Rate",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = -1 // Not in the file
                                                             }
@@ -984,9 +985,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "Disability Access Fund lumpsum",
-                                                        Type = Enums.CalculationType.LumpSum,
+                                                        Type = CalculationType.LumpSum,
                                                         Value = GetDataFromMillions(spreadsheet, 2, org.RowNumber, 11),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -994,7 +995,7 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Disability Access Fund Rate",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = -1 // Not in the file
                                                             }
@@ -1012,9 +1013,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "Per Pupil Funding for Maintained Nursery Schools",
-                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                        Type = CalculationType.PerPupilFunding,
                                                         Value = GetDataFromMillions(spreadsheet, 2, org.RowNumber, 12),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -1022,21 +1023,21 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Maintained Nursery Schools Supplement (PTE)",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = -1 // Not in the file
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "Maintained Nursery Schools Supplement Hourly Rate",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = -1 // Not in the file
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "PTE Funded Hours",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = -1 // Not in the file
                                                             }
@@ -1076,9 +1077,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "2019-20 mobility and premises funding",
-                                                        Type = Enums.CalculationType.LumpSum,
+                                                        Type = CalculationType.LumpSum,
                                                         Value = GetDataFromMillions(spreadsheet, 2, org.RowNumber, 6),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -1086,7 +1087,7 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "2019-20 funding through the premises and mobility factors",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataFromMillions(spreadsheet, 2, org.RowNumber, 6)
                                                             }
@@ -1104,9 +1105,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "2019-20 growth funding",
-                                                        Type = Enums.CalculationType.LumpSum,
+                                                        Type = CalculationType.LumpSum,
                                                         Value = GetDataFromMillions(spreadsheet, 2, org.RowNumber, 7),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -1114,7 +1115,7 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "2019-20 schools block primary unit of funding",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataFromMillions(spreadsheet, 2, org.RowNumber, 7)
                                                             }
@@ -1132,9 +1133,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "2019-20 schools block primary unit of funding",
-                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                        Type = CalculationType.PerPupilFunding,
                                                         Value = GetDataFromMillions(spreadsheet, 2, org.RowNumber, 2) * GetData(spreadsheet, 2, org.RowNumber, 4),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -1142,14 +1143,14 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "2019-20 schools block primary pupils (headcount)",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetData(spreadsheet, 2, org.RowNumber, 4)
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "2019-20 schools block primary unit of funding",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataFromMillions(spreadsheet, 2, org.RowNumber, 2)
                                                             }
@@ -1167,9 +1168,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "Deductions To School Block",
-                                                        Type = Enums.CalculationType.LumpSum,
+                                                        Type = CalculationType.LumpSum,
                                                         Value =  GetDataFromMillions(spreadsheet, 2, org.RowNumber, 9),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -1177,7 +1178,7 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Rate Deductions To School Block",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = -1 // Not given in file
                                                             }
@@ -1205,9 +1206,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "Rate Deductions To School Block",
-                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                        Type = CalculationType.PerPupilFunding,
                                                         Value = GetDataInPence(spreadsheet, 2, org.RowNumber, 11) * GetData(spreadsheet, 2, org.RowNumber, 12),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -1215,14 +1216,14 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "2019-20 CSSB pupils (headcount)",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetData(spreadsheet, 2, org.RowNumber, 12)
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "2019-20 CSSB unit of funding (£s)",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataInPence(spreadsheet, 2, org.RowNumber, 11)
                                                             }
@@ -1239,9 +1240,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "2019-20 CSSB funding for historic commitments",
-                                                        Type = Enums.CalculationType.LumpSum,
+                                                        Type = CalculationType.LumpSum,
                                                         Value = GetDataFromMillions(spreadsheet, 2, org.RowNumber, 13),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -1249,7 +1250,7 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "2019-20 CSSB funding for historic commitments",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataFromMillions(spreadsheet, 2, org.RowNumber, 13)
                                                             }
@@ -1276,9 +1277,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "HN Block Before Basic Entitlement and Import and Export Adjustments",
-                                                        Type = Enums.CalculationType.LumpSum,
+                                                        Type = CalculationType.LumpSum,
                                                         Value = GetDataFromMillions(spreadsheet, 3, org.RowNumber, 2),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -1286,7 +1287,7 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "HN Block Before Basic Entitlement and Import and Export Adjustments",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataFromMillions(spreadsheet, 3, org.RowNumber, 2)
                                                             }
@@ -1303,9 +1304,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "HN Block Before Basic Entitlement and Import and Export Adjustments",
-                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                        Type = CalculationType.PerPupilFunding,
                                                         Value = GetData(spreadsheet, 3, org.RowNumber, 4) * GetDataInPence(spreadsheet, 3, org.RowNumber, 3),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -1313,14 +1314,14 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Basic Entitlement Pupils",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetData(spreadsheet, 3, org.RowNumber, 4)
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "2019-20 ACA-weighted basic entitlement factor unit rate",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataInPence(spreadsheet, 3, org.RowNumber, 3)
                                                             }
@@ -1337,9 +1338,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "Import/Export Adjustment",
-                                                        Type = Enums.CalculationType.LumpSum,
+                                                        Type = CalculationType.LumpSum,
                                                         Value = GetDataFromMillions(spreadsheet, 3, org.RowNumber, 5),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -1347,7 +1348,7 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Import/Export Adjustment Rate",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = -1 // Not given in file
                                                             }
@@ -1364,9 +1365,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "ONS Population Projection",
-                                                        Type = Enums.CalculationType.PupilNumber,
+                                                        Type = CalculationType.PupilNumber,
                                                         Value = GetData(spreadsheet, 3, org.RowNumber, 6),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -1374,7 +1375,7 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Basic Entitlement Pupils",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetData(spreadsheet, 3, org.RowNumber, 6),
                                                             }
@@ -1391,9 +1392,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "Additional High Needs Funding",
-                                                        Type = Enums.CalculationType.LumpSum,
+                                                        Type = CalculationType.LumpSum,
                                                         Value = GetDataFromMillions(spreadsheet, 3, org.RowNumber, 7),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -1401,7 +1402,7 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Additional High Needs",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataFromMillions(spreadsheet, 3, org.RowNumber, 7)
                                                             }
@@ -1430,9 +1431,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "April 2019-August 2019",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 2) * 600000,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -1440,14 +1441,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-August 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 2)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-August 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = 600000
                                                                             }
@@ -1456,9 +1457,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "Sept 2019-March 2020",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 3) * 600000,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -1466,14 +1467,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Sept 2019-March 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 3)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Sept 2019-March 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = 600000
                                                                             }
@@ -1490,9 +1491,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "April 2019-August 2019",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 5) * 1000000,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -1500,14 +1501,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-August 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 5)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-August 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = 1000000
                                                                             }
@@ -1516,9 +1517,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "Sept 2019-March 2020",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 6) * 1000000,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -1526,14 +1527,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Sept 2019-March 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 6)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Sept 2019-March 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = 1000000
                                                                             }
@@ -1550,9 +1551,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "April 2019-August 2019",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 8) * 240000,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -1560,14 +1561,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-August 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 8)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-August 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = 240000 // I think
                                                                             }
@@ -1576,9 +1577,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "Sept 2019-March 2020",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 9) * 240000,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -1586,14 +1587,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Sept 2019-March 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 9)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Sept 2019-March 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = 240000 // I think
                                                                             }
@@ -1610,9 +1611,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "April 2019-August 2019",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 11) * -1,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -1620,14 +1621,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-August 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 11)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-August 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = -1 // Not given in file, and I can't infer
                                                                             }
@@ -1636,9 +1637,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "Sept 2019-March 2020",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 12) * -1,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -1646,14 +1647,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Sept 2019-March 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 12)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Sept 2019-March 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = -1 // Not given in file, and I can't infer
                                                                             }
@@ -1679,9 +1680,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "April 2019-August 2019",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 14) * -1,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -1689,14 +1690,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-August 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 14)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-August 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = -1 // Not given
                                                                             }
@@ -1705,9 +1706,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "Sept 2019-March 2020",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 15) * -1,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -1715,14 +1716,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Sept 2019-March 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 15)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Sept 2019-March 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = -1 // Not given
                                                                             }
@@ -1739,9 +1740,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "April 2019-August 2019",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 17) * -1,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -1749,14 +1750,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-August 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 17)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-August 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = -1 // Not given
                                                                             }
@@ -1766,9 +1767,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "Sept 2019-March 2020",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 18) * -1,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -1776,14 +1777,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Sept 2019-March 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 18)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Sept 2019-March 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = -1 // Not given
                                                                             }
@@ -1800,9 +1801,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "April 2019-August 2019",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 20) * -1,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -1810,14 +1811,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-August 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 20)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-August 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = -1 // Not given
                                                                             }
@@ -1826,9 +1827,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "Sept 2019-March 2020",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 21) * -1,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -1836,14 +1837,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Sept 2019-March 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 21)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Sept 2019-March 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = -1 // Not given
                                                                             }
@@ -1868,9 +1869,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "April 2019-August 2019",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 23) * -1,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -1878,14 +1879,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-August 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 23)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-August 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = -1 // Not given
                                                                             }
@@ -1894,9 +1895,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "Sept 2019-March 2020",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 24) * -1,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -1904,14 +1905,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Sept 2019-March 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 24)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Sept 2019-March 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = -1 // Not given
                                                                             }
@@ -1928,9 +1929,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "April 2019-August 2019",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 26) * -1,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -1938,14 +1939,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-August 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 26)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-August 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = -1 // Not given
                                                                             }
@@ -1954,9 +1955,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "Sept 2019-March 2020",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 27) * -1,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -1964,14 +1965,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Sept 2019-March 2020 Pupil Numbe",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 27)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Sept 2019-March 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = -1 // Not given
                                                                             }
@@ -1995,9 +1996,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "April 2019-August 2019",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 29) * -1,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -2005,14 +2006,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-July 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 29)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-July 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = -1 // Not given
                                                                             }
@@ -2021,9 +2022,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "Sept 2019-March 2020",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 30) * -1,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -2031,14 +2032,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Aug 2019-March 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 30)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Aug 2019-March 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = -1 // Not given
                                                                             }
@@ -2062,9 +2063,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "April 2019-August 2019",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 32) * -1,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -2072,14 +2073,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-July 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 32)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "April 2019-July 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = -1 // Not given
                                                                             }
@@ -2088,9 +2089,9 @@ namespace FundingMock.Web.Tools
                                                                     new Calculation
                                                                     {
                                                                         Name = "Sept 2019-March 2020",
-                                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                                        Type = CalculationType.PerPupilFunding,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 33) * -1,
-                                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                        ValueFormat = CalculationValueFormat.Currency,
                                                                         FormulaText = "",
                                                                         TemplateCalculationId = templateCalculationId++,
                                                                         ReferenceData = new List<ReferenceData>
@@ -2098,14 +2099,14 @@ namespace FundingMock.Web.Tools
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Aug 2019-March 2020 Pupil Number",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 33)
                                                                             },
                                                                             new ReferenceData
                                                                             {
                                                                                 Name = "Aug 2019-March 2020 Rate SEN/AP",
-                                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                                Format = ReferenceDataValueFormat.Number,
                                                                                 TemplateReferenceId = templateReferenceId++,
                                                                                 Value = -1 // Not given
                                                                             }
@@ -2124,9 +2125,9 @@ namespace FundingMock.Web.Tools
                                                             new Calculation
                                                             {
                                                                 Name = "April 2019-August 2019",
-                                                                Type = Enums.CalculationType.PerPupilFunding,
+                                                                Type = CalculationType.PerPupilFunding,
                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 35) * -1,
-                                                                ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                ValueFormat = CalculationValueFormat.Currency,
                                                                 FormulaText = "",
                                                                 TemplateCalculationId = templateCalculationId++,
                                                                 ReferenceData = new List<ReferenceData>
@@ -2134,14 +2135,14 @@ namespace FundingMock.Web.Tools
                                                                     new ReferenceData
                                                                     {
                                                                         Name = "April 2019-July 2020 Pupil Number",
-                                                                        Format = Enums.ReferenceDataValueFormat.Number,
+                                                                        Format = ReferenceDataValueFormat.Number,
                                                                         TemplateReferenceId = templateReferenceId++,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 35)
                                                                     },
                                                                     new ReferenceData
                                                                     {
                                                                         Name = "April 2019-July 2020 Rate SEN/AP",
-                                                                        Format = Enums.ReferenceDataValueFormat.Number,
+                                                                        Format = ReferenceDataValueFormat.Number,
                                                                         TemplateReferenceId = templateReferenceId++,
                                                                         Value = -1 // Not given
                                                                     }
@@ -2150,9 +2151,9 @@ namespace FundingMock.Web.Tools
                                                             new Calculation
                                                             {
                                                                 Name = "Sept 2019-March 2020",
-                                                                Type = Enums.CalculationType.PerPupilFunding,
+                                                                Type = CalculationType.PerPupilFunding,
                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 36) * -1,
-                                                                ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                ValueFormat = CalculationValueFormat.Currency,
                                                                 FormulaText = "",
                                                                 TemplateCalculationId = templateCalculationId++,
                                                                 ReferenceData = new List<ReferenceData>
@@ -2160,14 +2161,14 @@ namespace FundingMock.Web.Tools
                                                                     new ReferenceData
                                                                     {
                                                                         Name = "Aug 2019-March 2020 Pupil Number",
-                                                                        Format = Enums.ReferenceDataValueFormat.Number,
+                                                                        Format = ReferenceDataValueFormat.Number,
                                                                         TemplateReferenceId = templateReferenceId++,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 36)
                                                                     },
                                                                     new ReferenceData
                                                                     {
                                                                         Name = "Aug 2019-March 2020 Rate SEN/AP",
-                                                                        Format = Enums.ReferenceDataValueFormat.Number,
+                                                                        Format = ReferenceDataValueFormat.Number,
                                                                         TemplateReferenceId = templateReferenceId++,
                                                                         Value = -1 // Not given
                                                                     }
@@ -2184,9 +2185,9 @@ namespace FundingMock.Web.Tools
                                                             new Calculation
                                                             {
                                                                 Name = "April 2019-August 2019",
-                                                                Type = Enums.CalculationType.PerPupilFunding,
+                                                                Type = CalculationType.PerPupilFunding,
                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 38) * -1,
-                                                                ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                ValueFormat = CalculationValueFormat.Currency,
                                                                 FormulaText = "",
                                                                 TemplateCalculationId = templateCalculationId++,
                                                                 ReferenceData = new List<ReferenceData>
@@ -2194,14 +2195,14 @@ namespace FundingMock.Web.Tools
                                                                     new ReferenceData
                                                                     {
                                                                         Name = "April 2019-July 2020 Pupil Number",
-                                                                        Format = Enums.ReferenceDataValueFormat.Number,
+                                                                        Format = ReferenceDataValueFormat.Number,
                                                                         TemplateReferenceId = templateReferenceId++,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 38)
                                                                     },
                                                                     new ReferenceData
                                                                     {
                                                                         Name = "April 2019-July 2020 Rate SEN/AP",
-                                                                        Format = Enums.ReferenceDataValueFormat.Number,
+                                                                        Format = ReferenceDataValueFormat.Number,
                                                                         TemplateReferenceId = templateReferenceId++,
                                                                         Value = -1 // Not given
                                                                     }
@@ -2210,9 +2211,9 @@ namespace FundingMock.Web.Tools
                                                             new Calculation
                                                             {
                                                                 Name = "Sept 2019-March 2020",
-                                                                Type = Enums.CalculationType.PerPupilFunding,
+                                                                Type = CalculationType.PerPupilFunding,
                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 39) * -1,
-                                                                ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                ValueFormat = CalculationValueFormat.Currency,
                                                                 FormulaText = "",
                                                                 TemplateCalculationId = templateCalculationId++,
                                                                 ReferenceData = new List<ReferenceData>
@@ -2220,14 +2221,14 @@ namespace FundingMock.Web.Tools
                                                                     new ReferenceData
                                                                     {
                                                                         Name = "Aug 2019-March 2020 Pupil Number",
-                                                                        Format = Enums.ReferenceDataValueFormat.Number,
+                                                                        Format = ReferenceDataValueFormat.Number,
                                                                         TemplateReferenceId = templateReferenceId++,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 39)
                                                                     },
                                                                     new ReferenceData
                                                                     {
                                                                         Name = "Aug 2019-March 2020 Rate SEN/AP",
-                                                                        Format = Enums.ReferenceDataValueFormat.Number,
+                                                                        Format = ReferenceDataValueFormat.Number,
                                                                         TemplateReferenceId = templateReferenceId++,
                                                                         Value = -1 // Not given
                                                                     }
@@ -2244,9 +2245,9 @@ namespace FundingMock.Web.Tools
                                                             new Calculation
                                                             {
                                                                 Name = "April 2019-August 2019",
-                                                                Type = Enums.CalculationType.LumpSum,
+                                                                Type = CalculationType.LumpSum,
                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 41) * -1,
-                                                                ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                ValueFormat = CalculationValueFormat.Currency,
                                                                 FormulaText = "",
                                                                 TemplateCalculationId = templateCalculationId++,
                                                                 ReferenceData = new List<ReferenceData>
@@ -2254,14 +2255,14 @@ namespace FundingMock.Web.Tools
                                                                     new ReferenceData
                                                                     {
                                                                         Name = "April 2019-July 2020 Pupil Number",
-                                                                        Format = Enums.ReferenceDataValueFormat.Number,
+                                                                        Format = ReferenceDataValueFormat.Number,
                                                                         TemplateReferenceId = templateReferenceId++,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 41)
                                                                     },
                                                                     new ReferenceData
                                                                     {
                                                                         Name = "April 2019-July 2020 Rate SEN/AP",
-                                                                        Format = Enums.ReferenceDataValueFormat.Number,
+                                                                        Format = ReferenceDataValueFormat.Number,
                                                                         TemplateReferenceId = templateReferenceId++,
                                                                         Value = -1 // Not given
                                                                     }
@@ -2270,9 +2271,9 @@ namespace FundingMock.Web.Tools
                                                             new Calculation
                                                             {
                                                                 Name = "Sept 2019-March 2020",
-                                                                Type = Enums.CalculationType.LumpSum,
+                                                                Type = CalculationType.LumpSum,
                                                                 Value = GetData(spreadsheet, 4, org.RowNumber, 42) * -1,
-                                                                ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                                ValueFormat = CalculationValueFormat.Currency,
                                                                 FormulaText = "",
                                                                 TemplateCalculationId = templateCalculationId++,
                                                                 ReferenceData = new List<ReferenceData>
@@ -2280,14 +2281,14 @@ namespace FundingMock.Web.Tools
                                                                     new ReferenceData
                                                                     {
                                                                         Name = "Aug 2019-March 2020 Pupil Number",
-                                                                        Format = Enums.ReferenceDataValueFormat.Number,
+                                                                        Format = ReferenceDataValueFormat.Number,
                                                                         TemplateReferenceId = templateReferenceId++,
                                                                         Value = GetData(spreadsheet, 4, org.RowNumber, 42)
                                                                     },
                                                                     new ReferenceData
                                                                     {
                                                                         Name = "Aug 2019-March 2020 Rate SEN/AP",
-                                                                        Format = Enums.ReferenceDataValueFormat.Number,
+                                                                        Format = ReferenceDataValueFormat.Number,
                                                                         TemplateReferenceId = templateReferenceId++,
                                                                         Value = -1 // Not given
                                                                     }
@@ -2316,9 +2317,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "HN Block Before Basic Entitlement and Import and Export Adjustments",
-                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                        Type = CalculationType.PerPupilFunding,
                                                         Value = GetDataFromMillions(spreadsheet, 5, org.RowNumber, 4),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -2326,21 +2327,21 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Total 3 and 4 Year Old for Additional Hours for Working Parents (PTE)",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetData(spreadsheet, 5, org.RowNumber, 3)
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "Early Years Universal Entitlement for 3 and 4 Year Olds Rate",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataInPence(spreadsheet, 5, org.RowNumber, 2)
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "PTE Funded Hours",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = 15
                                                             }
@@ -2357,9 +2358,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "HN Block Before Basic Entitlement and Import and Export Adjustments",
-                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                        Type = CalculationType.PerPupilFunding,
                                                         Value = GetDataFromMillions(spreadsheet, 5, org.RowNumber, 6),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -2367,21 +2368,21 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Total 3 and 4 Year Old for Additional Hours for Working Parents (PTE)",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetData(spreadsheet, 5, org.RowNumber, 5)
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "Early Years Universal Entitlement for 3 and 4 Year Olds Rate",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataInPence(spreadsheet, 5, org.RowNumber, 2)
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "PTE Funded Hours",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = 15
                                                             }
@@ -2398,9 +2399,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "Per Pupil Funding for 2 year old entitlement",
-                                                        Type = Enums.CalculationType.LumpSum,
+                                                        Type = CalculationType.LumpSum,
                                                         Value =  GetDataFromMillions(spreadsheet, 5, org.RowNumber, 9),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -2408,21 +2409,21 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Total 2 Year Olds (PTE)",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetData(spreadsheet, 5, org.RowNumber, 8)
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "LA hourly rate for 2 year old entitlement",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = GetDataInPence(spreadsheet, 5, org.RowNumber, 7)
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "PTE Funded Hours",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = 15
                                                             }
@@ -2439,9 +2440,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "Early Years Pupil Premium lumpsum",
-                                                        Type = Enums.CalculationType.LumpSum,
+                                                        Type = CalculationType.LumpSum,
                                                         Value = GetDataFromMillions(spreadsheet, 5, org.RowNumber, 10),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -2449,7 +2450,7 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Early Years Pupil Premium Rate",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = -1
                                                             }
@@ -2466,9 +2467,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "Disability Access Fund lumpsum",
-                                                        Type = Enums.CalculationType.LumpSum,
+                                                        Type = CalculationType.LumpSum,
                                                         Value = GetDataFromMillions(spreadsheet, 5, org.RowNumber, 11),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -2476,7 +2477,7 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Disability Access Fund Rate",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = -1
                                                             }
@@ -2493,9 +2494,9 @@ namespace FundingMock.Web.Tools
                                                     new Calculation
                                                     {
                                                         Name = "Per Pupil Funding for Maintained Nursery Schools",
-                                                        Type = Enums.CalculationType.PerPupilFunding,
+                                                        Type = CalculationType.PerPupilFunding,
                                                         Value = GetDataFromMillions(spreadsheet, 5, org.RowNumber, 12),
-                                                        ValueFormat = Enums.CalculationValueFormat.Currency,
+                                                        ValueFormat = CalculationValueFormat.Currency,
                                                         FormulaText = "",
                                                         TemplateCalculationId = templateCalculationId++,
                                                         ReferenceData = new List<ReferenceData>
@@ -2503,21 +2504,21 @@ namespace FundingMock.Web.Tools
                                                             new ReferenceData
                                                             {
                                                                 Name = "Maintained Nursery Schools Supplement (PTE)",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = -1
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "Maintained Nursery Schools Supplement Hourly Rate",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = -1
                                                             },
                                                             new ReferenceData
                                                             {
                                                                 Name = "PTE Funded Hours",
-                                                                Format = Enums.ReferenceDataValueFormat.Number,
+                                                                Format = ReferenceDataValueFormat.Number,
                                                                 TemplateReferenceId = templateReferenceId++,
                                                                 Value = -1
                                                             }
@@ -3093,4 +3094,3 @@ namespace FundingMock.Web.Tools
         }
     }
 }
- 
