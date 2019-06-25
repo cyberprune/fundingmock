@@ -6,30 +6,49 @@ using System.Data;
 using System.IO;
 using System.Text;
 using System.Linq;
+using FundingMock.Web.Enums;
 
 namespace FundingMock.Web.Tools
 {
     public static class GenerateDSGFunding
     {
-        public static FeedBaseModel[] GenerateFeed(string groupingType, string filterBy, int maxResults, int skip)
+        public static FeedBaseModel GetFeedEntry(string id)
         {
+            var data = GenerateFeed(null, int.MaxValue, null);
+
+            foreach (var item in data)
+            {
+                if (item.Id == id)
+                {
+                    return item.Content;
+                }
+            }
+
+            return null;
+        }
+
+        public static FeedResponseContentModel[] GenerateFeed(FeedRequestObject feedRequestObject, int pageSize, int? pageRef)
+        {
+            var returnList0 = new List<FeedResponseContentModel>();
+
+            var ukprns = feedRequestObject?.UkPrns;
             var spreadsheet = GetSpreadsheet();
 
             var allLas = GetLAs(spreadsheet);
-            var las = groupingType == "LA" || string.IsNullOrEmpty(groupingType) ? 
-                allLas.Where(item => string.IsNullOrEmpty(filterBy) 
-                    || item.Code == filterBy
-                    || item.Name.Equals(filterBy, StringComparison.InvariantCultureIgnoreCase)).ToList() : new List<Org>();
+            var las = feedRequestObject?.OrganisationGroupTypes?.Contains(OrganisationType.LocalAuthority) != false ?
+                allLas.Where(item => ukprns == null
+                    || item.Code == ukprns[0]
+                    || item.Name.Equals(ukprns[0], StringComparison.InvariantCultureIgnoreCase)).ToList() : new List<Org>();
 
             var allRegions = GetRegions(spreadsheet);
-            var regions = groupingType == "Region" || string.IsNullOrEmpty(groupingType) ?
-                allRegions.Where(item => string.IsNullOrEmpty(filterBy) 
-                    || item.Name.Equals(filterBy, StringComparison.InvariantCultureIgnoreCase)).ToList() : new List<Org>();
+            var regions = feedRequestObject?.OrganisationGroupTypes?.Contains(OrganisationType.Region) != false ?
+                allRegions.Where(item => ukprns == null
+                    || item.Name.Equals(ukprns[0], StringComparison.InvariantCultureIgnoreCase)).ToList() : new List<Org>();
 
             var organisations = las.ToList(); // Shallow copy
             organisations.AddRange(regions);
 
-            if (string.IsNullOrEmpty(groupingType) || groupingType == "LocalGovernmentGroup")
+            if (feedRequestObject?.OrganisationGroupTypes?.Contains(OrganisationType.LocalGovernmentGroup) != false)
             {
                 organisations.Add(new Org { Name = "METROPOLITAN AUTHORITIES", RowNumber = 156, Type = Type.LocalGovernmentGroup });
                 organisations.Add(new Org { Name = "UNITARY AUTHORITIES", RowNumber = 157, Type = Type.LocalGovernmentGroup });
@@ -38,11 +57,17 @@ namespace FundingMock.Web.Tools
 
             var ukOffset = new TimeSpan(0, 0, 0);
 
+            if (feedRequestObject?.FundingPeriodCodes.Any() == true 
+                && feedRequestObject?.FundingPeriodCodes?.Contains("FY1920") == false)
+            {
+                return returnList0.ToArray();
+            }
+
             var period = new FundingPeriod
             {
                 Code = "FY1920",
                 Name = "Financial year 2019-20",
-                Type = Enums.PeriodType.FinancialYear,
+                Type = PeriodType.FinancialYear,
                 StartDate = new DateTimeOffset(2019, 4, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2020, 3, 31, 0, 0, 0, ukOffset)
             };
@@ -60,8 +85,6 @@ namespace FundingMock.Web.Tools
             var schemaUri = "http://example.org/#schema";
             var schemaVersion = "1.0";
 
-            var returnList = new List<FeedBaseModel>();
-
             foreach (var organisation in organisations)
             {
                 var identifiers = new List<OrganisationIdentifier>();
@@ -71,7 +94,7 @@ namespace FundingMock.Web.Tools
                     identifiers.Add(
                         new OrganisationIdentifier
                         {
-                            Type = Enums.OrganisationIdentifierType.LACode,
+                            Type = OrganisationIdentifierType.LACode,
                             Value = organisation.Code
                         }
                     );
@@ -79,7 +102,7 @@ namespace FundingMock.Web.Tools
                     identifiers.Add(
                         new OrganisationIdentifier
                         {
-                            Type = Enums.OrganisationIdentifierType.UKPRN,
+                            Type = OrganisationIdentifierType.UKPRN,
                             Value = organisation.UKPRN
                         }
                     );
@@ -117,11 +140,6 @@ namespace FundingMock.Web.Tools
                     case Type.LocalGovernmentGroup:
                         providerFundings.AddRange(GetLasForRegion(organisation.Name).Select(la => $"{stream.Code}_{period.Code}_{la.UKPRN}_{fundingVersion}").ToList());
 
-                        //foreach (var la in allLas)
-                        //{
-                        //    providerFundings.Add($"{stream.Code}_{period.Code}_{la.UKPRN}_{fundingVersion}");
-                        //}
-
                         break;
                 }
 
@@ -143,13 +161,34 @@ namespace FundingMock.Web.Tools
                         StatusChangedDate = new DateTimeOffset(new DateTime(2019, 3, 1)),
                         ExternalPublicationDate = new DateTimeOffset(new DateTime(2019, 3, 7)),
                         PaymentDate = new DateTimeOffset(new DateTime(2019, 3, 14))
-                    },
+                    }
                 };
 
-                returnList.Add(data);
+                var data0 = new FeedResponseContentModel
+                {
+                    Content = data,
+                    Id = data.Funding.Id,
+                    Author = new FeedResponseAuthor
+                    {
+                        Email = "calculate-funding@education.gov.uk",
+                        Name = "Calculate Funding Service"
+                    },
+                    Title = data.Funding.Id,
+                    Updated = DateTime.Now,
+                    Link = new FeedLink[]
+                    {
+                        new FeedLink
+                        {
+                            Href = $"#/{data.Funding.Id}",
+                            Rel = "self"
+                        }
+                    }
+                };
+
+                returnList0.Add(data0);
             }
 
-            return returnList.Skip(skip).Take(maxResults).ToArray();
+            return returnList0.Skip((pageRef ?? 0) * pageSize).Take(pageSize).ToArray();
         }
 
         public static ProviderFunding GenerateProviderFunding(string id)

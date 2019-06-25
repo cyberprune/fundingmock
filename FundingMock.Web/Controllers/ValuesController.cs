@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
+using System.Linq;
+using System;
 
 namespace FundingMock.Web.Controllers
 {
@@ -21,64 +23,132 @@ namespace FundingMock.Web.Controllers
         /// <summary>
         /// Get all fundings as a feed format.
         /// </summary>
-        /// <param name="streams">Limit to certain steams if passed - if null or empty, all streams are returned. Use commas to seperate (e.g. 'PESP,DSG').</param>
-        /// <param name="groupingTypes">Limit to certain grouping types (LA, Region) if passed - if null or empty, all grouping types are returned.</param>
-        /// <param name="filterBy">Filter by a specific string (this can be LA code or region name, for example).</param>
-        /// <param name="maxResults">Max results to get - default is 10.</param>
-        /// <param name="skip">Number of results to skip - default is 0.</param>
+        /// <param name="feedRequestObject">Optional - feed request parameters.</param>
         /// <returns>An array of feed results.</returns>
-        [HttpGet("api/feed")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(IEnumerable<FeedBaseModel>))]
-        [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(FeedBaseModelExample))]
-        public IActionResult Get(string streams, string groupingTypes, string filterBy, int maxResults = 10, int skip = 0)
+        [HttpPost("api/feed")]
+        [SwaggerRequestExample(typeof(FeedRequestObject), typeof(FeedRequestExample))]
+        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(FeedResponseModel))]
+        [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(FeedResponseModelExample))]
+        public IActionResult GetFeed(FeedRequestObject feedRequestObject = null)
         {
-            var returnList = new List<FeedBaseModel>();
-
-            if (string.IsNullOrEmpty(streams) || streams.ToLower().Contains("dsg"))
-            {
-                returnList.AddRange(GenerateDSGFunding.GenerateFeed(groupingTypes, filterBy, maxResults, skip));
-            }
-
-            if (string.IsNullOrEmpty(streams) || streams.ToLower().Contains("pesp"))
-            {
-                returnList.AddRange(GeneratePESPFunding.GenerateFeed(maxResults, skip));
-            }
-
-            return Ok(returnList);
+            return GetFeedPage(null, feedRequestObject);
         }
 
         /// <summary>
-        /// Get all fundings as a feed format - full logical format, this API won't be produced, it's purely for documentation
+        /// Get all fundings as a feed format (after newest page).
         /// </summary>
-        /// <returns>An array of fundings.</returns>
-        [HttpGet("api/logical")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(IEnumerable<LogicalBaseModel>))]
-        [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(LogicalBaseModelExample))]
-        public IActionResult GetLogicalFeed()
+        /// <param name="pageRef">Optional - the page to look at.</param>
+        /// <param name="feedRequestObject">Optional - feed request parameters.</param>
+        /// <returns>An array of feed results.</returns>
+        [HttpPost("api/feed/{pageRef}")]
+        [SwaggerRequestExample(typeof(FeedRequestObject), typeof(FeedRequestExample))]
+        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(FeedResponseModel))]
+        [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(FeedResponseModelExample))]
+        public IActionResult GetFeedPage([FromRoute] int? pageRef, FeedRequestObject feedRequestObject = null)
         {
-            return Ok(new LogicalBaseModelExample().GetExamples());
+            var list = new List<FeedResponseContentModel>();
+            var pageSize = feedRequestObject?.PageSize ?? 10;
+
+            if (feedRequestObject?.FundingStreamCodes == null || feedRequestObject.FundingStreamCodes.Contains("DSG"))
+            {
+                list.AddRange(GenerateDSGFunding.GenerateFeed(feedRequestObject, pageSize, pageRef));
+            }
+
+            if (feedRequestObject?.FundingStreamCodes == null || feedRequestObject.FundingStreamCodes.Contains("PESports"))
+            {
+                list.AddRange(GeneratePESportsFunding.GenerateFeed(pageSize, pageRef));
+            }
+
+            var returnItem = new FeedResponseModel
+            {
+                Id = Guid.NewGuid().ToString(),
+                Title = "MYESF / CFS shared funding model mock API",
+                Author = new FeedResponseAuthor
+                {
+                    Email = "calculate-funding@education.gov.uk",
+                    Name = "Calculate Funding Service"
+                },
+                Updated = DateTime.Now,
+                Rights = "Copyright (C) 2019 Department for Education",
+                Link = new FeedLink[]
+                {
+                    new FeedLink
+                    {
+                        Href = "#",
+                        Rel = "self"
+                    }
+                },
+                AtomEntry = list.ToArray()
+            };
+
+            return Ok(returnItem);
         }
 
         /// <summary>
-        /// Get all fundings as a feed format.
+        /// Get a funding by id.
+        /// </summary>
+        /// <param name="id">The ID to look up.</param>
+        /// <returns>An array of feed results.</returns>
+        [HttpGet("api/feed/byId/{id}")]
+        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(FeedBaseModel))]
+        [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(FeedBaseModelExample))]
+        public IActionResult GetFeedById(string id)
+        {
+            var parts = id?.Split('_');
+
+            if (parts == null || parts.Length == 0)
+            {
+                return NotFound();
+            }
+
+            if (parts[0].Equals("DSG", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var data = GenerateDSGFunding.GetFeedEntry(id);
+
+                if (data == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(data);
+            }
+            else if (parts[0].Equals("PESports", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var data = GeneratePESportsFunding.GetFeedEntry(id);
+
+                if (data == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(data);
+            }
+
+            return NotFound();
+        }
+
+        /// <summary>
+        /// Get provider funding detail. 
         /// </summary>
         /// <param name="providerFundingFeedId">The ID to look up.</param>
         /// <returns>An array of fundings.</returns>
-        [HttpGet("api/provider/{providerFundingFeedId}")]
+        [HttpGet("api/providerfunding/{providerFundingFeedId}")]
         [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(ProviderFunding))]
         [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(ProviderFundingModelExample))]
         public IActionResult GetProviderFunding(string providerFundingFeedId)
         {
             if (providerFundingFeedId.StartsWith("DSG_"))
             {
-                return Ok(GenerateDSGFunding.GenerateProviderFunding(providerFundingFeedId));
+                var data = GenerateDSGFunding.GenerateProviderFunding(providerFundingFeedId);
+                return Ok(data);
             }
             else if (providerFundingFeedId.StartsWith("PESports_"))
             {
-                return Ok(GeneratePESPFunding.GenerateProviderFunding(providerFundingFeedId));
+                var data = GeneratePESportsFunding.GenerateProviderFunding(providerFundingFeedId);
+                return Ok(data);
             }
 
-            return Ok();
+            return NotFound();
         }
 
         /// <summary>
@@ -106,10 +176,22 @@ namespace FundingMock.Web.Controllers
         }
 
         /// <summary>
+        /// Get all fundings as a feed format - full logical format, this API won't be produced, it's purely for documentation
+        /// </summary>
+        /// <returns>An array of fundings.</returns>
+        [HttpGet("api/logical")]
+        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(IEnumerable<LogicalBaseModel>))]
+        [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(LogicalBaseModelExample))]
+        public IActionResult GetLogicalFeed()
+        {
+            return Ok(new LogicalBaseModelExample().GetExamples());
+        }
+
+        /// <summary>
         /// Helper function to download all DSG files as a zip.
         /// </summary>
         /// <returns>Nothing - but writes to disk.</returns>
-        [HttpGet("api/downloadDSGfiles")]
+        [HttpGet("api/downloadDsgFiles")]
         public IActionResult DownloadDSGFiles()
         {
             var takeAtOnce = 10;
@@ -124,11 +206,11 @@ namespace FundingMock.Web.Controllers
                 {
                     for (var idx = 0; idx <= 16; idx++)
                     {
-                        var feedResponse = GenerateDSGFunding.GenerateFeed(string.Empty, string.Empty, takeAtOnce, idx * takeAtOnce);
+                        var feedResponse = GenerateDSGFunding.GenerateFeed(null, takeAtOnce, idx * takeAtOnce);
 
                         foreach (var feedEntry in feedResponse)
                         {
-                            foreach (var providerFundingId in feedEntry.Funding.ProviderFundings)
+                            foreach (var providerFundingId in feedEntry.Content.Funding.ProviderFundings)
                             {
                                 var fileName = $"{providerFundingId}.txt";
 
@@ -143,7 +225,6 @@ namespace FundingMock.Web.Controllers
                                 zipItem = zip.CreateEntry(fileName);
                                 processedFileNames.Add(fileName);
 
-                                // add the item bytes to the zip entry by opening the original file and copying the bytes 
                                 using (var originalFileMemoryStream = new System.IO.MemoryStream(Encoding.ASCII.GetBytes(fundingStr)))
                                 {
                                     using (var entryStream = zipItem.Open())
@@ -157,7 +238,6 @@ namespace FundingMock.Web.Controllers
                         zipItem = zip.CreateEntry($"FeedResponse{(idx * takeAtOnce) + 1}-{(idx * takeAtOnce) + feedResponse.Length}.txt");
                         var feedResponseStr = JsonConvert.SerializeObject(feedResponse);
 
-                        // add the item bytes to the zip entry by opening the original file and copying the bytes 
                         using (var originalFileMemoryStream = new System.IO.MemoryStream(Encoding.ASCII.GetBytes(feedResponseStr)))
                         {
                             using (var entryStream = zipItem.Open())
@@ -176,11 +256,11 @@ namespace FundingMock.Web.Controllers
         }
 
         /// <summary>
-        /// Helper function to download all PESP files as a zip (very slow).
+        /// Helper function to download all PESports files as a zip (very slow).
         /// </summary>
         /// <returns>Nothing - but writes to disk.</returns>
-        [HttpGet("api/downloadPESPfiles")]
-        public IActionResult DownloadPESPFiles()
+        [HttpGet("api/downloadPesportsFiles")]
+        public IActionResult DownloadPESportsFiles()
         {
             var takeAtOnce = 50;
             var processedFileNames = new List<string>();
@@ -194,11 +274,11 @@ namespace FundingMock.Web.Controllers
                 {
                     for (var idx = 0; idx <= 120; idx++)
                     {
-                        var feedResponse = GeneratePESPFunding.GenerateFeed(takeAtOnce, idx * takeAtOnce);
+                        var feedResponse = GeneratePESportsFunding.GenerateFeed(takeAtOnce, idx * takeAtOnce);
 
                         foreach (var feedEntry in feedResponse)
                         {
-                            foreach (var providerFundingId in feedEntry.Funding.ProviderFundings)
+                            foreach (var providerFundingId in feedEntry.Content.Funding.ProviderFundings)
                             {
                                 var fileName = $"{providerFundingId}.txt";
 
@@ -207,13 +287,12 @@ namespace FundingMock.Web.Controllers
                                     continue;
                                 }
 
-                                var funding = GeneratePESPFunding.GenerateProviderFunding(providerFundingId);
+                                var funding = GeneratePESportsFunding.GenerateProviderFunding(providerFundingId);
                                 var fundingStr = JsonConvert.SerializeObject(funding);
 
                                 zipItem = zip.CreateEntry(fileName);
                                 processedFileNames.Add(fileName);
 
-                                // add the item bytes to the zip entry by opening the original file and copying the bytes 
                                 using (var originalFileMemoryStream = new System.IO.MemoryStream(Encoding.ASCII.GetBytes(fundingStr)))
                                 {
                                     using (var entryStream = zipItem.Open())
@@ -224,10 +303,9 @@ namespace FundingMock.Web.Controllers
                             }
                         }
 
-                        zipItem = zip.CreateEntry($"FeedResponse_PESP_{(idx * takeAtOnce) + 1}-{(idx * takeAtOnce) + feedResponse.Count}.txt");
+                        zipItem = zip.CreateEntry($"FeedResponse_PESports_{(idx * takeAtOnce) + 1}-{(idx * takeAtOnce) + feedResponse.Length}.txt");
                         var feedResponseStr = JsonConvert.SerializeObject(feedResponse);
 
-                        // add the item bytes to the zip entry by opening the original file and copying the bytes 
                         using (var originalFileMemoryStream = new System.IO.MemoryStream(Encoding.ASCII.GetBytes(feedResponseStr)))
                         {
                             using (var entryStream = zipItem.Open())
@@ -241,7 +319,7 @@ namespace FundingMock.Web.Controllers
                 fileBytes = memoryStream.ToArray();
             }
 
-            Response.Headers.Add("Content-Disposition", "attachment; filename=allPESP.zip");
+            Response.Headers.Add("Content-Disposition", "attachment; filename=allPesports.zip");
             return File(fileBytes, "application/zip");
         }
     }

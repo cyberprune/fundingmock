@@ -1,4 +1,5 @@
 ﻿using System;
+using FundingMock.Web.Enums;
 using Newtonsoft.Json;
 
 namespace FundingMock.Web.Models.Providers

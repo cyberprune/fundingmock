@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using FundingMock.Web.Enums;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 

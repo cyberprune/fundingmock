@@ -2,14 +2,28 @@
 using System.Collections.Generic;
 using FundingMock.Web.Enums;
 using FundingMock.Web.Models;
-using FundingMock.Web.Models.Providers;
 using System.Linq;
 
 namespace FundingMock.Web.Samples
 {
-    public static class GeneratePESPFunding
+    public static class GeneratePESportsFunding
     {
-        public static List<FeedBaseModel> GenerateFeed(int maxResults, int skip)
+        public static FeedBaseModel GetFeedEntry(string id)
+        {
+            var data = GenerateFeed(int.MaxValue, null);
+
+            foreach (var item in data)
+            {
+                if (item.Id == id)
+                {
+                    return item.Content;
+                }
+            }
+
+            return null;
+        }
+
+        public static FeedResponseContentModel[] GenerateFeed(int pageSize, int? pageRef)
         {
             var fundingVersion = "1.0";
             var templateVersion = "1.0";
@@ -60,7 +74,7 @@ namespace FundingMock.Web.Samples
                 "MaintainedSchools"
             };
 
-            var baseModels = new List<FeedBaseModel>();
+            var baseModels = new List<FeedResponseContentModel>();
 
             foreach (var providerType in providerTypes)
             {
@@ -78,13 +92,13 @@ namespace FundingMock.Web.Samples
                 baseModels.AddRange(ProcessOrgGroups(orgGroups, providerType, financialYearPeriod1920, financialYearPeriod2021, period, stream, schemaVersion, fundingVersion));
             }
 
-            return baseModels.Skip(skip).Take(maxResults).ToList();
+            return baseModels.Skip((pageRef ?? 0 * pageSize)).Take(pageSize).ToArray();
         }
 
-        private static List<FeedBaseModel> ProcessOrgGroups(List<OrgGroup> orgGroups, string providerType, FundingPeriod financialYearPeriod1920, FundingPeriod financialYearPeriod2021, 
-            FundingPeriod period, StreamWithTemplateVersion stream, string schemaVersion, string fundingVersion)
+        private static List<FeedResponseContentModel> ProcessOrgGroups(List<OrgGroup> orgGroups, string providerType, FundingPeriod financialYearPeriod1920, 
+            FundingPeriod financialYearPeriod2021, FundingPeriod period, StreamWithTemplateVersion stream, string schemaVersion, string fundingVersion)
         {
-            var returnList = new List<FeedBaseModel>();
+            var returnList = new List<FeedResponseContentModel>();
 
             foreach (var orgGroup in orgGroups)
             {
@@ -93,7 +107,7 @@ namespace FundingMock.Web.Samples
                 var groupingOrg = ConvertToOrganisationGroup(orgGroup, orgGroup.Code, orgType);
                 var id = $"{stream.Code}_{period.Code}_{groupingOrg.Type}_{groupingOrg.Name.Replace(" ", string.Empty)}_{fundingVersion}";
 
-                var baseModel = new FeedBaseModel
+                var data = new FeedBaseModel
                 {
                     SchemaUri = "http://example.org/#schema",
                     SchemaVersion = schemaVersion,
@@ -178,7 +192,26 @@ namespace FundingMock.Web.Samples
                     },
                 };
 
-                returnList.Add(baseModel);
+                returnList.Add(new FeedResponseContentModel
+                {
+                    Content = data,
+                    Id = data.Funding.Id,
+                    Author = new FeedResponseAuthor
+                    {
+                        Email = "calculate-funding@education.gov.uk",
+                        Name = "Calculate Funding Service"
+                    },
+                    Title = data.Funding.Id,
+                    Updated = DateTime.Now,
+                    Link = new FeedLink[]
+                    {
+                        new FeedLink
+                        {
+                            Href = $"#/{data.Funding.Id}",
+                            Rel = "self"
+                        }
+                    }
+                });
             };
 
             return returnList;

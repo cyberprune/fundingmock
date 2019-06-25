@@ -37,7 +37,7 @@ namespace FundingMock.Web
                 c.ExampleFilters();
             });
 
-            services.AddSwaggerExamplesFromAssemblyOf<FeedBaseModelExample>();
+            services.AddSwaggerExamplesFromAssemblyOf<FeedResponseModelExample>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

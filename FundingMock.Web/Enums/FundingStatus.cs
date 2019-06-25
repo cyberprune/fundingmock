@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace FundingMock.Web.Models
+namespace FundingMock.Web.Enums
 {
     /// <summary>
-    /// The funding status (wehter its released or otherwise).
+    /// The funding status (wether its released or otherwise).
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
     public enum FundingStatus
