@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace FundingMock.Web.Models
+namespace FundingMock.Web.Enums
 {
     /// <summary>
     /// A period that a funding line covers.

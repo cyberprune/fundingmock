@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FundingMock.Web.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace FundingMock.Web.Models
 {

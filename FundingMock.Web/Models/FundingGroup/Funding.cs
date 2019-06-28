@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using FundingMock.Web.Enums;
 using Newtonsoft.Json;
 
 namespace FundingMock.Web.Models

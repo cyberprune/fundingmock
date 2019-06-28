@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace FundingMock.Web.Models
+namespace FundingMock.Web.Enums
 {
     /// <summary>
     /// The reason for the groupig. Is it paid based on this grouping, or just informational.

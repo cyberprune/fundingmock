@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace FundingMock.Web.Models.Providers
+namespace FundingMock.Web.Enums
 {
     [JsonConverter(typeof(StringEnumConverter))]
     public enum TrustStatus

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using FundingMock.Web.Enums;
 using FundingMock.Web.Models;
-using FundingMock.Web.Models.Providers;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace FundingMock.Web.Samples

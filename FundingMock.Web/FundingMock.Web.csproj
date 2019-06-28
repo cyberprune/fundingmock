@@ -6,7 +6,33 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="SchemaDefinition\BaseModel.json">
+    <Compile Remove="Examples\PeAndSportsExample2.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Tools\CsvFiles\Academies.csv" />
+    <None Remove="Tools\CsvFiles\DSG_2019-20_Mar_Tables_Values.xls" />
+    <None Remove="Tools\CsvFiles\MaintainedSchools.csv" />
+    <None Remove="Tools\CsvFiles\NonMaintainedSpecialSchools.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Tools\CsvFiles\Academies.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tools\CsvFiles\DSG_2019-20_Mar_Tables_Values.xls">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tools\CsvFiles\MaintainedSchools.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tools\CsvFiles\NonMaintainedSpecialSchools.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="SchemaDefinition\LogicalModel.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
