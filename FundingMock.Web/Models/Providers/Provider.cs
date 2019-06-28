@@ -42,7 +42,7 @@ namespace FundingMock.Web.Models.Providers
         public string LegalName { get; set; }
 
         public string Status { get; set; }
-]
+
         public string PhaseOfEducation { get; set; }
 
         public string ReasonEstablishmentOpened { get; set; }
