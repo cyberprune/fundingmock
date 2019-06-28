@@ -33,7 +33,7 @@ namespace FundingMock.Web.Samples
 
             var groupingOrg = new OrganisationGroup()
             {
-                Type = OrganisationType.LocalAuthority,
+                Type = OrganisationGroupType.LocalAuthority,
                 Name = "Camden",
                 SearchableName = "Camden",
                 Identifiers = new List<OrganisationIdentifier>

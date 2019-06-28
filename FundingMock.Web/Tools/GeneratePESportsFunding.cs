@@ -102,7 +102,7 @@ namespace FundingMock.Web.Samples
 
             foreach (var orgGroup in orgGroups)
             {
-                var orgType = providerType == "NonMaintainedSpecialSchools" || providerType == "Academies" ? OrganisationType.Provider : OrganisationType.LocalAuthority;
+                var orgType = providerType == "NonMaintainedSpecialSchools" || providerType == "Academies" ? OrganisationGroupType.Provider : OrganisationGroupType.LocalAuthority;
 
                 var groupingOrg = ConvertToOrganisationGroup(orgGroup, orgGroup.Code, orgType);
                 var id = $"{stream.Code}_{period.Code}_{groupingOrg.Type}_{groupingOrg.Name.Replace(" ", string.Empty)}_{fundingVersion}";
@@ -217,7 +217,7 @@ namespace FundingMock.Web.Samples
             return returnList;
         }
 
-        private static OrganisationGroup ConvertToOrganisationGroup(OrgGroup orgGroup, string ukprn, OrganisationType organisationType)
+        private static OrganisationGroup ConvertToOrganisationGroup(OrgGroup orgGroup, string ukprn, OrganisationGroupType organisationType)
         {
             var identifiers = new List<OrganisationIdentifier>
             {
@@ -228,7 +228,7 @@ namespace FundingMock.Web.Samples
                 }
             };
 
-            if (organisationType == OrganisationType.LocalAuthority)
+            if (organisationType == OrganisationGroupType.LocalAuthority)
             {
                 identifiers.Add(new OrganisationIdentifier
                 {

@@ -42,7 +42,7 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// 
         /// </summary>
-        public OrganisationType[] OrganisationGroupTypes { get; set; }
+        public OrganisationGroupType[] OrganisationGroupTypes { get; set; }
 
         // Organisation level
 

@@ -25,7 +25,7 @@ namespace FundingMock.Web.Samples
 
                 OrganisationIdentifiers = null,
                 OrganisationGroupIdentifiers = null,
-                OrganisationGroupTypes = new Enums.OrganisationType[] { Enums.OrganisationType.Region },
+                OrganisationGroupTypes = new Enums.OrganisationGroupType[] { Enums.OrganisationGroupType.Region },
                 OrganisationTypes = new Enums.OrganisationType[] { Enums.OrganisationType.LocalAuthority }
             };
         }

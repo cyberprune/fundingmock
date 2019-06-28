@@ -35,20 +35,20 @@ namespace FundingMock.Web.Tools
             var spreadsheet = GetSpreadsheet();
 
             var allLas = GetLAs(spreadsheet);
-            var las = feedRequestObject?.OrganisationGroupTypes?.Contains(OrganisationType.LocalAuthority) != false ?
+            var las = feedRequestObject?.OrganisationGroupTypes?.Contains(OrganisationGroupType.LocalAuthority) != false ?
                 allLas.Where(item => ukprns == null
                     || item.Code == ukprns[0]
                     || item.Name.Equals(ukprns[0], StringComparison.InvariantCultureIgnoreCase)).ToList() : new List<Org>();
 
             var allRegions = GetRegions(spreadsheet);
-            var regions = feedRequestObject?.OrganisationGroupTypes?.Contains(OrganisationType.Region) != false ?
+            var regions = feedRequestObject?.OrganisationGroupTypes?.Contains(OrganisationGroupType.Region) != false ?
                 allRegions.Where(item => ukprns == null
                     || item.Name.Equals(ukprns[0], StringComparison.InvariantCultureIgnoreCase)).ToList() : new List<Org>();
 
             var organisations = las.ToList(); // Shallow copy
             organisations.AddRange(regions);
 
-            if (feedRequestObject?.OrganisationGroupTypes?.Contains(OrganisationType.LocalGovernmentGroup) != false)
+            if (feedRequestObject?.OrganisationGroupTypes?.Contains(OrganisationGroupType.LocalGovernmentGroup) != false)
             {
                 organisations.Add(new Org { Name = "METROPOLITAN AUTHORITIES", RowNumber = 156, Type = Type.LocalGovernmentGroup });
                 organisations.Add(new Org { Name = "UNITARY AUTHORITIES", RowNumber = 157, Type = Type.LocalGovernmentGroup });
@@ -111,8 +111,8 @@ namespace FundingMock.Web.Tools
                 var groupingOrg = new OrganisationGroup
                 {
                     Name = organisation.Name,
-                    Type = organisation.Type == Type.LA ? OrganisationType.LocalAuthority 
-                        : (organisation.Type  == Type.LocalGovernmentGroup ? OrganisationType.LocalGovernmentGroup : OrganisationType.Region),
+                    Type = organisation.Type == Type.LA ? OrganisationGroupType.LocalAuthority 
+                        : (organisation.Type  == Type.LocalGovernmentGroup ? OrganisationGroupType.LocalGovernmentGroup : OrganisationGroupType.Region),
                     SearchableName = organisation.Name,
                     Identifiers = identifiers
                 };

@@ -17,8 +17,8 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// The organisation group type.
         /// </summary>
-        [EnumDataType(typeof(OrganisationType))]
-        public OrganisationType Type { get; set; }
+        [EnumDataType(typeof(OrganisationGroupType))]
+        public OrganisationGroupType Type { get; set; }
 
         /// <summary>
         /// Text for Azure search to make this entity searchable. This is the name, but with punctuation etc removed to make it suitable for searching
