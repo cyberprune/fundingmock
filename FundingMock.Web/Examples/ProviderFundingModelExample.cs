@@ -35,7 +35,7 @@ namespace FundingMock.Web.Examples
 
             var groupingOrg = new OrganisationGroup()
             {
-                Type = OrganisationGroupType.LocalAuthority,
+                Type = OrganisationType.LocalAuthority,
                 Name = "Camden",
                 Identifiers = new List<OrganisationIdentifier>
                 {

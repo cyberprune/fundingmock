@@ -377,7 +377,7 @@ namespace Sfa.Sfs.Mock.Generators
                 }
             };
 
-            if (organisationType == OrganisationGroupType.LocalAuthority)
+            if (organisationType == OrganisationType.LocalAuthority)
             {
                 identifiers.Add(new OrganisationIdentifier
                 {
