@@ -1,8 +1,10 @@
-﻿using FundingMock.Web.Models;
-using Swashbuckle.AspNetCore.Filters;
+﻿using System;
 using System.Collections.Generic;
+using FundingMock.Web.Enums;
+using FundingMock.Web.Models;
+using Swashbuckle.AspNetCore.Filters;
 
-namespace FundingMock.Web.Samples
+namespace FundingMock.Web.Examples
 {
     public class StreamExtendedExample : IExamplesProvider
     {

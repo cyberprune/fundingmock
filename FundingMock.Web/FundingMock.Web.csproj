@@ -10,23 +10,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Tools\CsvFiles\Academies.csv" />
-    <None Remove="Tools\CsvFiles\DSG_2019-20_Mar_Tables_Values.xls" />
-    <None Remove="Tools\CsvFiles\MaintainedSchools.csv" />
-    <None Remove="Tools\CsvFiles\NonMaintainedSpecialSchools.csv" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Tools\CsvFiles\Academies.csv">
+    <EmbeddedResource Include="Resources\Academies.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Tools\CsvFiles\DSG_2019-20_Mar_Tables_Values.xls">
+    <EmbeddedResource Include="Resources\DSG_2019-20_Mar_Tables_Values.xls">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Tools\CsvFiles\MaintainedSchools.csv">
+    <EmbeddedResource Include="Resources\MaintainedSchools.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Tools\CsvFiles\NonMaintainedSpecialSchools.csv">
+    <EmbeddedResource Include="Resources\NonMaintainedSpecialSchools.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

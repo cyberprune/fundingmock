@@ -1,10 +1,10 @@
-﻿using FundingMock.Web.Enums;
+﻿using System;
+using System.Collections.Generic;
+using FundingMock.Web.Enums;
 using FundingMock.Web.Models;
 using Swashbuckle.AspNetCore.Filters;
-using System;
-using System.Collections.Generic;
 
-namespace FundingMock.Web.Samples
+namespace FundingMock.Web.Examples
 {
     public class FeedBaseModelExample : IExamplesProvider
     {
@@ -35,7 +35,7 @@ namespace FundingMock.Web.Samples
 
             var groupingOrg = new OrganisationGroup()
             {
-                Type = OrganisationGroupType.LocalAuthority,
+                Type = OrganisationType.LocalAuthority,
                 Name = "Camden",
                 SearchableName = "Camden",
                 Identifiers = new List<OrganisationIdentifier>

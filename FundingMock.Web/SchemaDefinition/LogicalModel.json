@@ -156,7 +156,7 @@
         "type": {
           "type": "string",
           "description": "Grouped by Region, Authority Type, LA",
-          "enum": [ "LocalAuthority", "AcademyTrust", "RSCRegion", "GovernmentOfficeRegion", "District", "Ward", "CensusWard", "MiddleSuperOutputArea", "LowerSuperOutputArea", "ParliamentaryConstituency" ]
+          "enum": [ "LocalAuthority", "AcademyTrust", "Region", "RSCRegion", "GovernmentOfficeRegion", "District", "Ward", "CensusWard", "MiddleSuperOutputArea", "LowerSuperOutputArea", "ParliamentaryConstituency" ]
         },
         "name": {
           "type": "string",
@@ -492,7 +492,7 @@
           "description": "The name of the organisation"
         },
         "identifiers": {
-          "$ref": "#/definitions/organisationOrRegionidentifers-schema",
+          "$ref": "#/definitions/organisationIdentifers-schema",
           "description": "Identifier numbers for this organisation"
         },
         "providerType": {

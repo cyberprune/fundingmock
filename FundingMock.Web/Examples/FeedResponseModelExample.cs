@@ -4,7 +4,7 @@ using FundingMock.Web.Enums;
 using FundingMock.Web.Models;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace FundingMock.Web.Samples
+namespace FundingMock.Web.Examples
 {
     public class FeedResponseModelExample : IExamplesProvider
     {
@@ -33,7 +33,7 @@ namespace FundingMock.Web.Samples
 
             var groupingOrg = new OrganisationGroup()
             {
-                Type = OrganisationGroupType.LocalAuthority,
+                Type = OrganisationType.LocalAuthority,
                 Name = "Camden",
                 SearchableName = "Camden",
                 Identifiers = new List<OrganisationIdentifier>
@@ -53,6 +53,8 @@ namespace FundingMock.Web.Samples
 
             var id = $"{stream.Code}_{period.Code}_{groupingOrg.Type}_{groupingOrg.Name}_{fundingVersion}";
 
+            var host = "http://example.org";
+
             return new FeedResponseModel
             {
                 Id = Guid.NewGuid().ToString(),
@@ -64,12 +66,32 @@ namespace FundingMock.Web.Samples
                 },
                 Updated = DateTime.Now,
                 Rights = "Copyright (C) 2019 Department for Education",
-                Link = new FeedLink[]
+                Link = new List<FeedLink>
                 {
                     new FeedLink
                     {
-                        Href = "http://example.org/api/feed",
+                        Href = $"{host}/api/funding/feed/2",
                         Rel = "self"
+                    },
+                    new FeedLink
+                    {
+                        Href = $"{host}/api/funding/feed/5",
+                        Rel = "first"
+                    },
+                    new FeedLink
+                    {
+                        Href = $"{host}/api/funding/feed/1",
+                        Rel = "last"
+                    },
+                    new FeedLink
+                    {
+                        Href = $"{host}/api/funding/feed/1",
+                        Rel = "previous"
+                    },
+                    new FeedLink
+                    {
+                        Href = $"{host}/api/funding/feed/3",
+                        Rel = "next"
                     }
                 },
                 AtomEntry = new FeedResponseContentModel[]
@@ -87,7 +109,7 @@ namespace FundingMock.Web.Samples
                         {
                             new FeedLink
                             {
-                                Href = $"http://example.org/api/feed/byId/{id}",
+                                Href = $"{host}/api/funding/feed/byId/{id}",
                                 Rel = "self"
                             }
                         },

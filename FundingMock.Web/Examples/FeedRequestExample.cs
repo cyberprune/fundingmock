@@ -1,8 +1,10 @@
-﻿using FundingMock.Web.Enums;
+﻿using System;
+using System.Collections.Generic;
+using FundingMock.Web.Enums;
 using FundingMock.Web.Models;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace FundingMock.Web.Samples
+namespace FundingMock.Web.Examples
 {
     public class FeedRequestExample : IExamplesProvider
     {
@@ -12,11 +14,11 @@ namespace FundingMock.Web.Samples
             {
                 PageSize = 2,
                 Statuses = new FundingStatus[] { FundingStatus.Released },
-                UkPrns = null,
+                Ukprns = null,
                 GroupingReasons = new GroupingReason[] { GroupingReason.Information },
                 MinStatusChangeDate = new System.DateTime(2000, 1, 1),
-                VariationReasons = new Enums.VariationReason[0],
-                FundingLineTypes = new FundingLineType[] { FundingLineType.Information, FundingLineType.Payment},
+                VariationReasons = null,
+                FundingLineTypes = new FundingLineType[] { FundingLineType.Information, FundingLineType.Payment },
                 FundingPeriodStartYear = 2018,
                 FundingPeriodEndYear = 2020,
                 FundingPeriodCodes = new string[] { "FY1920" },
@@ -25,8 +27,8 @@ namespace FundingMock.Web.Samples
 
                 OrganisationIdentifiers = null,
                 OrganisationGroupIdentifiers = null,
-                OrganisationGroupTypes = new Enums.OrganisationGroupType[] { Enums.OrganisationGroupType.Region },
-                OrganisationTypes = new Enums.OrganisationType[] { Enums.OrganisationType.LocalAuthority }
+                OrganisationGroupTypes = new OrganisationType[] { OrganisationType.Region },
+                OrganisationTypes = new OrganisationType[] { OrganisationType.LocalAuthority }
             };
         }
     }
