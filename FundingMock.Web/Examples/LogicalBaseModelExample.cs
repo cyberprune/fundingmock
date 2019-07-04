@@ -4,7 +4,7 @@ using FundingMock.Web.Enums;
 using FundingMock.Web.Models;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace FundingMock.Web.Samples
+namespace FundingMock.Web.Examples
 {
     public class LogicalBaseModelExample : IExamplesProvider
     {
@@ -160,7 +160,7 @@ namespace FundingMock.Web.Samples
                             new ProviderFunding
                             {
                                 Id = $"{stream.Code}_{period.Code}_87654321_{fundingVersion}",
-                                //FundingVersion = fundingVersion,
+                                FundingVersion = fundingVersion,
 
                                 FundingPeriodCode = period.Code,
                                 FundingStreamCode = stream.Code,
@@ -291,7 +291,7 @@ namespace FundingMock.Web.Samples
                             new ProviderFunding
                             {
                                 Id = $"{stream.Code}_{period.Code}_87654322_{fundingVersion}",
-                                //FundingVersion = fundingVersion,
+                                FundingVersion = fundingVersion,
 
                                 FundingPeriodCode = period.Code,
                                 FundingStreamCode = stream.Code,

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using FundingMock.Web.Samples;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.Filters;
+using FundingMock.Web.Examples;
 
 namespace FundingMock.Web
 {

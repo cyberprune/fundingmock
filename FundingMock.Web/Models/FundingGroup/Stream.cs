@@ -1,4 +1,6 @@
-﻿namespace FundingMock.Web.Models
+﻿using Newtonsoft.Json;
+
+namespace FundingMock.Web.Models
 {
     /// <summary>
     /// Details around a funding stream.
@@ -8,11 +10,13 @@
         /// <summary>
         /// The code for the funding stream (e.g. PESport).
         /// </summary>
+        [JsonProperty("code")]
         public string Code { get; set; }
 
         /// <summary>
         /// The name of the funding stream (e.g. PE Sport &amp; Premium).
         /// </summary>
+        [JsonProperty("name")]
         public string Name { get; set; }
     }
 }

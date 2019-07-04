@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using FundingMock.Web.Enums;
 using Newtonsoft.Json;
+using FundingMock.Web.Enums;
 
 namespace FundingMock.Web.Models
 {
@@ -10,6 +10,9 @@ namespace FundingMock.Web.Models
     /// </summary>
     public class Calculation
     {
+        /// <summary>
+        /// Create a calculation, setting properties to defaults. 
+        /// </summary>
         public Calculation()
         {
             AggregationType = AggregationType.Sum;
@@ -18,6 +21,7 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// The name of the calculation. Used as a description within the model.
         /// </summary>
+        [JsonProperty("name")]
         public string Name { get; set; }
 
         /// <summary>
@@ -28,45 +32,52 @@ namespace FundingMock.Web.Models
         /// 
         /// When templates are versioned, template IDs should be kept the same if they refer to the same thing, otherwise a new, unused ID should be used.
         /// </summary>
+        [JsonProperty("templateCalculationId")]
         public uint TemplateCalculationId { get; set; }
 
         /// <summary>
         /// The value the calculation is resulting in.
         /// </summary>
+        [JsonProperty("value")]
         public object Value { get; set; }
 
         /// <summary>
         /// The way the value should show.
         /// </summary>
         [EnumDataType(typeof(CalculationValueFormat))]
+        [JsonProperty("valueFormat")]
         public CalculationValueFormat ValueFormat { get; set; }
 
         /// <summary>
         /// The type of calculation.
         /// </summary>
         [EnumDataType(typeof(CalculationType))]
+        [JsonProperty("type")]
         public CalculationType Type { get; set; }
 
         /// <summary>
         /// Presentation data about how a formula is built up.
         /// </summary>
+        [JsonProperty("formulaText")]
         public string FormulaText { get; set; }
 
         /// <summary>
         /// How the calculation should aggregate.
         /// </summary>
         [EnumDataType(typeof(AggregationType))]
+        [JsonProperty("aggregationType")]
         public AggregationType AggregationType { get; set; }
 
         /// <summary>
         /// Sub level calculations.
         /// </summary>
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("calculations", NullValueHandling = NullValueHandling.Ignore)]
         public IEnumerable<Calculation> Calculations { get; set; }
 
         /// <summary>
         /// Reference data this these calculations depend on.
         /// </summary>
+        [JsonProperty("referenceData")]
         public IEnumerable<ReferenceData> ReferenceData { get; set; }
     }
 }

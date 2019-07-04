@@ -1,16 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FundingMock.Web.Controllers;
 using FundingMock.Web.Enums;
 using FundingMock.Web.Models;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 
-namespace FundingMock.Web.Samples
+namespace Sfa.Sfs.Mock.Generators
 {
+    /// <summary>
+    /// Generate PE + Sports funding.
+    /// </summary>
     public static class GeneratePESportsFunding
     {
+        /// <summary>
+        /// Lookup a feed entry by its id.
+        /// </summary>
+        /// <param name="id">The id to lookup from the feed.</param>
+        /// <returns>A feed entry.</returns>
         public static FeedBaseModel GetFeedEntry(string id)
         {
-            var data = GenerateFeed(int.MaxValue, null);
+            var data = GenerateFeed(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 
             foreach (var item in data)
             {
@@ -23,9 +33,64 @@ namespace FundingMock.Web.Samples
             return null;
         }
 
-        public static FeedResponseContentModel[] GenerateFeed(int pageSize, int? pageRef)
+        /// <summary>
+        /// Generate a feed from CSV files (from a spreadsheet).
+        /// </summary>
+        /// <param name="fundingPeriodStartYear">Optional - </param>
+        /// <param name="fundingPeriodEndYear">Optional - </param>
+        /// <param name="fundingPeriodCodes">Optional - The period codes to limit to (e.g. AY1920).</param>
+        /// <param name="organisationGroupIdentifiers">Optional - The group identifiers to limit by (e.g. UKPRN 12345678).</param>
+        /// <param name="organisationGroupTypes">Optional - The group types to limit to (e.g. Region, LocalAuthority).</param>
+        /// <param name="organisationIdentifiers">Optional - The organisation identifiers to limit to (e.g. UKPRN 12345678).</param>
+        /// <param name="organisationTypes">Optional - The organisation types to return.</param>
+        /// <param name="variationReasons">Optional - Filter to only organisations with these variation reasons types</param>
+        /// <param name="ukprns">Optional - Only get these UKPRNs back.</param>
+        /// <param name="groupingReasons">Optional - The grouping reasons we want to get back (e.g. Information and/or Payment).</param>
+        /// <param name="statuses">Optional - The status of the funding (e.g. Released).</param>
+        /// <param name="minStatusChangeDate">Optional - Only get records back that were changed after this date.</param>
+        /// <param name="fundingLineTypes">Optional - limit the types of lines we want to get back (e.g. Information and/or Payment).</param>
+        /// <param name="templateLineIds">Optional - Filter the lines to these ids only.</param>
+        /// <returns>An array of FeedResponseContentModel objects./returns>
+        public static FeedResponseContentModel[] GenerateFeed(int? fundingPeriodStartYear, int? fundingPeriodEndYear,
+            string[] fundingPeriodCodes, OrganisationIdentifier[] organisationGroupIdentifiers, OrganisationType[] organisationGroupTypes,
+            OrganisationIdentifier[] organisationIdentifiers, OrganisationType[] organisationTypes, VariationReason[] variationReasons,
+            string[] ukprns, GroupingReason[] groupingReasons, FundingStatus[] statuses, DateTime? minStatusChangeDate,
+            FundingLineType[] fundingLineTypes, string[] templateLineIds)
         {
-            var fundingVersion = "1.0";
+            var totalList = new List<FeedResponseContentModel>();
+
+            // Check period dates
+            if ((fundingPeriodStartYear != null && fundingPeriodStartYear != 2019)
+                || (fundingPeriodEndYear != null && fundingPeriodEndYear != 2020))
+            {
+                return totalList.ToArray();
+            }
+
+            // Check period codes
+            if (fundingPeriodCodes?.Any() == true && fundingPeriodCodes?.Contains("AY1920") == false)
+            {
+                return totalList.ToArray();
+            }
+
+            // Check statuses
+            if (statuses?.Any() == true && !statuses.Contains(FundingStatus.Released))
+            {
+                return totalList.ToArray();
+            }
+
+            // Check feed cut off date
+            if (minStatusChangeDate != null && minStatusChangeDate.Value > new DateTime(2019, 3, 1))
+            {
+                return totalList.ToArray();
+            }
+
+            // If we only want information type, we are out of luck
+            if (groupingReasons?.Any() == true && groupingReasons?.Contains(GroupingReason.Payment) == false)
+            {
+                return totalList.ToArray();
+            }
+
+            var fundingVersion = "1-0";
             var templateVersion = "1.0";
             var schemaVersion = "1.0";
 
@@ -35,7 +100,7 @@ namespace FundingMock.Web.Samples
             {
                 Code = "AY1920",
                 Name = "Academic year 2019-20",
-                Type = PeriodType.AcademicYear, 
+                Type = PeriodType.AcademicYear,
                 StartDate = new DateTimeOffset(2019, 9, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2020, 8, 31, 0, 0, 0, ukOffset)
             };
@@ -47,7 +112,7 @@ namespace FundingMock.Web.Samples
                 TemplateVersion = templateVersion,
             };
 
-            var processFile = new ProcessFile();
+            var processFile = new ProcessPesportsCsv();
 
             var financialYearPeriod1920 = new FundingPeriod
             {
@@ -71,13 +136,22 @@ namespace FundingMock.Web.Samples
             {
                 "MaintainedSchools",
                 "Academies",
-                "MaintainedSchools"
+                "NonMaintainedSpecialSchools"
             };
-
-            var baseModels = new List<FeedResponseContentModel>();
 
             foreach (var providerType in providerTypes)
             {
+                if ((providerType == "MaintainedSchools" || providerType == "NonMaintainedSpecialSchools")
+                    && organisationGroupTypes?.Any() == true && organisationGroupTypes?.Contains(OrganisationType.Provider) == false)
+                {
+                    continue;
+                }
+                else if (providerType == "Academies"
+                    && organisationGroupTypes?.Any() == true && organisationGroupTypes?.Contains(OrganisationType.AcademyTrust) == false)
+                {
+                    continue;
+                }
+
                 var groupByLa = false;
 
                 switch (providerType)
@@ -88,24 +162,71 @@ namespace FundingMock.Web.Samples
                         break;
                 }
 
-                var orgGroups = processFile.GetOrgGroups($"{providerType}.csv", groupByLa);
-                baseModels.AddRange(ProcessOrgGroups(orgGroups, providerType, financialYearPeriod1920, financialYearPeriod2021, period, stream, schemaVersion, fundingVersion));
+                var orgGroups = processFile.GetOrgsOrOrgGroups($"{providerType}.csv", groupByLa);
+
+                totalList.AddRange(ProcessOrgGroups(orgGroups, providerType, financialYearPeriod1920, financialYearPeriod2021, period, stream, schemaVersion, fundingVersion,
+                    organisationGroupIdentifiers, organisationIdentifiers, organisationTypes, variationReasons, ukprns, fundingLineTypes, templateLineIds)
+                );
             }
 
-            return baseModels.Skip((pageRef ?? 0 * pageSize)).Take(pageSize).ToArray();
+            return totalList.ToArray();
         }
 
-        private static List<FeedResponseContentModel> ProcessOrgGroups(List<OrgGroup> orgGroups, string providerType, FundingPeriod financialYearPeriod1920, 
-            FundingPeriod financialYearPeriod2021, FundingPeriod period, StreamWithTemplateVersion stream, string schemaVersion, string fundingVersion)
+        /// <summary>
+        /// Process org groups into feed models.
+        /// </summary>
+        /// <param name="orgGroups">List of org groups.</param>
+        /// <param name="providerType">The provider types we are looking at.</param>
+        /// <param name="financialYearPeriod1920">Data about the first financial period.</param>
+        /// <param name="financialYearPeriod2021">Data about the second financial period.</param>
+        /// <param name="period">Period to use.</param>
+        /// <param name="stream">Stream to use.</param>
+        /// <param name="schemaVersion">Schema version number.</param>
+        /// <param name="fundingVersion">Funding version number.</param>
+        /// <param name="organisationGroupIdentifiers">Optional - The group identifiers to limit by (e.g. UKPRN 12345678).</param>
+        /// <param name="organisationIdentifiers">Optional - The organisation identifiers to limit to (e.g. UKPRN 12345678).</param>
+        /// <param name="organisationTypes">Optional - The organisation types to return.</param>
+        /// <param name="variationReasons">Optional - Filter to only organisations with these variation reasons types</param>
+        /// <param name="ukprns">Optional - Only get these UKPRNs back.</param>
+        /// <param name="fundingLineTypes">Optional - limit the types of lines we want to get back (e.g. Information and/or Payment).</param>
+        /// <param name="templateLineIds">Optional - Filter the lines to these ids only.</param>
+        /// <returns>A list of feed response models.</returns>
+        private static List<FeedResponseContentModel> ProcessOrgGroups(List<OrgGroup> orgGroups, string providerType, FundingPeriod financialYearPeriod1920,
+            FundingPeriod financialYearPeriod2021, FundingPeriod period, StreamWithTemplateVersion stream, string schemaVersion, string fundingVersion,
+            OrganisationIdentifier[] organisationGroupIdentifiers, OrganisationIdentifier[] organisationIdentifiers, OrganisationType[] organisationTypes,
+            VariationReason[] variationReasons, string[] ukprns, FundingLineType[] fundingLineTypes, string[] templateLineIds)
         {
             var returnList = new List<FeedResponseContentModel>();
 
+            // Limit by org group identifiers
+            if (organisationGroupIdentifiers?.Any() == true)
+            {
+                foreach (var organisationGroupIdentifier in organisationGroupIdentifiers)
+                {
+                    orgGroups = orgGroups.Where(orgGroup => orgGroup.Type != organisationGroupIdentifier.Type.ToString()
+                        || orgGroup.Code == organisationGroupIdentifier.Value).ToList();
+                }
+            }
+
+            // Limit by org identifiers
+            if (organisationIdentifiers?.Any() == true)
+            {
+                foreach (var orgGroup in orgGroups)
+                {
+                    orgGroup.Providers = orgGroup.Providers.Where(provider =>
+                        organisationIdentifiers.Any(oi => oi.Type != OrganisationIdentifierType.LACode || oi.Value == provider.LaEstablishmentNo)).ToList();
+                }
+            }
+
             foreach (var orgGroup in orgGroups)
             {
-                var orgType = providerType == "NonMaintainedSpecialSchools" || providerType == "Academies" ? OrganisationGroupType.Provider : OrganisationGroupType.LocalAuthority;
+                var orgType = providerType == "NonMaintainedSpecialSchools" || providerType == "Academies" ?
+                    (providerType == "NonMaintainedSpecialSchools" ? OrganisationType.Provider : OrganisationType.AcademyTrust) : OrganisationType.LocalAuthority;
 
-                var groupingOrg = ConvertToOrganisationGroup(orgGroup, orgGroup.Code, orgType);
-                var id = $"{stream.Code}_{period.Code}_{groupingOrg.Type}_{groupingOrg.Name.Replace(" ", string.Empty)}_{fundingVersion}";
+                var ukprn = $"MOCKUKPRN{orgGroup.Code}";
+
+                var groupingOrg = ConvertToOrganisationGroup(orgGroup, ukprn, orgType);
+                var id = $"{stream.Code}_{period.Code}_{groupingOrg.Type}_{ukprn}_{fundingVersion}";
 
                 var data = new FeedBaseModel
                 {
@@ -118,7 +239,7 @@ namespace FundingMock.Web.Samples
                         FundingStream = stream,
                         FundingPeriod = period,
                         OrganisationGroup = groupingOrg,
-                        FundingVersion = fundingVersion,
+                        FundingVersion = fundingVersion.Replace("-", "."),
 
                         ExternalPublicationDate = new DateTimeOffset(2019, 9, 1, 0, 0, 0, new TimeSpan(1, 0, 0)),
                         PaymentDate = DateTimeOffset.Now,
@@ -126,11 +247,10 @@ namespace FundingMock.Web.Samples
                         Status = FundingStatus.Released,
                         StatusChangedDate = DateTimeOffset.Now,
                         GroupingReason = GroupingReason.Payment,
-                        ProviderFundings = GetProviderFundingIds(orgGroup, period, stream, fundingVersion),
+                        ProviderFundings = GetProviderFundingIds(orgGroup, period, stream, fundingVersion, organisationTypes, variationReasons, ukprns),
                         FundingValue = new FundingValue
                         {
                             TotalValue = orgGroup.TotalAllocation,
-
                             FundingValueByDistributionPeriod = new List<FundingValueByDistributionPeriod>
                             {
                                 new FundingValueByDistributionPeriod
@@ -192,6 +312,28 @@ namespace FundingMock.Web.Samples
                     },
                 };
 
+                if (fundingLineTypes?.Any() == true)
+                {
+                    foreach (var dperiod in data.Funding.FundingValue.FundingValueByDistributionPeriod)
+                    {
+                        dperiod.FundingLines = dperiod.FundingLines.Where(line => fundingLineTypes.Contains(line.Type)).ToList();
+
+                        //TODO - filter at lower levels
+                    }
+                }
+
+                if (templateLineIds?.Any() == true)
+                {
+                    foreach (var dperiod in data.Funding.FundingValue.FundingValueByDistributionPeriod)
+                    {
+                        dperiod.FundingLines = dperiod.FundingLines.Where(line => templateLineIds.Contains(line.TemplateLineId.ToString())).ToList();
+
+                        //TODO - filter at lower levels
+                    }
+                }
+
+                var host = "http://example.org";
+
                 returnList.Add(new FeedResponseContentModel
                 {
                     Content = data,
@@ -207,7 +349,7 @@ namespace FundingMock.Web.Samples
                     {
                         new FeedLink
                         {
-                            Href = $"#/{data.Funding.Id}",
+                            Href = $"{host}/api/funding/feed/byId/{data.Funding.Id}",
                             Rel = "self"
                         }
                     }
@@ -217,7 +359,14 @@ namespace FundingMock.Web.Samples
             return returnList;
         }
 
-        private static OrganisationGroup ConvertToOrganisationGroup(OrgGroup orgGroup, string ukprn, OrganisationGroupType organisationType)
+        /// <summary>
+        /// Convert an internal representation of an org into the response object.
+        /// </summary>
+        /// <param name="orgGroup"></param>
+        /// <param name="ukprn"></param>
+        /// <param name="organisationType"></param>
+        /// <returns>An organsation group response objct.</returns>
+        private static OrganisationGroup ConvertToOrganisationGroup(OrgGroup orgGroup, string ukprn, OrganisationType organisationType)
         {
             var identifiers = new List<OrganisationIdentifier>
             {
@@ -241,23 +390,56 @@ namespace FundingMock.Web.Samples
             {
                 Type = organisationType,
                 Name = orgGroup.Name,
-                SearchableName = orgGroup.Name.Replace(" ", string.Empty),
+                SearchableName = FundingController.SanitiseName(orgGroup.Name),
                 Identifiers = identifiers
             };
         }
 
-        private static List<string> GetProviderFundingIds(OrgGroup orgGroup, FundingPeriod period, Stream stream, string fundingVersion)
+        /// <summary>
+        /// Get the provider funding ids to return for a feed entry.
+        /// </summary>
+        /// <param name="orgGroup"></param>
+        /// <param name="period"></param>
+        /// <param name="stream"></param>
+        /// <param name="fundingVersion"></param>
+        /// <returns>A list of provider funding ids.</returns>
+        private static List<string> GetProviderFundingIds(OrgGroup orgGroup, FundingPeriod period, Stream stream, string fundingVersion,
+            OrganisationType[] organisationTypes, VariationReason[] variationReasons, string[] ukprns)
         {
             var returnList = new List<string>();
 
+            // We don't have variation reasons yet
+            if (variationReasons?.Any() == true)
+            {
+                return returnList;
+            }
+
+            // If we are asking for anything but local authorities, there won't be any results
+            if (organisationTypes?.Any() == true && organisationTypes?.Contains(OrganisationType.LocalAuthority) == false)
+            {
+                return returnList;
+            }
+
             foreach (var provider in orgGroup.Providers)
             {
-                returnList.Add($"{stream.Code}_{period.Code}_{provider.LaEstablishmentNo}_{fundingVersion}");
+                var ukprn = $"MOCKUKPRN{provider.LaEstablishmentNo}";
+
+                if (ukprns?.Any() == true && ukprns?.Contains(ukprn) == false)
+                {
+                    continue;
+                }
+
+                returnList.Add($"{stream.Code}_{period.Code}_{ukprn}_{fundingVersion}");
             }
 
             return returnList;
         }
 
+        /// <summary>
+        /// Get the provider funding from the spreadsheet
+        /// </summary>
+        /// <param name="id">The id to lookup.</param>
+        /// <returns>A provider funding object.</returns>
         public static ProviderFunding GenerateProviderFunding(string id)
         {
             var idParts = id.Split('_');
@@ -301,12 +483,12 @@ namespace FundingMock.Web.Samples
                 EndDate = new DateTimeOffset(2021, 3, 30, 0, 0, 0, ukOffset)
             };
 
-            var processFile = new ProcessFile();
+            var processFile = new ProcessPesportsCsv();
 
             var orgGroups = new List<OrgGroup>();
-            orgGroups.AddRange(processFile.GetOrgGroups("MaintainedSchools.csv", true));
-            orgGroups.AddRange(processFile.GetOrgGroups("Academies.csv", false));
-            orgGroups.AddRange(processFile.GetOrgGroups("MaintainedSchools.csv", false));
+            orgGroups.AddRange(processFile.GetOrgsOrOrgGroups("MaintainedSchools.csv", true));
+            orgGroups.AddRange(processFile.GetOrgsOrOrgGroups("Academies.csv", false));
+            orgGroups.AddRange(processFile.GetOrgsOrOrgGroups("MaintainedSchools.csv", false));
 
             foreach (var orgGroup in orgGroups)
             {
@@ -314,7 +496,7 @@ namespace FundingMock.Web.Samples
                 {
                     if (provider.LaEstablishmentNo == code)
                     {
-                        return GetProvider(provider, financialYearPeriod1920, financialYearPeriod2021, period, stream, orgGroup.Type, orgGroup.Code);
+                        return GetProviderFunding(provider, financialYearPeriod1920, financialYearPeriod2021, period, stream, orgGroup.Type, orgGroup.Code);
                     }
                 }
             }
@@ -322,15 +504,28 @@ namespace FundingMock.Web.Samples
             return null;
         }
 
-        private static ProviderFunding GetProvider(Provider provider, FundingPeriod financialYearPeriod1920,
+        /// <summary>
+        /// Get provider funding from component parts.
+        /// </summary>
+        /// <param name="provider">A provider object.</param>
+        /// <param name="financialYearPeriod1920">Period data for year1.</param>
+        /// <param name="financialYearPeriod2021">Period data for year2.</param>
+        /// <param name="period">Funding period.</param>
+        /// <param name="stream">Data about a stream.</param>
+        /// <param name="providerType">The type of provider (e.g. NonMaintainedSpecialSchools).</param>
+        /// <param name="code">The code that identifies the provider (e.g. ukprn).</param>
+        /// <returns>A provider funding object.</returns>
+        private static ProviderFunding GetProviderFunding(Provider provider, FundingPeriod financialYearPeriod1920,
             FundingPeriod financialYearPeriod2021, FundingPeriod period, Stream stream, string providerType, string code)
         {
+            var ukprn = $"MOCKUKPRN{provider.LaEstablishmentNo}";
+
             var identifiers = new List<OrganisationIdentifier>
             {
                 new OrganisationIdentifier
                 {
                     Type = OrganisationIdentifierType.UKPRN,
-                    Value = code
+                    Value = ukprn
                 }
             };
 
@@ -357,18 +552,18 @@ namespace FundingMock.Web.Samples
                 });
             }
 
-            var fundingVersion = "1.0";
+            var fundingVersion = "1-0";
 
             return new ProviderFunding
             {
-                Id = $"{stream.Code}_{period.Code}_{provider.LaEstablishmentNo}_{fundingVersion}",
+                Id = $"{stream.Code}_{period.Code}_{ukprn}_{fundingVersion}",
+                FundingVersion = fundingVersion.Replace("-", "."),
                 FundingPeriodCode = period.Code,
                 FundingStreamCode = stream.Code,
                 Organisation = new Organisation
                 {
-                    Name = provider.SchoolName,
-                    SearchableName = provider.SchoolName.Replace(" ", string.Empty),
-
+                    Name = provider.Name,
+                    SearchableName = FundingController.SanitiseName(provider.Name),
                     OrganisationDetails = new OrganisationDetails()
                     {
                         DateClosed = null,
@@ -378,12 +573,17 @@ namespace FundingMock.Web.Samples
                         OpenReason = ProviderOpenReason.NotRecorded,
                         CloseReason = null,
                         TrustName = null,
-                        TrustStatus = TrustStatus.NotApplicable
+                        TrustStatus = TrustStatus.NotApplicable,
+                        Address = new OrganisationAddress
+                        {
+                            Postcode = "MOCK POSTCODE",
+                            Town = "MOCK TOWN"
+                        }
                     },
                     ProviderType = providerType,
                     ProviderSubType = "Provider SubType",
                     ProviderVersionId = "1.0",
-                    Identifiers = identifiers
+                    Identifiers = identifiers,
                 },
                 FundingValue = new FundingValue
                 {
@@ -429,7 +629,7 @@ namespace FundingMock.Web.Samples
                                                 new ReferenceData
                                                 {
                                                     Name = "Eligible pupils",
-                                                    Value = provider.EligiblePupils.ToString(), // "20",   //  "Maintained Schools"
+                                                    Value = provider.EligiblePupilsCount.ToString(), // "20",   //  "Maintained Schools"
                                                     Format = ReferenceDataValueFormat.Number
                                                 },
                                             }
@@ -477,7 +677,7 @@ namespace FundingMock.Web.Samples
                                                 new ReferenceData
                                                 {
                                                     Name = "Eligible pupils",
-                                                    Value = provider.EligiblePupils.ToString(), // "20",   //  "Maintained Schools"
+                                                    Value = provider.EligiblePupilsCount.ToString(), // "20",   //  "Maintained Schools"
                                                     Format = ReferenceDataValueFormat.Number
                                                 },
                                             }
