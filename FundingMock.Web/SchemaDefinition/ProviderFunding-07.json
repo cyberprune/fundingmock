@@ -1,0 +1,471 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://dfe.gov.uk.com/providerfunding.schema.json",
+    "title": "Corporate funding schema",
+    "description": "A Department of Education view of funding allocation",
+    "version": "0.7",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "string",
+            "description": "A unique id for this funding. In format ''"
+        },
+        "fundingVersion": {
+            "type": "string",
+            "description": "Version number for the funding'"
+        },
+        "organisation": {
+            "$ref": "#/definitions/organisation-schema",
+            "description": "The organisation for which the funding is for"
+        },
+        "variations": {
+            "oneOf": [
+                { "type": "null" },
+                { "$ref": "#/definitions/variations-schema" }
+            ],
+            "description": ""
+        },
+        "fundingValue": {
+            "$ref": "#/definitions/fundingValue-schema",
+            "description": "Funding value"
+        },
+        "fundingStreamCode": {
+            "type": "string",
+            "description": "The funding stream the funding relates to"
+        },
+        "fundingPeriodCode": {
+            "type": "string",
+            "description": "The funding period the funding relates to"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "id",
+        "organisation",
+        "fundingValue",
+        "fundingStreamCode",
+        "fundingPeriodCode"
+    ],
+    "definitions": {
+        "fundingValue-schema": {
+            "properties": {
+                "totalValue": {
+                    "type": "number",
+                    "description": "The funding value amount in pence"
+                },
+                "fundingValueByDistributionPeriod": {
+                    "description": "An array showing the amounts by the periods (envelopes) they are paid in (e.g. for PE + Sport there are 2 periods per year, with a 7/5 split)",
+                    "$ref": "#/definitions/fundingValueByDistributionPeriods-schema"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "totalValue",
+                "fundingValueByDistributionPeriod"
+            ]
+        },
+        "fundingValueByDistributionPeriods-schema": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/fundingValueByDistributionPeriod-schema"
+            }
+        },
+        "fundingValueByDistributionPeriod-schema": {
+            "properties": {
+                "distributionPeriodCode": {
+                    "type": "string",
+                    "description": "The funding period the funding relates to"
+                },
+                "value": {
+                    "type": "number",
+                    "description": "The overall value for the distribution period"
+                },
+                "fundingLines": {
+                    "$ref": "#/definitions/fundingLines-schema",
+                    "description": "The lines that make up this funding"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "distributionPeriodCode",
+                "value",
+                "fundingLines"
+            ]
+        },
+        "fundingLines-schema": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/fundingLine-schema"
+            }
+        },
+        "fundingLine-schema": {
+            "properties": {
+                "templateLineId": {
+                    "type": "number",
+                    "description": " A unique ID (in terms of template, not data) for this funding line (e.g. 345)"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "This is either payable funding line or information",
+                    "enum": [ "Payment", "Information" ]
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of a funding line (e.g. 'Total funding line')"
+                },
+                "fundingLineCode": {
+                    "type": "string",
+                    "description": "The funding line code (e.g. PSG-001)"
+                },
+                "value": {
+                    "type": "number",
+                    "description": "The funding value in pence."
+                },
+                "fundingLines": {
+                    "oneOf": [
+                        { "type": "null" },
+                        { "$ref": "#/definitions/fundingLines-schema" }
+                    ],
+                    "description": "Sub funding lines that make up this funding line"
+                },
+                "profilePeriods": {
+                    "$ref": "#/definitions/profilePeriods-schema",
+                    "description": "The periods that this funding line where paid in / are due to be paid in"
+                },
+                "calculations": {
+                    "oneOf": [
+                        { "type": "null" },
+                        { "$ref": "#/definitions/calculations-schema" }
+                    ],
+                    "description": "Calculations that make up this funding line"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "templateLineId",
+                "type",
+                "name",
+                "value"
+            ]
+        },
+        "profilePeriods-schema": {
+            "type": "array",
+            "description": "",
+            "items": {
+                "$ref": "#/definitions/profilePeriod-schema"
+            }
+        },
+        "profilePeriod-schema": {
+            "properties": {
+                "occurence": {
+                    "type": "number",
+                    "description": "Which occurance this month (note that this is 1 indexed)"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "The type of the period (e.g. CalendarMonth)",
+                    "enum": [ "CalendarMonth" ]
+                },
+                "typeValue": {
+                    "type": "string",
+                    "description": "The value identifier for this period (e.g. if type is 'Calendar Month', this could be 'April')"
+                },
+                "year": {
+                    "type": "number",
+                    "description": "Which year is the period in"
+                },
+                "profiledValue": {
+                    "type": "number",
+                    "description": "The amount of the profiled value, in pence"
+                },
+                "periodCode": {
+                    "type": "string",
+                    "description": "The code for the period"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "occurence",
+                "type",
+                "typeValue",
+                "year",
+                "profiledValue",
+                "periodCode"
+            ]
+        },
+        "calculations-schema": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/calculation-schema"
+            }
+        },
+        "calculation-schema": {
+            "properties": {
+                "templateCalculationId": {
+                    "type": "number",
+                    "description": "The template calculation id (i.e. a way to get to this property in the template)"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "The type of calculation.",
+                    "enum": [ "Cash", "Rate", "PupilNumber", "Weighting", "Scope", "Information", "Drilldown", "PerPupilFunding", "LumpSum", "ProviderLedFunding" ]
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of the calculation"
+                },
+                "value": {
+                    "type": [ "string", "number" ],
+                    "description": "he value the calculation is resulting in"
+                },
+                "formulaText": {
+                    "type": "string",
+                    "description": "Presentation data about how a formula is built up"
+                },
+                "valueFormat": {
+                    "type": "string",
+                    "description": "The way the value should show",
+                    "enum": [ "Number", "Percentage", "Currency" ]
+                },
+                "referenceData": {
+                    "$ref": "#/definitions/referenceDatas-schema",
+                    "description": "Reference data this these calculations depend on"
+                },
+                "calculations": {
+                    "oneOf": [
+                        { "type": "null" },
+                        { "$ref": "#/definitions/calculations-schema" }
+                    ],
+                    "description": "Sub level calculations"
+                },
+                "aggregationType": {
+                    "type": "string",
+                    "description": "How the reference data should aggregate",
+                    "enum": [ "None", "Avergage", "Sum" ]
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "type",
+                "name",
+                "value",
+                "aggregationType"
+            ]
+        },
+        "referenceDatas-schema": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/referenceData-schema"
+            }
+        },
+        "referenceData-schema": {
+            "properties": {
+                "templateReferenceId": {
+                    "type": "number",
+                    "description": "The template reference id (i.e. a way to get to this property in the template)."
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of this reference data (e.g. 'Academic year 2018 to 2019 pupil number on roll')"
+                },
+                "value": {
+                    "type": [ "string", "number" ],
+                    "description": "The reference data value"
+                },
+                "format": {
+                    "type": "string",
+                    "description": "The format of the reference data value (e.g. Percentage)"
+                },
+                "aggregationType": {
+                    "type": "string",
+                    "description": "How the calculation should aggregate",
+                    "enum": [ "None", "Avergage", "Sum" ]
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "name",
+                "value",
+                "format",
+                "aggregationType"
+            ]
+        },
+        "organisationDetails-schema": {
+            "properties": {
+                "dateOpened": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Date Opened."
+                },
+                "dateClosed": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Date Closed."
+                },
+                "status": {
+                    "type": "string",
+                    "description": "Status of the organisation"
+                },
+                "phaseOfEducation": {
+                    "type": "string",
+                    "description": ""
+                },
+                "openReason": {
+                    "type": "string",
+                    "description": "Optional open reason from the list of GIAS Open Reasons"
+                },
+                "closeReason": {
+                    "type": "string",
+                    "description": "Optional close reason from list of GIAS Close Reasons"
+                },
+                "trustStatus": {
+                    "type": "string",
+                    "description": ""
+                },
+                "trustName": {
+                    "type": "string",
+                    "description": ""
+                },
+                "address": {
+                    "oneOf": [
+                        { "type": "null" },
+                        { "$ref": "#/definitions/organisationAddress-schema" }
+                    ],
+                    "description": ""
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+            ]
+        },
+        "organisationAddress-schema": {
+            "properties": {
+                "town": {
+                    "type": "string",
+                    "description": "The town of the organisation"
+                },
+                "postcode": {
+                    "type": "string",
+                    "description": "The postcode of the organisation"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+            ]
+        },
+        "organisationIdentifers-schema": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/organisationIdentifer-schema"
+            }
+        },
+        "organisationIdentifer-schema": {
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "The type of organisation identifier (e.g. UKPRN)",
+                    "enum": [ "UKPRN", "LACode", "UPIN", "URN", "UID", "CompaniesHouseNumber", "GroupID", "RSCRegionName", "GovernmentOfficeRegion", "DistrictName", "WardName", "CensusWardName", "MiddleSuperOutputAreaCode", "LowerSuperOutputAreaCode", "ParliamentaryConstituencyName", "DfeNumber" ]
+                },
+                "value": {
+                    "type": "string",
+                    "description": "The value of this identifier type (e.g. if the type is UKPRN, then the value may be 12345678. If the type is LACode, the value may be 'LE 203')."
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "type",
+                "value"
+            ]
+        },
+        "organisation-schema": {
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The name of the organisation"
+                },
+                "searchableName": {
+                    "type": "string",
+                    "description": "A searchable name of the organisation"
+                },
+                "identifiers": {
+                    "$ref": "#/definitions/organisationIdentifers-schema",
+                    "description": "Identifier numbers for this organisation"
+                },
+                "providerVersionId": {
+                    "type": "string",
+                    "description": "Identifier numbers for this organisation"
+                },
+                "providerType": {
+                    "type": "string",
+                    "description": "Provider type (e.g. School, Academy, Special School"
+                },
+                "providerSubType": {
+                    "oneOf": [
+                        { "type": "null" },
+                        { "type": "string" }
+                    ],
+                    "description": "Provider type (e.g. School, Academy, Special School"
+                },
+                "organisationDetails": {
+                    "anyOf": [
+                        { "type": "null" },
+                        { "$ref": "#/definitions/organisationDetails-schema" }
+                    ],
+                    "description": "Organisation Details. This property is optional"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "name",
+                "providerType"
+            ]
+        },
+        "variations-schema": {
+            "properties": {
+                "variationReasons": {
+                    "type": "string",
+                    "description": "Optional reasons for the provider variation. These reasons are in addition to open and close reason of the organisation. This field can contain zero or more items.",
+                    "enum": [ "AuthorityFieldUpdated", "EstablishmentNumberFieldUpdated", "DfeEstablishmentNumberFieldUpdated", "NameFieldUpdated", "LACodeFieldUpdated", "LegalNameFieldUpdated", "TrustCodeFieldUpdated", "FundingUpdated", "ProfilingUpdated" ]
+                },
+                "successors": {
+                    "$ref": "#/definitions/providerInformations-schema",
+                    "description": "Collection of successor providers"
+                },
+                "predecessors": {
+                    "$ref": "#/definitions/providerInformations-schema",
+                    "description": "Collection of predecessor providers"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "variationReasons",
+                "successors",
+                "predecessors"
+            ]
+        },
+        "providerInformations-schema": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/providerInformation-schema"
+            },
+            "additionalProperties": false
+        },
+        "providerInformation-schema": {
+            "properties": {
+                "ukPrn": {
+                    "type": "string",
+                    "description": "The name of the organisation"
+                },
+                "providerVersionId": {
+                    "type": "number",
+                    "description": ""
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "ukPrn",
+                "providerVersionId"
+            ]
+        }
+    }
+}

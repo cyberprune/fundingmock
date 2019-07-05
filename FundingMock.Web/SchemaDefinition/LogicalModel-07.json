@@ -1,9 +1,9 @@
-﻿{
+{
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"$id": "http://dfe.gov.uk.com/funding.schema.json",
 	"title": "Corporate funding schema",
 	"description": "A Department of Education view of funding allocation",
-	"version": "0.6",
+	"version": "0.7",
 	"type": "object",
   "properties": {
     "$schema": {
@@ -162,7 +162,7 @@
           "type": "string",
           "description": "If Grouped by Type is Authority Type, then it will be value such as London, Metropolitan authorities. If type is Region, value will be such as East of England. If Group by type is LA, then the value would be Camden"
         },
-        "searcableName": {
+        "searchableName": {
           "type": "string",
           "description": "Text for Azure search to make this entity searchable. This is the name, but with punctuation etc removed to make it suitable for searching"
         },
@@ -452,6 +452,10 @@
           "type": "string",
           "description": "A unique id for this funding. In format 'schema:v{schemaVersion}/{stream.Code}/template:v{templateVersion}/{groupingOrg.Name}/{period.Code}/funding:v{fundingVersion}/{organisation.Name}'"
         },
+        "fundingVersion": {
+          "type": "string",
+          "description": "Version number for the funding'"
+        },
         "organisation": {
           "$ref": "#/definitions/organisation-schema",
           "description": "The organisation for which the funding is for"
@@ -481,9 +485,72 @@
         "id",
         "organisation",
         "fundingValue",
-        "streamCode",
-        "periodCode"
+        "fundingStreamCode",
+        "fundingPeriodCode"
       ]
+    },
+    "organisationDetails-schema": {
+        "properties": {
+             "dateOpened": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date Opened."
+            },
+            "dateClosed": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date Closed."
+            },
+            "status": {
+              "type": "string",
+              "description": "Status of the organisation"
+            },
+            "phaseOfEducation": {
+              "type": "string",
+              "description": ""
+            },
+            "openReason": {
+              "type": "string",
+              "description": "Optional open reason from the list of GIAS Open Reasons"
+            },
+            "closeReason": {
+              "type": "string",
+              "description": "Optional close reason from list of GIAS Close Reasons"
+            },
+            "trustStatus": {
+              "type": "string",
+              "description": ""
+            },
+            "trustName": {
+              "type": "string",
+              "description": ""
+            },
+            "address": {
+               "oneOf": [
+                { "type": "null" },
+                { "$ref": "#/definitions/organisationAddress-schema" }
+               ],
+              "description": ""
+            }
+        },
+        "additionalProperties": false,
+        "required": [           
+        ]
+    },
+    "organisationAddress-schema": {
+        "properties": {
+            "town": {
+              "type": "string",
+              "description": "The town of the organisation"
+            },
+            "postcode": {
+              "type": "string",
+              "description": "The postcode of the organisation"
+            }
+        },
+        "additionalProperties": false,
+        "required": [           
+        ]
     },
     "organisation-schema": {
       "properties": {
@@ -491,13 +558,35 @@
           "type": "string",
           "description": "The name of the organisation"
         },
+        "searchableName": {
+          "type": "string",
+          "description": "A searchable name of the organisation"
+        },
         "identifiers": {
           "$ref": "#/definitions/organisationIdentifers-schema",
+          "description": "Identifier numbers for this organisation"
+        },
+        "providerVersionId": {
+          "type": "string",
           "description": "Identifier numbers for this organisation"
         },
         "providerType": {
           "type": "string",
           "description": "Provider type (e.g. School, Academy, Special School"
+        },
+        "providerSubType": {
+          "oneOf": [
+            { "type": "null" },
+            { "type": "string", }
+          ],
+          "description": "Provider type (e.g. School, Academy, Special School"
+        },
+        "organisationDetails": {
+          "anyOf": [
+            { "type": "null" },
+            { "$ref": "#/definitions/organisationDetails-schema" }
+          ],
+          "description": "Organisation Details. This property is optional"
         }
       },
       "additionalProperties": false,
