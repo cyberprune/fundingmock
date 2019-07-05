@@ -1,30 +1,140 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
-	"$id": "http://dfe.gov.uk.com/funding.schema.json",
+	"$id": "http://dfe.gov.uk.com/funding.feeditem.schema.json",
 	"title": "Corporate funding schema",
 	"description": "A Department of Education view of funding allocation",
 	"version": "0.7",
 	"type": "object",
   "properties": {
-    "$schema": {
+    "id": {
       "type": "string",
-      "description": "Spec URI"
+      "description": ""
     },
-    "schemaVersion": {
+    "title": {
       "type": "string",
-      "description": "The schema version. Schema here refers to the Classes etc.., not the specific allocation model being used."
+      "description": ""
     },
-    "funding": {
-      "$ref": "#/definitions/funding-schema",
-      "description": "The funding group (grouping on region or organisation - such as an LA, MAT, Region etc...)."
+    "author": {
+      "$ref": "#/definitions/author-schema",
+      "description": ""
+    },
+    "updated": {
+        "type": "string",
+        "format": "date-time",
+        "description": ""
+    },
+    "rights": {
+      "type": "string",
+      "description": ""
+    },
+    "link": {
+      "$ref": "#/definitions/links-schema",
+      "description": ""
+    },
+    "atomEntry": {
+      "$ref": "#/definitions/atomEntries-schema",
+      "description": ""
     }
   },
-	"additionalProperties": false,
+  "additionalProperties": false,
   "required": [
-    "schemaVersion",
-    "funding"
+    "id",
+    "title",
+    "atomEntry"
   ],
   "definitions": {
+    "author-schema": {
+        "properties": {
+            "email": {
+                "type": "string",
+                "description": ""
+            },
+            "name": {
+                "type": "string",
+                "description": ""
+            }
+        },
+        "additionalProperties": false,
+        "required": []
+    },
+    "links-schema": {
+        "type": "array",
+        "items": {
+            "$ref": "#/definitions/link-schema"
+        }
+    },
+    "link-schema": {
+        "properties": {
+            "href": {
+                "type": "string",
+                "description": ""
+            },
+            "rel": {
+                "type": "string",
+                "description": ""
+            }
+        },
+        "additionalProperties": false,
+        "required": []
+    },
+    "atomEntries-schema": {
+        "type": "array",
+        "items": {
+            "$ref": "#/definitions/atomEntry-schema"
+        }
+    },
+    "atomEntry-schema": {
+        "properties": {
+            "id": {
+                "type": "string",
+                "description": ""
+            },
+            "title": {
+                "type": "string",
+                "description": ""
+            },
+            "author": {
+                "$ref": "#/definitions/author-schema",
+                "description": ""
+            },
+            "updated": {
+                "type": "string",
+                "format": "date-time",
+                "description": ""
+            },
+            "link": {
+                "$ref": "#/definitions/links-schema",
+                "description": ""
+            },
+            "content": {
+                "$ref": "#/definitions/content-schema",
+                "description": ""
+            }
+        },
+        "additionalProperties": false,
+        "required": []
+    },
+    "content-schema": {
+        "properties": {
+            "$schema": {
+                "type": "string",
+                "description": "Spec URI"
+            },
+            "schemaVersion": {
+                "type": "string",
+                "description": "The schema version. Schema here refers to the Classes etc.., not the specific allocation model being used."
+            },
+            "funding": {
+                "$ref": "#/definitions/funding-schema",
+                "description": "The funding group (grouping on region or organisation - such as an LA, MAT, Region etc...)."
+            }
+        },
+        "additionalProperties": false,
+        "required": [
+            "schemaVersion",
+            "funding"
+        ]
+    },
     "funding-schema": {
       "properties": {
         "id": {
@@ -57,8 +167,8 @@
           "description": "Funding value breakdown"
         },
         "providerFundings": {
-          "$ref": "#/definitions/providerFundings-schema",
-          "description": "The fundings (child organisation level lines, e.g. providers under an LA) that are grouped into this funding group"
+          "$ref": "#/definitions/providerFundingIds-schema",
+          "description": "The funding ids for the providers who make up this item"
         },
         "groupingReason": {
           "type": "string",
@@ -439,208 +549,12 @@
         "aggregationType"
       ]
     },
-    "providerFundings-schema": {
+    "providerFundingIds-schema": {
       "type": "array",
       "items": {
-        "$ref": "#/definitions/providerFunding-schema"
+        "type": "string"
       },
       "additionalProperties": false
-    },
-    "providerFunding-schema": {
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "A unique id for this funding. In format 'schema:v{schemaVersion}/{stream.Code}/template:v{templateVersion}/{groupingOrg.Name}/{period.Code}/funding:v{fundingVersion}/{organisation.Name}'"
-        },
-        "fundingVersion": {
-          "type": "string",
-          "description": "Version number for the funding'"
-        },
-        "organisation": {
-          "$ref": "#/definitions/organisation-schema",
-          "description": "The organisation for which the funding is for"
-        },
-        "variations": {
-          "oneOf": [
-            { "type": "null" },
-            { "$ref": "#/definitions/variations-schema" }
-          ],
-          "description": ""
-        },
-        "fundingValue": {
-          "$ref": "#/definitions/fundingValue-schema",
-          "description": "Funding value"
-        },
-        "fundingStreamCode": {
-          "type": "string",
-          "description": "The funding stream the funding relates to"
-        },
-        "fundingPeriodCode": {
-          "type": "string",
-          "description": "The funding period the funding relates to"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "id",
-        "organisation",
-        "fundingValue",
-        "fundingStreamCode",
-        "fundingPeriodCode"
-      ]
-    },
-    "organisationDetails-schema": {
-        "properties": {
-             "dateOpened": {
-              "type": "string",
-              "format": "date-time",
-              "description": "Date Opened."
-            },
-            "dateClosed": {
-              "type": "string",
-              "format": "date-time",
-              "description": "Date Closed."
-            },
-            "status": {
-              "type": "string",
-              "description": "Status of the organisation"
-            },
-            "phaseOfEducation": {
-              "type": "string",
-              "description": ""
-            },
-            "openReason": {
-              "type": "string",
-              "description": "Optional open reason from the list of GIAS Open Reasons"
-            },
-            "closeReason": {
-              "type": "string",
-              "description": "Optional close reason from list of GIAS Close Reasons"
-            },
-            "trustStatus": {
-              "type": "string",
-              "description": ""
-            },
-            "trustName": {
-              "type": "string",
-              "description": ""
-            },
-            "address": {
-               "oneOf": [
-                { "type": "null" },
-                { "$ref": "#/definitions/organisationAddress-schema" }
-               ],
-              "description": ""
-            }
-        },
-        "additionalProperties": false,
-        "required": [           
-        ]
-    },
-    "organisationAddress-schema": {
-        "properties": {
-            "town": {
-              "type": "string",
-              "description": "The town of the organisation"
-            },
-            "postcode": {
-              "type": "string",
-              "description": "The postcode of the organisation"
-            }
-        },
-        "additionalProperties": false,
-        "required": [           
-        ]
-    },
-    "organisation-schema": {
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "The name of the organisation"
-        },
-        "searchableName": {
-          "type": "string",
-          "description": "A searchable name of the organisation"
-        },
-        "identifiers": {
-          "$ref": "#/definitions/organisationIdentifers-schema",
-          "description": "Identifier numbers for this organisation"
-        },
-        "providerVersionId": {
-          "type": "string",
-          "description": "Identifier numbers for this organisation"
-        },
-        "providerType": {
-          "type": "string",
-          "description": "Provider type (e.g. School, Academy, Special School"
-        },
-        "providerSubType": {
-          "oneOf": [
-            { "type": "null" },
-            { "type": "string", }
-          ],
-          "description": "Provider type (e.g. School, Academy, Special School"
-        },
-        "organisationDetails": {
-          "anyOf": [
-            { "type": "null" },
-            { "$ref": "#/definitions/organisationDetails-schema" }
-          ],
-          "description": "Organisation Details. This property is optional"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "name",
-        "providerType"
-      ]
-    },
-    "variations-schema": {
-      "properties": {
-        "variationReasons": {
-          "type": "string",
-          "description": "Optional reasons for the provider variation. These reasons are in addition to open and close reason of the organisation. This field can contain zero or more items.",
-          "enum": [ "AuthorityFieldUpdated", "EstablishmentNumberFieldUpdated", "DfeEstablishmentNumberFieldUpdated", "NameFieldUpdated", "LACodeFieldUpdated", "LegalNameFieldUpdated", "TrustCodeFieldUpdated", "FundingUpdated", "ProfilingUpdated" ]
-        },
-        "successors": {
-          "$ref": "#/definitions/providerInformations-schema",
-          "description": "Collection of successor providers"
-        },
-        "predecessors": {
-          "$ref": "#/definitions/providerInformations-schema",
-          "description": "Collection of predecessor providers"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "variationReasons",
-        "successors",
-        "predecessors"
-      ]
-    },
-    "providerInformations-schema": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/providerInformation-schema"
-      },
-      "additionalProperties": false
-    },
-    "providerInformation-schema": {
-      "properties": {
-        "ukPrn": {
-          "type": "string",
-          "description": "The name of the organisation"
-        },
-        "providerVersionId": {
-          "type": "number",
-          "description": ""
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "ukPrn",
-        "providerVersionId"
-      ]
     }
   }
 }
