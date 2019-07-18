@@ -15,25 +15,24 @@ namespace FundingMock.Web.Examples
 
             var period = new FundingPeriod
             {
-                Code = "AY1920",
+                Period = "AY1920",
                 Name = "Academic year 2019-20",
-                Type = PeriodType.AcademicYear,
+                Type = PeriodType.AY,
                 StartDate = new DateTimeOffset(2019, 9, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2020, 8, 31, 0, 0, 0, ukOffset)
             };
 
             var templateVersion = "1.0";
 
-            var stream = new StreamWithTemplateVersion
+            var stream = new FundingStream
             {
                 Code = "PESports",
                 Name = "PE + Sport Premium",
-                TemplateVersion = templateVersion,
             };
 
             var groupingOrg = new OrganisationGroup()
             {
-                Type = OrganisationType.LocalAuthority,
+                PrimaryIdentifierType = OrganisationType.LocalAuthority,
                 Name = "Camden",
                 SearchableName = "Camden",
                 Identifiers = new List<OrganisationIdentifier>
@@ -51,7 +50,7 @@ namespace FundingMock.Web.Examples
                 }
             };
 
-            var id = $"{stream.Code}_{period.Code}_{groupingOrg.Type}_{groupingOrg.Name}_{fundingVersion}";
+            var id = $"{stream.Code}_{period.Period}_{groupingOrg.PrimaryIdentifierType}_{groupingOrg.Name}_{fundingVersion}";
 
             var host = "http://example.org";
 
@@ -104,7 +103,7 @@ namespace FundingMock.Web.Examples
                             Email = "calculate-funding@education.gov.uk",
                             Name = "Calculate Funding Service"
                         },
-                        Title = $"Feed response for {stream.Code} - {period.Code} - version {fundingVersion}",
+                        Title = $"Feed response for {stream.Code} - {period.Period} - version {fundingVersion}",
                         Link = new FeedLink[]
                         {
                             new FeedLink

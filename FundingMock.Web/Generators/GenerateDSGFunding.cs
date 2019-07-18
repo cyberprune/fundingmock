@@ -1,13 +1,13 @@
-﻿using ExcelDataReader;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 using System.Linq;
 using System.Reflection;
-using FundingMock.Web.Models;
-using FundingMock.Web.Enums;
+using System.Text;
+using ExcelDataReader;
 using FundingMock.Web.Controllers;
+using FundingMock.Web.Enums;
+using FundingMock.Web.Models;
 
 namespace Sfa.Sfs.Mock.Generators
 {
@@ -143,20 +143,19 @@ namespace Sfa.Sfs.Mock.Generators
 
             var period = new FundingPeriod
             {
-                Code = "FY1920",
+                Period = "FY1920",
                 Name = "Financial year 2019-20",
-                Type = PeriodType.FinancialYear,
+                Type = PeriodType.FY,
                 StartDate = new DateTimeOffset(2019, 4, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2020, 3, 31, 0, 0, 0, ukOffset)
             };
 
             var templateVersion = "1.0";
 
-            var stream = new StreamWithTemplateVersion
+            var stream = new FundingStream
             {
                 Code = "DSG",
                 Name = "Dedicated Schools Grant",
-                TemplateVersion = templateVersion,
             };
 
             var fundingVersion = "1-0";
@@ -189,7 +188,7 @@ namespace Sfa.Sfs.Mock.Generators
                 var groupingOrg = new OrganisationGroup
                 {
                     Name = organisation.Name,
-                    Type = organisation.Type == Type.LA ? OrganisationType.LocalAuthority
+                    PrimaryIdentifierType = organisation.Type == Type.LA ? OrganisationType.LocalAuthority
                         : (organisation.Type == Type.LocalGovernmentGroup ? OrganisationType.LocalGovernmentGroup : OrganisationType.Region),
                     SearchableName = FundingController.SanitiseName(organisation.Name),
                     Identifiers = identifiers
@@ -213,7 +212,7 @@ namespace Sfa.Sfs.Mock.Generators
                         {
                             providerFundings = new List<string>
                             {
-                                $"{stream.Code}_{period.Code}_{primaryId}_{fundingVersion}"
+                                $"{stream.Code}_{period.Period}_{primaryId}_{fundingVersion}"
                             };
                         }
 
@@ -223,7 +222,7 @@ namespace Sfa.Sfs.Mock.Generators
                         if ((organisationTypes?.Any() != true || organisationTypes?.Contains(OrganisationType.Region) == true || organisationTypes?.Contains(OrganisationType.LocalGovernmentGroup) == true) &&
                             (groupingReasons?.Any() != true || groupingReasons?.Contains(GroupingReason.Information) == true))
                         {
-                            providerFundings.AddRange(GetLasForRegion(organisation.Name).Select(la => $"{stream.Code}_{period.Code}_{la.UKPRN}_{fundingVersion}").ToList());
+                            providerFundings.AddRange(GetLasForRegion(organisation.Name).Select(la => $"{stream.Code}_{period.Period}_{la.UKPRN}_{fundingVersion}").ToList());
                         }
 
                         break;
@@ -240,7 +239,6 @@ namespace Sfa.Sfs.Mock.Generators
                     SchemaVersion = schemaVersion,
                     Funding = new FundingFeed
                     {
-                        Id = $"{stream.Code}_{period.Code}_{groupingOrg.Type}_{primaryId.Replace(" ", "_")}_{fundingVersion}",
                         FundingStream = stream,
                         FundingPeriod = period,
                         Status = FundingStatus.Released,
@@ -257,22 +255,24 @@ namespace Sfa.Sfs.Mock.Generators
 
                 if (fundingLineTypes?.Any() == true)
                 {
-                    foreach (var dperiod in data.Funding.FundingValue.FundingValueByDistributionPeriod)
-                    {
-                        dperiod.FundingLines = dperiod.FundingLines.Where(line => fundingLineTypes.Contains(line.Type)).ToList();
+                    // TODO fix after funding model update
+                    //foreach (var dperiod in data.Funding.FundingValue.FundingValueByDistributionPeriod)
+                    //{
+                    //    dperiod.FundingLines = dperiod.FundingLines.Where(line => fundingLineTypes.Contains(line.Type)).ToList();
 
-                        //TODO - filter at lower levels
-                    }
+                    //    //TODO - filter at lower levels
+                    //}
                 }
 
                 if (templateLineIds?.Any() == true)
                 {
-                    foreach (var dperiod in data.Funding.FundingValue.FundingValueByDistributionPeriod)
-                    {
-                        dperiod.FundingLines = dperiod.FundingLines.Where(line => templateLineIds.Contains(line.TemplateLineId.ToString())).ToList();
+                    // TODO fix after funding model update
+                    //foreach (var dperiod in data.Funding.FundingValue.FundingValueByDistributionPeriod)
+                    //{
+                    //    dperiod.FundingLines = dperiod.FundingLines.Where(line => templateLineIds.Contains(line.TemplateLineId.ToString())).ToList();
 
-                        //TODO - filter at lower levels
-                    }
+                    //    //TODO - filter at lower levels
+                    //}
                 }
 
                 var host = "http://example.org";
@@ -355,20 +355,19 @@ namespace Sfa.Sfs.Mock.Generators
 
             var period = new FundingPeriod
             {
-                Code = "FY1920",
+                Period = "FY1920",
                 Name = "Financial year 2019-20",
-                Type = PeriodType.FinancialYear,
+                Type = PeriodType.FY,
                 StartDate = new DateTimeOffset(2019, 4, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2020, 3, 31, 0, 0, 0, ukOffset)
             };
 
             var templateVersion = "1.0";
 
-            var stream = new StreamWithTemplateVersion
+            var stream = new FundingStream
             {
                 Code = "DSG",
                 Name = "Dedicated Schools Grant",
-                TemplateVersion = templateVersion,
             };
 
             var periodValue = Convert.ToInt64(GetDataFromMillions(spreadsheet, 1, organisation.SpreadsheetRowNumber, 11) / 25.0);
@@ -388,7 +387,7 @@ namespace Sfa.Sfs.Mock.Generators
                     ProviderVersionId = "TBC",
                     Identifiers = identifiers
                 },
-                FundingPeriodCode = period.Code,
+                FundingPeriodCode = period.Period,
                 FundingStreamCode = stream.Code,
                 FundingValue = fundingValue
             };
@@ -613,13 +612,7 @@ namespace Sfa.Sfs.Mock.Generators
             return new FundingValue
             {
                 TotalValue = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 11),
-                FundingValueByDistributionPeriod = new List<FundingValueByDistributionPeriod>
-                {
-                    new FundingValueByDistributionPeriod
-                    {
-                        DistributionPeriodCode = "FY1920",
-                        Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 11),
-                        FundingLines = new List<FundingLine>
+                FundingLines = new List<FundingLine>
                         {
                             new FundingLine
                             {
@@ -2702,7 +2695,14 @@ namespace Sfa.Sfs.Mock.Generators
                                     }
                                 }
                             }
-                        }
+                        },
+                DistrubutionPeriods = new List<FundingValueByDistributionPeriod>
+                {
+                    new FundingValueByDistributionPeriod
+                    {
+                        DistributionPeriodCode = "FY1920",
+                        Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 11),
+
                     }
                 }
             };

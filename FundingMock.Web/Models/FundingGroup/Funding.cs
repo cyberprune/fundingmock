@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using FundingMock.Web.Enums;
 using Newtonsoft.Json;
@@ -11,13 +12,20 @@ namespace FundingMock.Web.Models
     public abstract class Funding
     {
         /// <summary>
-        /// Unique identifier of this funding group / business event (in format 'TODO').
+        /// Unique identifier of this funding group / business event (in format 'FundingStreamCode-FundingPeriodCode-OrganisationGroupPrimaryIdentifierType-OrganisationGroupPrimaryIdentifierCode-FundingVersion').
         /// </summary>
         [JsonProperty("id", Order = 1)]
-        public string Id { get; set; }
+        public string Id => $"{FundingStream.Code}-{FundingPeriod.Period}-{OrganisationGroup.PrimaryIdentifierType}-{OrganisationGroup.PrimaryIdentifierCode}-{FundingVersion}";
+
+        /// <summary>
+        /// The version of the template (e.g. this is Version 2 of PE and sport template).
+        /// </summary>
+        [JsonProperty("templateVersion")]
+        public string TemplateVersion { get; set; }
 
         /// <summary>
         /// Version number of the published data. If there are changes to the funding for this organisation in this period, this number would increase.
+        /// Major and minor are seperated by an underscore eg 1_0
         /// </summary>
         [JsonProperty("fundingVersion", Order = 2)]
         public string FundingVersion { get; set; }
@@ -33,7 +41,7 @@ namespace FundingMock.Web.Models
         /// The funding stream the funding relates to.
         /// </summary>
         [JsonProperty("fundingStream", Order = 4)]
-        public StreamWithTemplateVersion FundingStream { get; set; }
+        public FundingStream FundingStream { get; set; }
 
         /// <summary>
         /// The funding period the funding relates to.

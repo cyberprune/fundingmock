@@ -3,5 +3,5 @@
     /// <summary>
     /// An extensible version of a stream.
     /// </summary>
-    public class StreamExtended : Stream { }
+    public class StreamExtended : FundingStream { }
 }

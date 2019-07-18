@@ -1,27 +1,33 @@
-﻿using Newtonsoft.Json;
-using FundingMock.Web.Enums;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using FundingMock.Web.Enums;
+using Newtonsoft.Json;
 
 namespace FundingMock.Web.Models
 {
     /// <summary>
-    /// A grouping organistion (e.g. 'Camden', an LA).
+    /// A grouping organistion (e.g. 'Camden', an LA) or (specific provider, 100023) or (country England)
     /// </summary>
     public class OrganisationGroup
     {
+        /// <summary>
+        /// The organisation group type. eg UKPRN or LACode
+        /// </summary>
+        [EnumDataType(typeof(OrganisationType))]
+        [JsonProperty("primaryIdentifierType")]
+        public OrganisationType PrimaryIdentifierType { get; set; }
+
+        /// <summary>
+        /// Value of the organisation type key, eg the actual UKPRN or LACode. 100023 or 202
+        /// </summary>
+        [JsonProperty("primaryIdentifierCode")]
+        public string PrimaryIdentifierCode { get; set; }
+
         /// <summary>
         /// The name of the grouping organisation (e.g. in the case of the type being LA, this could be 'Camden').
         /// </summary>
         [JsonProperty("name")]
         public string Name { get; set; }
-
-        /// <summary>
-        /// The organisation group type.
-        /// </summary>
-        [EnumDataType(typeof(OrganisationType))]
-        [JsonProperty("type")]
-        public OrganisationType Type { get; set; }
 
         /// <summary>
         /// Text for Azure search to make this entity searchable. This is the name, but with punctuation etc removed to make it suitable for searching

@@ -1,10 +1,9 @@
-﻿using FundingMock.Web.Controllers;
-using FundingMock.Web.Enums;
-using FundingMock.Web.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using FundingMock.Web.Controllers;
+using FundingMock.Web.Enums;
+using FundingMock.Web.Models;
 
 namespace Sfa.Sfs.Mock.Generators
 {
@@ -98,36 +97,35 @@ namespace Sfa.Sfs.Mock.Generators
 
             var period = new FundingPeriod
             {
-                Code = "AY1920",
+                Period = "AY1920",
                 Name = "Academic year 2019-20",
-                Type = PeriodType.AcademicYear,
+                Type = PeriodType.AY,
                 StartDate = new DateTimeOffset(2019, 9, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2020, 8, 31, 0, 0, 0, ukOffset)
             };
 
-            var stream = new StreamWithTemplateVersion
+            var stream = new FundingStream
             {
                 Code = "PESports",
                 Name = "PE + Sport Premium",
-                TemplateVersion = templateVersion,
             };
 
             var processFile = new ProcessPesportsCsv();
 
             var financialYearPeriod1920 = new FundingPeriod
             {
-                Code = "FY1920",
+                Period = "FY1920",
                 Name = "Financial Year 2019-20",
-                Type = PeriodType.FinancialYear,
+                Type = PeriodType.FY,
                 StartDate = new DateTimeOffset(2019, 4, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2020, 3, 30, 0, 0, 0, ukOffset)
             };
 
             var financialYearPeriod2021 = new FundingPeriod
             {
-                Code = "FY2021",
+                Period = "FY2021",
                 Name = "Financial Year 2020-21",
-                Type = PeriodType.FinancialYear,
+                Type = PeriodType.FY,
                 StartDate = new DateTimeOffset(2020, 4, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2021, 3, 30, 0, 0, 0, ukOffset)
             };
@@ -192,7 +190,7 @@ namespace Sfa.Sfs.Mock.Generators
         /// <param name="templateLineIds">Optional - Filter the lines to these ids only.</param>
         /// <returns>A list of feed response models.</returns>
         private static List<FeedResponseContentModel> ProcessOrgGroups(List<OrgGroup> orgGroups, string providerType, FundingPeriod financialYearPeriod1920,
-            FundingPeriod financialYearPeriod2021, FundingPeriod period, StreamWithTemplateVersion stream, string schemaVersion, string fundingVersion,
+            FundingPeriod financialYearPeriod2021, FundingPeriod period, FundingStream stream, string schemaVersion, string fundingVersion,
             OrganisationIdentifier[] organisationGroupIdentifiers, OrganisationIdentifier[] organisationIdentifiers, OrganisationType[] organisationTypes,
             VariationReason[] variationReasons, string[] ukprns, FundingLineType[] fundingLineTypes, string[] templateLineIds)
         {
@@ -226,7 +224,7 @@ namespace Sfa.Sfs.Mock.Generators
                 var ukprn = $"MOCKUKPRN{orgGroup.Code}";
 
                 var groupingOrg = ConvertToOrganisationGroup(orgGroup, ukprn, orgType);
-                var id = $"{stream.Code}_{period.Code}_{groupingOrg.Type}_{ukprn}_{fundingVersion}";
+                var id = $"{stream.Code}_{period.Period}_{groupingOrg.PrimaryIdentifierType}_{ukprn}_{fundingVersion}";
 
                 var data = new FeedBaseModel
                 {
@@ -234,8 +232,6 @@ namespace Sfa.Sfs.Mock.Generators
                     SchemaVersion = schemaVersion,
                     Funding = new FundingFeed
                     {
-                        Id = id,
-
                         FundingStream = stream,
                         FundingPeriod = period,
                         OrganisationGroup = groupingOrg,
@@ -243,7 +239,7 @@ namespace Sfa.Sfs.Mock.Generators
 
                         ExternalPublicationDate = new DateTimeOffset(2019, 9, 1, 0, 0, 0, new TimeSpan(1, 0, 0)),
                         PaymentDate = DateTimeOffset.Now,
-
+                        TemplateVersion = "1.0",
                         Status = FundingStatus.Released,
                         StatusChangedDate = DateTimeOffset.Now,
                         GroupingReason = GroupingReason.Payment,
@@ -251,13 +247,7 @@ namespace Sfa.Sfs.Mock.Generators
                         FundingValue = new FundingValue
                         {
                             TotalValue = orgGroup.TotalAllocation,
-                            FundingValueByDistributionPeriod = new List<FundingValueByDistributionPeriod>
-                            {
-                                new FundingValueByDistributionPeriod
-                                {
-                                    DistributionPeriodCode = financialYearPeriod1920.Code,
-                                    Value = orgGroup.OctoberTotal,
-                                    FundingLines = new List<FundingLine>
+                            FundingLines = new List<FundingLine>
                                     {
                                         new FundingLine
                                         {
@@ -274,38 +264,23 @@ namespace Sfa.Sfs.Mock.Generators
                                                     TypeValue = "October",
                                                     ProfiledValue = orgGroup.OctoberTotal,
                                                     Type = FundingLinePeriodType.CalendarMonth,
-                                                    PeriodCode = financialYearPeriod1920.Code
+                                                    PeriodCode = financialYearPeriod1920.Period
                                                 }
                                             },
                                         }
-                                    }
+                                    },
+                            DistrubutionPeriods = new List<FundingValueByDistributionPeriod>
+                            {
+                                new FundingValueByDistributionPeriod
+                                {
+                                    DistributionPeriodCode = financialYearPeriod1920.Period,
+                                    Value = orgGroup.OctoberTotal,
+
                                 },
                                 new FundingValueByDistributionPeriod
                                 {
-                                    DistributionPeriodCode = financialYearPeriod2021.Code,
+                                    DistributionPeriodCode = financialYearPeriod2021.Period,
                                     Value = orgGroup.AprilTotal,
-                                    FundingLines = new List<FundingLine>
-                                    {
-                                        new FundingLine
-                                        {
-                                            Name = "Total funding line",
-                                            TemplateLineId = 2,
-                                            Type = FundingLineType.Payment,
-                                            Value = orgGroup.AprilTotal,
-                                            ProfilePeriods = new List<FundingLinePeriod>
-                                            {
-                                                new FundingLinePeriod
-                                                {
-                                                    Occurence = 1,
-                                                    Year = 2020,
-                                                    TypeValue = "April",
-                                                    ProfiledValue = orgGroup.AprilTotal,
-                                                    Type = FundingLinePeriodType.CalendarMonth,
-                                                    PeriodCode = financialYearPeriod2021.Code
-                                                }
-                                            }
-                                        }
-                                    }
                                 }
                             }
                         }
@@ -314,22 +289,22 @@ namespace Sfa.Sfs.Mock.Generators
 
                 if (fundingLineTypes?.Any() == true)
                 {
-                    foreach (var dperiod in data.Funding.FundingValue.FundingValueByDistributionPeriod)
-                    {
-                        dperiod.FundingLines = dperiod.FundingLines.Where(line => fundingLineTypes.Contains(line.Type)).ToList();
+                    //foreach (var dperiod in data.Funding.FundingValue.FundingValueByDistributionPeriod)
+                    //{
+                    //    dperiod.FundingLines = dperiod.FundingLines.Where(line => fundingLineTypes.Contains(line.Type)).ToList();
 
-                        //TODO - filter at lower levels
-                    }
+                    //    //TODO - filter at lower levels
+                    //}
                 }
 
                 if (templateLineIds?.Any() == true)
                 {
-                    foreach (var dperiod in data.Funding.FundingValue.FundingValueByDistributionPeriod)
-                    {
-                        dperiod.FundingLines = dperiod.FundingLines.Where(line => templateLineIds.Contains(line.TemplateLineId.ToString())).ToList();
+                    //foreach (var dperiod in data.Funding.FundingValue.FundingValueByDistributionPeriod)
+                    //{
+                    //    dperiod.FundingLines = dperiod.FundingLines.Where(line => templateLineIds.Contains(line.TemplateLineId.ToString())).ToList();
 
-                        //TODO - filter at lower levels
-                    }
+                    //    //TODO - filter at lower levels
+                    //}
                 }
 
                 var host = "http://example.org";
@@ -388,7 +363,7 @@ namespace Sfa.Sfs.Mock.Generators
 
             return new OrganisationGroup()
             {
-                Type = organisationType,
+                PrimaryIdentifierType = organisationType,
                 Name = orgGroup.Name,
                 SearchableName = FundingController.SanitiseName(orgGroup.Name),
                 Identifiers = identifiers
@@ -403,7 +378,7 @@ namespace Sfa.Sfs.Mock.Generators
         /// <param name="stream"></param>
         /// <param name="fundingVersion"></param>
         /// <returns>A list of provider funding ids.</returns>
-        private static List<string> GetProviderFundingIds(OrgGroup orgGroup, FundingPeriod period, Stream stream, string fundingVersion,
+        private static List<string> GetProviderFundingIds(OrgGroup orgGroup, FundingPeriod period, FundingStream stream, string fundingVersion,
             OrganisationType[] organisationTypes, VariationReason[] variationReasons, string[] ukprns)
         {
             var returnList = new List<string>();
@@ -429,7 +404,7 @@ namespace Sfa.Sfs.Mock.Generators
                     continue;
                 }
 
-                returnList.Add($"{stream.Code}_{period.Code}_{ukprn}_{fundingVersion}");
+                returnList.Add($"{stream.Code}_{period.Period}_{ukprn}_{fundingVersion}");
             }
 
             return returnList;
@@ -449,36 +424,35 @@ namespace Sfa.Sfs.Mock.Generators
 
             var period = new FundingPeriod
             {
-                Code = "AY1920",
+                Period = "AY1920",
                 Name = "Academic year 2019-20",
-                Type = PeriodType.AcademicYear,
+                Type = PeriodType.AY,
                 StartDate = new DateTimeOffset(2019, 9, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2020, 8, 31, 0, 0, 0, ukOffset)
             };
 
             var templateVersion = "1.0";
 
-            var stream = new StreamWithTemplateVersion
+            var stream = new FundingStream
             {
                 Code = "PESports",
                 Name = "PE + Sport Premium",
-                TemplateVersion = templateVersion,
             };
 
             var financialYearPeriod1920 = new FundingPeriod
             {
-                Code = "FY1920",
+                Period = "FY1920",
                 Name = "Financial Year 2019-20",
-                Type = PeriodType.FinancialYear,
+                Type = PeriodType.FY,
                 StartDate = new DateTimeOffset(2019, 4, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2020, 3, 30, 0, 0, 0, ukOffset)
             };
 
             var financialYearPeriod2021 = new FundingPeriod
             {
-                Code = "FY2021",
+                Period = "FY2021",
                 Name = "Financial Year 2020-21",
-                Type = PeriodType.FinancialYear,
+                Type = PeriodType.FY,
                 StartDate = new DateTimeOffset(2020, 4, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2021, 3, 30, 0, 0, 0, ukOffset)
             };
@@ -516,7 +490,7 @@ namespace Sfa.Sfs.Mock.Generators
         /// <param name="code">The code that identifies the provider (e.g. ukprn).</param>
         /// <returns>A provider funding object.</returns>
         private static ProviderFunding GetProviderFunding(Provider provider, FundingPeriod financialYearPeriod1920,
-            FundingPeriod financialYearPeriod2021, FundingPeriod period, Stream stream, string providerType, string code)
+            FundingPeriod financialYearPeriod2021, FundingPeriod period, FundingStream stream, string providerType, string code)
         {
             var ukprn = $"MOCKUKPRN{provider.LaEstablishmentNo}";
 
@@ -556,9 +530,9 @@ namespace Sfa.Sfs.Mock.Generators
 
             return new ProviderFunding
             {
-                Id = $"{stream.Code}_{period.Code}_{ukprn}_{fundingVersion}",
+                Id = $"{stream.Code}_{period.Period}_{ukprn}_{fundingVersion}",
                 FundingVersion = fundingVersion.Replace("-", "."),
-                FundingPeriodCode = period.Code,
+                FundingPeriodCode = period.Period,
                 FundingStreamCode = stream.Code,
                 Organisation = new Organisation
                 {
@@ -588,13 +562,7 @@ namespace Sfa.Sfs.Mock.Generators
                 FundingValue = new FundingValue
                 {
                     TotalValue = provider.TotalAllocation, // 16200, // "Maintained Schools" -> F3
-                    FundingValueByDistributionPeriod = new List<FundingValueByDistributionPeriod>
-                    {
-                        new FundingValueByDistributionPeriod
-                        {
-                            DistributionPeriodCode = financialYearPeriod1920.Code,
-                            Value = provider.OctoberPayment, //9450,  // "Maintained Schools" -> G3
-                            FundingLines = new List<FundingLine>
+                    FundingLines = new List<FundingLine>
                             {
                                 new FundingLine
                                 {
@@ -611,7 +579,7 @@ namespace Sfa.Sfs.Mock.Generators
                                             TypeValue = "October",
                                             ProfiledValue = provider.OctoberPayment, //9450, // "Maintained Schools"  -> G3
                                             Type = FundingLinePeriodType.CalendarMonth,
-                                            PeriodCode = financialYearPeriod1920.Code
+                                            PeriodCode = financialYearPeriod1920.Period
                                         }
                                     },
                                     Calculations = new List<Calculation>
@@ -636,55 +604,19 @@ namespace Sfa.Sfs.Mock.Generators
                                         }
                                     }
                                 }
-                            }
+                            },
+                    DistrubutionPeriods = new List<FundingValueByDistributionPeriod>
+                    {
+                        new FundingValueByDistributionPeriod
+                        {
+                            DistributionPeriodCode = financialYearPeriod1920.Period,
+                            Value = provider.OctoberPayment, //9450,  // "Maintained Schools" -> G3
+                           
                         },
                         new FundingValueByDistributionPeriod
                         {
-                            DistributionPeriodCode = financialYearPeriod2021.Code,
+                            DistributionPeriodCode = financialYearPeriod2021.Period,
                             Value = 6750, // "Maintained Schools" -> H3
-                            FundingLines = new List<FundingLine>
-                            {
-                                new FundingLine
-                                {
-                                    Name = "April payment",// "Maintained Schools"  
-                                    TemplateLineId = 2,
-                                    Type = FundingLineType.Payment,
-                                    Value = provider.AprilPayment, //6750,  // "Maintained Schools" -> H3
-                                    ProfilePeriods = new List<FundingLinePeriod>
-                                    {
-                                        new FundingLinePeriod
-                                        {
-                                            Occurence = 1,
-                                            Year = 2020,
-                                            TypeValue = "April",
-                                            ProfiledValue = provider.AprilPayment,  //6750, // "Maintained Schools" -> H3
-                                            Type = FundingLinePeriodType.CalendarMonth,
-                                            PeriodCode = financialYearPeriod2021.Code
-                                        }
-                                    },
-                                    Calculations = new List<Calculation>
-                                    {
-                                        new Calculation
-                                        {
-                                            Name = "Total Allocation",
-                                            Type = CalculationType.Cash,
-                                            TemplateCalculationId = 1,
-                                            Value = provider.TotalAllocation, //"16200",  //  "Maintained Schools" 
-                                            ValueFormat = CalculationValueFormat.Currency,
-                                            FormulaText = "School with pupils with less than 17 eligible pupils (X) = 1000 * X School with pupils with more than 16 eligible pupils (X) =((1 * 16000) + (10 * X))",
-                                            ReferenceData = new List<ReferenceData>
-                                            {
-                                                new ReferenceData
-                                                {
-                                                    Name = "Eligible pupils",
-                                                    Value = provider.EligiblePupilsCount.ToString(), // "20",   //  "Maintained Schools"
-                                                    Format = ReferenceDataValueFormat.Number
-                                                },
-                                            }
-                                        }
-                                    }
-                                }
-                            }
                         }
                     }
                 }

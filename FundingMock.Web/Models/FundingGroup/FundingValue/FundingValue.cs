@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace FundingMock.Web.Models
 {
@@ -15,9 +15,12 @@ namespace FundingMock.Web.Models
         public long TotalValue { get; set; }
 
         /// <summary>
-        /// An array showing the amounts by the periods (envelopes) they are paid in (e.g. for PE + Sport there are 2 periods per year, with a 7/5 split).
+        /// The lines that make up this funding. 
         /// </summary>
-        [JsonProperty("fundingValueByDistributionPeriod")]
-        public IEnumerable<FundingValueByDistributionPeriod> FundingValueByDistributionPeriod { get; set; }
+        [JsonProperty("fundingLines")]
+        public IEnumerable<FundingLine> FundingLines { get; set; }
+
+        [JsonProperty("distributionPeriods")]
+        public IEnumerable<FundingValueByDistributionPeriod> DistrubutionPeriods { get; set; }
     }
 }

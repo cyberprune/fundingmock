@@ -14,33 +14,33 @@ namespace FundingMock.Web.Examples
             {
                 new PeriodExtended
                 {
-                    Code = "AY1920",
+                    Period = "AY1920",
                     Name = "Academic Year 2019 to 2020",
-                    Type = Enums.PeriodType.AcademicYear,
+                    Type = Enums.PeriodType.AY,
                     StartDate = new DateTimeOffset(2019, 9, 1, 0, 0, 0, new TimeSpan(0, 0, 0)),
                     EndDate = new DateTimeOffset(2020, 8, 31, 0, 0, 0, new TimeSpan(0, 0, 0))
                 },
                 new PeriodExtended
                 {
-                    Code = "AY2021",
+                    Period = "AY2021",
                     Name = "Academic Year 2020 to 2021",
-                    Type = Enums.PeriodType.AcademicYear,
+                    Type = Enums.PeriodType.AY,
                     StartDate = new DateTimeOffset(2020, 9, 1, 0, 0, 0, new TimeSpan(0, 0, 0)),
                     EndDate = new DateTimeOffset(2021, 8, 31, 0, 0, 0, new TimeSpan(0, 0, 0))
                 },
                 new PeriodExtended
                 {
-                    Code = "FY1920",
+                    Period = "FY1920",
                     Name = "Financial Year 2019 to 2020",
-                    Type = Enums.PeriodType.FinancialYear,
+                    Type = Enums.PeriodType.FY,
                     StartDate = new DateTimeOffset(2019, 4, 1, 0, 0, 0, new TimeSpan(0, 0, 0)),
                     EndDate = new DateTimeOffset(2020, 3, 30, 0, 0, 0, new TimeSpan(0, 0, 0))
                 },
                 new PeriodExtended
                 {
-                    Code = "FY2021",
+                    Period = "FY2021",
                     Name = "Financial Year 2020 to 2021",
-                    Type = Enums.PeriodType.FinancialYear,
+                    Type = Enums.PeriodType.FY,
                     StartDate = new DateTimeOffset(2020, 4, 1, 0, 0, 0, new TimeSpan(0, 0, 0)),
                     EndDate = new DateTimeOffset(2021, 3, 30, 0, 0, 0, new TimeSpan(0, 0, 0))
                 }
