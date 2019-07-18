@@ -7,7 +7,7 @@ namespace FundingMock.Web.Enums
     /// Valid list of organisation group types.
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum OrganisationType
+    public enum OrganisationGroupTypeIdentifier
     {
         /// <summary>
         /// Local Authority (e.g. Warwickshire).

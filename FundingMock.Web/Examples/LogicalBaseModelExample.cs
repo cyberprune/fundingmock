@@ -34,20 +34,20 @@ namespace FundingMock.Web.Examples
 
             var groupingOrg = new OrganisationGroup()
             {
-                PrimaryIdentifierType = OrganisationType.LocalAuthority,
+                MainIdentifierType = OrganisationGroupTypeIdentifier.LocalAuthority,
                 Name = "Camden",
                 SearchableName = "Camden",
-                PrimaryIdentifierCode = "203",
+                MainIdentifierCode = "203",
                 Identifiers = new List<OrganisationIdentifier>
                 {
                     new OrganisationIdentifier
                     {
-                        Type = OrganisationIdentifierType.LACode,
+                        Type = OrganisationTypeIdentifier.LACode,
                         Value = "203"
                     },
                     new OrganisationIdentifier
                     {
-                        Type = OrganisationIdentifierType.UKPRN,
+                        Type = OrganisationTypeIdentifier.UKPRN,
                         Value = "12345678"
                     }
                 }
@@ -162,12 +162,12 @@ namespace FundingMock.Web.Examples
                                     {
                                         new OrganisationIdentifier
                                         {
-                                            Type = OrganisationIdentifierType.URN,
+                                            Type = OrganisationTypeIdentifier.URN,
                                             Value = "123453"
                                         },
                                         new OrganisationIdentifier
                                         {
-                                            Type = OrganisationIdentifierType.UKPRN,
+                                            Type = OrganisationTypeIdentifier.UKPRN,
                                             Value = "87654321"
                                         }
                                     }
@@ -271,12 +271,12 @@ namespace FundingMock.Web.Examples
                                     {
                                         new OrganisationIdentifier
                                         {
-                                            Type = OrganisationIdentifierType.URN,
+                                            Type = OrganisationTypeIdentifier.URN,
                                             Value = "123453"
                                         },
                                         new OrganisationIdentifier
                                         {
-                                            Type = OrganisationIdentifierType.UKPRN,
+                                            Type = OrganisationTypeIdentifier.UKPRN,
                                             Value = "87654322"
                                         }
                                     }

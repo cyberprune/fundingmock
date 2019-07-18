@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace FundingMock.Web.Models
 {
@@ -8,6 +8,12 @@ namespace FundingMock.Web.Models
     /// </summary>
     public class Organisation
     {
+        /// <summary>
+        /// The ID of the organisation. This is the UKRPN of the provider
+        /// </summary>
+        [JsonProperty("mainIdentifierCode")]
+        public string MainIdentifierCode { get; set; }
+
         /// <summary>
         /// The name of the organisation.
         /// </summary>

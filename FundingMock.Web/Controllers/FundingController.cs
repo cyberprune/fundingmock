@@ -50,8 +50,8 @@ namespace FundingMock.Web.Controllers
         [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(FeedResponseModelExample))]
         public IActionResult GetFeed(int? pageSize = null, int? fundingPeriodStartYear = null,
             int? fundingPeriodEndYear = null, string[] fundingPeriodCodes = null,
-            OrganisationIdentifier[] organisationGroupIdentifiers = null, OrganisationType[] organisationGroupTypes = null,
-            OrganisationIdentifier[] organisationIdentifiers = null, OrganisationType[] organisationTypes = null,
+            OrganisationIdentifier[] organisationGroupIdentifiers = null, OrganisationGroupTypeIdentifier[] organisationGroupTypes = null,
+            OrganisationIdentifier[] organisationIdentifiers = null, OrganisationGroupTypeIdentifier[] organisationTypes = null,
             VariationReason[] variationReasons = null, string[] ukprns = null, GroupingReason[] groupingReasons = null,
             FundingStatus[] statuses = null, DateTime? minStatusChangeDate = null, string[] fundingStreamCodes = null,
             FundingLineType[] fundingLineTypes = null, string[] templateLineIds = null)
@@ -88,8 +88,8 @@ namespace FundingMock.Web.Controllers
         [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(FeedResponseModelExample))]
         public IActionResult GetFeedPage([FromRoute] int? pageRef, int? pageSize = null, int? fundingPeriodStartYear = null,
             int? fundingPeriodEndYear = null, string[] fundingPeriodCodes = null,
-            OrganisationIdentifier[] organisationGroupIdentifiers = null, OrganisationType[] organisationGroupTypes = null,
-            OrganisationIdentifier[] organisationIdentifiers = null, OrganisationType[] organisationTypes = null,
+            OrganisationIdentifier[] organisationGroupIdentifiers = null, OrganisationGroupTypeIdentifier[] organisationGroupTypes = null,
+            OrganisationIdentifier[] organisationIdentifiers = null, OrganisationGroupTypeIdentifier[] organisationTypes = null,
             VariationReason[] variationReasons = null, string[] ukprns = null, GroupingReason[] groupingReasons = null,
             FundingStatus[] statuses = null, DateTime? minStatusChangeDate = null, string[] fundingStreamCodes = null,
             FundingLineType[] fundingLineTypes = null, string[] templateLineIds = null)

@@ -13,15 +13,15 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// The organisation group type. eg UKPRN or LACode
         /// </summary>
-        [EnumDataType(typeof(OrganisationType))]
-        [JsonProperty("primaryIdentifierType")]
-        public OrganisationType PrimaryIdentifierType { get; set; }
+        [EnumDataType(typeof(OrganisationGroupTypeIdentifier))]
+        [JsonProperty("mainIdentifierType")]
+        public OrganisationGroupTypeIdentifier MainIdentifierType { get; set; }
 
         /// <summary>
         /// Value of the organisation type key, eg the actual UKPRN or LACode. 100023 or 202
         /// </summary>
-        [JsonProperty("primaryIdentifierCode")]
-        public string PrimaryIdentifierCode { get; set; }
+        [JsonProperty("mainIdentifierCode")]
+        public string MainIdentifierCode { get; set; }
 
         /// <summary>
         /// The name of the grouping organisation (e.g. in the case of the type being LA, this could be 'Camden').

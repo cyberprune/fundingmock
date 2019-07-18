@@ -15,7 +15,7 @@ namespace FundingMock.Web.Models
         /// Unique identifier of this funding group / business event (in format 'FundingStreamCode-FundingPeriodCode-OrganisationGroupPrimaryIdentifierType-OrganisationGroupPrimaryIdentifierCode-FundingVersion').
         /// </summary>
         [JsonProperty("id", Order = 1)]
-        public string Id => $"{FundingStream.Code}-{FundingPeriod.Period}-{OrganisationGroup.PrimaryIdentifierType}-{OrganisationGroup.PrimaryIdentifierCode}-{FundingVersion}";
+        public string Id => $"{FundingStream.Code}-{FundingPeriod.Period}-{OrganisationGroup.MainIdentifierType}-{OrganisationGroup.MainIdentifierCode}-{FundingVersion}";
 
         /// <summary>
         /// The version of the template (e.g. this is Version 2 of PE and sport template).

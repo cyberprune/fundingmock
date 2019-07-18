@@ -12,9 +12,9 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// The type of organisation identifier (e.g. UKPRN). 
         /// </summary>
-        [EnumDataType(typeof(OrganisationIdentifierType))]
+        [EnumDataType(typeof(OrganisationTypeIdentifier))]
         [JsonProperty("type")]
-        public OrganisationIdentifierType Type { get; set; }
+        public OrganisationTypeIdentifier Type { get; set; }
 
         /// <summary>
         /// The value of this identifier type (e.g. if the type is UKPRN, then the value may be 12345678. 

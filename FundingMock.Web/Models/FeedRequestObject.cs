@@ -43,7 +43,7 @@ namespace FundingMock.Web.Models
         /// Optional - Group types to limit to.
         /// </summary>
         [JsonProperty("organisationGroupTypes")]
-        public OrganisationType[] OrganisationGroupTypes { get; set; }
+        public OrganisationGroupTypeIdentifier[] OrganisationGroupTypes { get; set; }
 
         /// <summary>
         /// Optional - Restrict returned identifiers by id.
@@ -55,7 +55,7 @@ namespace FundingMock.Web.Models
         /// Optional - Organisation types to limit to.
         /// </summary>
         [JsonProperty("organisationTypes")]
-        public OrganisationType[] OrganisationTypes { get; set; }
+        public OrganisationGroupTypeIdentifier[] OrganisationTypes { get; set; }
 
         /// <summary>
         /// Optional - Variation reasons to limit to.

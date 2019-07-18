@@ -34,26 +34,26 @@ namespace FundingMock.Web.Examples
 
             var groupingOrg = new OrganisationGroup()
             {
-                PrimaryIdentifierType = OrganisationType.LocalAuthority,
+                MainIdentifierType = OrganisationGroupTypeIdentifier.LocalAuthority,
                 Name = "Camden",
                 SearchableName = "Camden",
-                PrimaryIdentifierCode = "202",
+                MainIdentifierCode = "202",
                 Identifiers = new List<OrganisationIdentifier>
                 {
                     new OrganisationIdentifier
                     {
-                        Type = OrganisationIdentifierType.LACode,
+                        Type = OrganisationTypeIdentifier.LACode,
                         Value = "203"
                     },
                     new OrganisationIdentifier
                     {
-                        Type = OrganisationIdentifierType.UKPRN,
+                        Type = OrganisationTypeIdentifier.UKPRN,
                         Value = "12345678"
                     }
                 }
             };
 
-            var id = $"{stream.Code}_{period.Period}_{groupingOrg.PrimaryIdentifierType}_{groupingOrg.Name}_{fundingVersion}";
+            var id = $"{stream.Code}_{period.Period}_{groupingOrg.MainIdentifierType}_{groupingOrg.Name}_{fundingVersion}";
 
             var financialYearPeriod1920 = new FundingPeriod
             {

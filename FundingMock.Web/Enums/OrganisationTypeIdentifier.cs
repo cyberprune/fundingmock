@@ -7,7 +7,7 @@ namespace FundingMock.Web.Enums
     /// Valid list of the different unique ways to identifier an organisation.
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum OrganisationIdentifierType
+    public enum OrganisationTypeIdentifier
     {
         /// <summary>
         /// UK Provider Reference Number - the unique identifier allocated to providers by the UK Register of Learning Providers (UKRLP) - 8 digits.

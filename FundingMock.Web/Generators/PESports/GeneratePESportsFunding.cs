@@ -51,8 +51,8 @@ namespace Sfa.Sfs.Mock.Generators
         /// <param name="templateLineIds">Optional - Filter the lines to these ids only.</param>
         /// <returns>An array of FeedResponseContentModel objects./returns>
         public static FeedResponseContentModel[] GenerateFeed(int? fundingPeriodStartYear, int? fundingPeriodEndYear,
-            string[] fundingPeriodCodes, OrganisationIdentifier[] organisationGroupIdentifiers, OrganisationType[] organisationGroupTypes,
-            OrganisationIdentifier[] organisationIdentifiers, OrganisationType[] organisationTypes, VariationReason[] variationReasons,
+            string[] fundingPeriodCodes, OrganisationIdentifier[] organisationGroupIdentifiers, OrganisationGroupTypeIdentifier[] organisationGroupTypes,
+            OrganisationIdentifier[] organisationIdentifiers, OrganisationGroupTypeIdentifier[] organisationTypes, VariationReason[] variationReasons,
             string[] ukprns, GroupingReason[] groupingReasons, FundingStatus[] statuses, DateTime? minStatusChangeDate,
             FundingLineType[] fundingLineTypes, string[] templateLineIds)
         {
@@ -140,12 +140,12 @@ namespace Sfa.Sfs.Mock.Generators
             foreach (var providerType in providerTypes)
             {
                 if ((providerType == "MaintainedSchools" || providerType == "NonMaintainedSpecialSchools")
-                    && organisationGroupTypes?.Any() == true && organisationGroupTypes?.Contains(OrganisationType.Provider) == false)
+                    && organisationGroupTypes?.Any() == true && organisationGroupTypes?.Contains(OrganisationGroupTypeIdentifier.Provider) == false)
                 {
                     continue;
                 }
                 else if (providerType == "Academies"
-                    && organisationGroupTypes?.Any() == true && organisationGroupTypes?.Contains(OrganisationType.AcademyTrust) == false)
+                    && organisationGroupTypes?.Any() == true && organisationGroupTypes?.Contains(OrganisationGroupTypeIdentifier.AcademyTrust) == false)
                 {
                     continue;
                 }
@@ -191,7 +191,7 @@ namespace Sfa.Sfs.Mock.Generators
         /// <returns>A list of feed response models.</returns>
         private static List<FeedResponseContentModel> ProcessOrgGroups(List<OrgGroup> orgGroups, string providerType, FundingPeriod financialYearPeriod1920,
             FundingPeriod financialYearPeriod2021, FundingPeriod period, FundingStream stream, string schemaVersion, string fundingVersion,
-            OrganisationIdentifier[] organisationGroupIdentifiers, OrganisationIdentifier[] organisationIdentifiers, OrganisationType[] organisationTypes,
+            OrganisationIdentifier[] organisationGroupIdentifiers, OrganisationIdentifier[] organisationIdentifiers, OrganisationGroupTypeIdentifier[] organisationTypes,
             VariationReason[] variationReasons, string[] ukprns, FundingLineType[] fundingLineTypes, string[] templateLineIds)
         {
             var returnList = new List<FeedResponseContentModel>();
@@ -212,19 +212,19 @@ namespace Sfa.Sfs.Mock.Generators
                 foreach (var orgGroup in orgGroups)
                 {
                     orgGroup.Providers = orgGroup.Providers.Where(provider =>
-                        organisationIdentifiers.Any(oi => oi.Type != OrganisationIdentifierType.LACode || oi.Value == provider.LaEstablishmentNo)).ToList();
+                        organisationIdentifiers.Any(oi => oi.Type != OrganisationTypeIdentifier.LACode || oi.Value == provider.LaEstablishmentNo)).ToList();
                 }
             }
 
             foreach (var orgGroup in orgGroups)
             {
                 var orgType = providerType == "NonMaintainedSpecialSchools" || providerType == "Academies" ?
-                    (providerType == "NonMaintainedSpecialSchools" ? OrganisationType.Provider : OrganisationType.AcademyTrust) : OrganisationType.LocalAuthority;
+                    (providerType == "NonMaintainedSpecialSchools" ? OrganisationGroupTypeIdentifier.Provider : OrganisationGroupTypeIdentifier.AcademyTrust) : OrganisationGroupTypeIdentifier.LocalAuthority;
 
                 var ukprn = $"MOCKUKPRN{orgGroup.Code}";
 
                 var groupingOrg = ConvertToOrganisationGroup(orgGroup, ukprn, orgType);
-                var id = $"{stream.Code}_{period.Period}_{groupingOrg.PrimaryIdentifierType}_{ukprn}_{fundingVersion}";
+                var id = $"{stream.Code}_{period.Period}_{groupingOrg.MainIdentifierType}_{ukprn}_{fundingVersion}";
 
                 var data = new FeedBaseModel
                 {
@@ -341,29 +341,29 @@ namespace Sfa.Sfs.Mock.Generators
         /// <param name="ukprn"></param>
         /// <param name="organisationType"></param>
         /// <returns>An organsation group response objct.</returns>
-        private static OrganisationGroup ConvertToOrganisationGroup(OrgGroup orgGroup, string ukprn, OrganisationType organisationType)
+        private static OrganisationGroup ConvertToOrganisationGroup(OrgGroup orgGroup, string ukprn, OrganisationGroupTypeIdentifier organisationType)
         {
             var identifiers = new List<OrganisationIdentifier>
             {
                 new OrganisationIdentifier
                 {
-                    Type = OrganisationIdentifierType.UKPRN,
+                    Type = OrganisationTypeIdentifier.UKPRN,
                     Value = ukprn
                 }
             };
 
-            if (organisationType == OrganisationType.LocalAuthority)
+            if (organisationType == OrganisationGroupTypeIdentifier.LocalAuthority)
             {
                 identifiers.Add(new OrganisationIdentifier
                 {
-                    Type = OrganisationIdentifierType.LACode,
+                    Type = OrganisationTypeIdentifier.LACode,
                     Value = orgGroup.Code
                 });
             }
 
             return new OrganisationGroup()
             {
-                PrimaryIdentifierType = organisationType,
+                MainIdentifierType = organisationType,
                 Name = orgGroup.Name,
                 SearchableName = FundingController.SanitiseName(orgGroup.Name),
                 Identifiers = identifiers
@@ -379,7 +379,7 @@ namespace Sfa.Sfs.Mock.Generators
         /// <param name="fundingVersion"></param>
         /// <returns>A list of provider funding ids.</returns>
         private static List<string> GetProviderFundingIds(OrgGroup orgGroup, FundingPeriod period, FundingStream stream, string fundingVersion,
-            OrganisationType[] organisationTypes, VariationReason[] variationReasons, string[] ukprns)
+            OrganisationGroupTypeIdentifier[] organisationTypes, VariationReason[] variationReasons, string[] ukprns)
         {
             var returnList = new List<string>();
 
@@ -390,7 +390,7 @@ namespace Sfa.Sfs.Mock.Generators
             }
 
             // If we are asking for anything but local authorities, there won't be any results
-            if (organisationTypes?.Any() == true && organisationTypes?.Contains(OrganisationType.LocalAuthority) == false)
+            if (organisationTypes?.Any() == true && organisationTypes?.Contains(OrganisationGroupTypeIdentifier.LocalAuthority) == false)
             {
                 return returnList;
             }
@@ -498,7 +498,7 @@ namespace Sfa.Sfs.Mock.Generators
             {
                 new OrganisationIdentifier
                 {
-                    Type = OrganisationIdentifierType.UKPRN,
+                    Type = OrganisationTypeIdentifier.UKPRN,
                     Value = ukprn
                 }
             };
@@ -507,7 +507,7 @@ namespace Sfa.Sfs.Mock.Generators
             {
                 identifiers.Add(new OrganisationIdentifier
                 {
-                    Type = OrganisationIdentifierType.LACode,
+                    Type = OrganisationTypeIdentifier.LACode,
                     Value = provider.LaEstablishmentNo
                 });
             }
@@ -515,13 +515,13 @@ namespace Sfa.Sfs.Mock.Generators
             {
                 identifiers.Add(new OrganisationIdentifier
                 {
-                    Type = OrganisationIdentifierType.URN,
+                    Type = OrganisationTypeIdentifier.URN,
                     Value = code
                 });
 
                 identifiers.Add(new OrganisationIdentifier
                 {
-                    Type = OrganisationIdentifierType.DfeNumber,
+                    Type = OrganisationTypeIdentifier.DfeNumber,
                     Value = code
                 });
             }

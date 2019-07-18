@@ -34,18 +34,18 @@ namespace FundingMock.Web.Examples
 
             var groupingOrg = new OrganisationGroup()
             {
-                PrimaryIdentifierType = OrganisationType.LocalAuthority,
+                MainIdentifierType = OrganisationGroupTypeIdentifier.LocalAuthority,
                 Name = "Camden",
                 Identifiers = new List<OrganisationIdentifier>
                 {
                     new OrganisationIdentifier
                     {
-                        Type = OrganisationIdentifierType.LACode,
+                        Type = OrganisationTypeIdentifier.LACode,
                         Value = "203"
                     },
                     new OrganisationIdentifier
                     {
-                        Type = OrganisationIdentifierType.UKPRN,
+                        Type = OrganisationTypeIdentifier.UKPRN,
                         Value = providerId
                     }
                 }
@@ -106,17 +106,17 @@ namespace FundingMock.Web.Examples
                     {
                         new OrganisationIdentifier
                         {
-                            Type = OrganisationIdentifierType.URN,
+                            Type = OrganisationTypeIdentifier.URN,
                             Value = "123453"
                         },
                         new OrganisationIdentifier
                         {
-                            Type = OrganisationIdentifierType.UKPRN,
+                            Type = OrganisationTypeIdentifier.UKPRN,
                             Value = providerId
                         },
                         new OrganisationIdentifier
                         {
-                            Type = OrganisationIdentifierType.AcademyTrustCode,
+                            Type = OrganisationTypeIdentifier.AcademyTrustCode,
                             Value = "2705",
                         }
                     },
