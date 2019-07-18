@@ -37,6 +37,7 @@ namespace FundingMock.Web.Examples
                 PrimaryIdentifierType = OrganisationType.LocalAuthority,
                 Name = "Camden",
                 SearchableName = "Camden",
+                PrimaryIdentifierCode = "202",
                 Identifiers = new List<OrganisationIdentifier>
                 {
                     new OrganisationIdentifier

@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using FundingMock.Web.Enums;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using FundingMock.Web.Enums;
+using Newtonsoft.Json;
 
 namespace FundingMock.Web.Models
 {
@@ -55,6 +55,12 @@ namespace FundingMock.Web.Models
         /// </summary>
         [JsonProperty("profilePeriods", NullValueHandling = NullValueHandling.Ignore)]
         public IEnumerable<FundingLinePeriod> ProfilePeriods { get; set; }
+
+        /// <summary>
+        /// Distrubution periods for this funding line
+        /// </summary>
+        [JsonProperty("distributionPeriods")]
+        public IEnumerable<FundingValueByDistributionPeriod> DistrubutionPeriods { get; set; }
 
         /// <summary>
         /// Calculations that make up this funding line.

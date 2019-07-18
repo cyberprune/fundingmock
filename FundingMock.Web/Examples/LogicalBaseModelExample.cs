@@ -37,6 +37,7 @@ namespace FundingMock.Web.Examples
                 PrimaryIdentifierType = OrganisationType.LocalAuthority,
                 Name = "Camden",
                 SearchableName = "Camden",
+                PrimaryIdentifierCode = "203",
                 Identifiers = new List<OrganisationIdentifier>
                 {
                     new OrganisationIdentifier
@@ -51,8 +52,6 @@ namespace FundingMock.Web.Examples
                     }
                 }
             };
-
-            var id = $"{stream.Code}_{period.Period}_{groupingOrg.PrimaryIdentifierType}_{groupingOrg.Name}_{fundingVersion}";
 
             var financialYearPeriod1920 = new FundingPeriod
             {
@@ -90,6 +89,7 @@ namespace FundingMock.Web.Examples
                     Status = FundingStatus.Released,
                     StatusChangedDate = DateTimeOffset.Now,
                     GroupingReason = GroupingReason.Payment,
+                    TemplateVersion = "dsg1.0",
                     FundingValue = new FundingValue
                     {
                         FundingLines = new List<FundingLine>
@@ -113,6 +113,19 @@ namespace FundingMock.Web.Examples
                                                     PeriodCode = financialYearPeriod1920.Period
                                                 }
                                             },
+                                            DistrubutionPeriods = new List<FundingValueByDistributionPeriod>
+                                            {
+                                                new FundingValueByDistributionPeriod
+                                                {
+                                                    DistributionPeriodCode = financialYearPeriod1920.Period,
+                                                    Value = 1400,
+                                                },
+                                                new FundingValueByDistributionPeriod
+                                                {
+                                                    DistributionPeriodCode = financialYearPeriod2021.Period,
+                                                    Value = 1000,
+                                                }
+                                            }
                                         }
                                     },
                         DistrubutionPeriods = new List<FundingValueByDistributionPeriod>
@@ -138,7 +151,7 @@ namespace FundingMock.Web.Examples
                                 Id = $"{stream.Code}_{period.Period}_87654321_{fundingVersion}",
                                 FundingVersion = fundingVersion,
 
-                                FundingPeriodCode = period.Period,
+                                FundingPeriodId = period.Period,
                                 FundingStreamCode = stream.Code,
                                 Organisation = new Organisation
                                 {
@@ -247,7 +260,7 @@ namespace FundingMock.Web.Examples
                                 Id = $"{stream.Code}_{period.Period}_87654322_{fundingVersion}",
                                 FundingVersion = fundingVersion,
 
-                                FundingPeriodCode = period.Period,
+                                FundingPeriodId = period.Period,
                                 FundingStreamCode = stream.Code,
                                 Organisation = new Organisation
                                 {
@@ -307,7 +320,7 @@ namespace FundingMock.Web.Examples
                                             DistributionPeriodCode = financialYearPeriod2021.Period,
                                             Value = 500,
                                         }
-                                    }
+                                    },
                                 }
                             }
                         }

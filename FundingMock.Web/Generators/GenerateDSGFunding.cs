@@ -387,7 +387,7 @@ namespace Sfa.Sfs.Mock.Generators
                     ProviderVersionId = "TBC",
                     Identifiers = identifiers
                 },
-                FundingPeriodCode = period.Period,
+                FundingPeriodId = period.Period,
                 FundingStreamCode = stream.Code,
                 FundingValue = fundingValue
             };

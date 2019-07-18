@@ -76,7 +76,7 @@ namespace FundingMock.Web.Examples
             {
                 Id = id,
                 FundingVersion = fundingVersion,
-                FundingPeriodCode = period.Period,
+                FundingPeriodId = period.Period,
                 FundingStreamCode = stream.Code,
                 Organisation = new Organisation
                 {
@@ -96,7 +96,8 @@ namespace FundingMock.Web.Examples
                         {
                             Postcode = "MOCK POSTCODE",
                             Town = "MOCK TOWN"
-                        }
+                        },
+
                     },
                     ProviderType = "Academies",
                     ProviderSubType = "Academy alternative provision converter",
@@ -158,6 +159,20 @@ namespace FundingMock.Web.Examples
                                             ProfiledValue = 700,
                                             Type = FundingLinePeriodType.CalendarMonth,
                                             PeriodCode = financialYearPeriod1920.Period
+                                        }
+                                    },
+                                    DistrubutionPeriods = new List<FundingValueByDistributionPeriod>
+                                    {
+                                        new FundingValueByDistributionPeriod
+                                        {
+                                            DistributionPeriodCode = financialYearPeriod1920.Period,
+                                            Value = 200,
+
+                                        },
+                                        new FundingValueByDistributionPeriod
+                                        {
+                                            DistributionPeriodCode = financialYearPeriod2021.Period,
+                                            Value = 500,
                                         }
                                     },
                                     Calculations = new List<Calculation>

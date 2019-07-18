@@ -38,10 +38,10 @@ namespace FundingMock.Web.Models
         public string FundingStreamCode { get; set; }
 
         /// <summary>
-        /// The funding period the funding relates to.
+        /// The funding period the funding relates to. eg AY-1819
         /// </summary>
-        [JsonProperty("fundingPeriodCode")]
-        public string FundingPeriodCode { get; set; }
+        [JsonProperty("fundingPeriodId")]
+        public string FundingPeriodId { get; set; }
 
         /// <summary>
         /// Funding value.

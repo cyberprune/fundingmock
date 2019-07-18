@@ -12,7 +12,7 @@ namespace FundingMock.Web.Models
         /// The funding value amount in pence. Rolled up from all child Funding Lines where Type = Payment
         /// </summary>
         [JsonProperty("totalValue")]
-        public long TotalValue { get; set; }
+        public decimal TotalValue { get; set; }
 
         /// <summary>
         /// The lines that make up this funding. 
@@ -20,6 +20,9 @@ namespace FundingMock.Web.Models
         [JsonProperty("fundingLines")]
         public IEnumerable<FundingLine> FundingLines { get; set; }
 
+        /// <summary>
+        /// An aggregate of distribution periods for this provider (aggregates from child Funding Lines)
+        /// </summary>
         [JsonProperty("distributionPeriods")]
         public IEnumerable<FundingValueByDistributionPeriod> DistrubutionPeriods { get; set; }
     }

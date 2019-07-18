@@ -532,7 +532,7 @@ namespace Sfa.Sfs.Mock.Generators
             {
                 Id = $"{stream.Code}_{period.Period}_{ukprn}_{fundingVersion}",
                 FundingVersion = fundingVersion.Replace("-", "."),
-                FundingPeriodCode = period.Period,
+                FundingPeriodId = period.Period,
                 FundingStreamCode = stream.Code,
                 Organisation = new Organisation
                 {
