@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.ComponentModel.DataAnnotations;
 using FundingMock.Web.Enums;
-using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace FundingMock.Web.Models
 {
@@ -35,13 +35,13 @@ namespace FundingMock.Web.Models
         public int Occurence { get; set; }
 
         /// <summary>
-        /// The amount of the profiled value, in pence.
+        /// The amount of the profiled value, in pence. Is ths amount total or per occurrence?
         /// </summary>
         [JsonProperty("profiledValue")]
         public long ProfiledValue { get; set; }
 
         /// <summary>
-        /// The code for the period.
+        /// The code for the period. Is this Financial Year or Academic Year?
         /// </summary>
         [JsonProperty("periodCode")]
         public string PeriodCode { get; set; }

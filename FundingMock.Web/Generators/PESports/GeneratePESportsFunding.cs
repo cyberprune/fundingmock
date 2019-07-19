@@ -269,7 +269,7 @@ namespace Sfa.Sfs.Mock.Generators
                                             },
                                         }
                                     },
-                            DistrubutionPeriods = new List<FundingValueByDistributionPeriod>
+                            DistributionPeriods = new List<FundingValueByDistributionPeriod>
                             {
                                 new FundingValueByDistributionPeriod
                                 {
@@ -605,7 +605,7 @@ namespace Sfa.Sfs.Mock.Generators
                                     }
                                 }
                             },
-                    DistrubutionPeriods = new List<FundingValueByDistributionPeriod>
+                    DistributionPeriods = new List<FundingValueByDistributionPeriod>
                     {
                         new FundingValueByDistributionPeriod
                         {

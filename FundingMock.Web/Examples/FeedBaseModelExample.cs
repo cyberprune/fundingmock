@@ -137,7 +137,7 @@ namespace FundingMock.Web.Examples
                                     }
                                 },
 
-                        DistrubutionPeriods = new List<FundingValueByDistributionPeriod>
+                        DistributionPeriods = new List<FundingValueByDistributionPeriod>
                         {
                             new FundingValueByDistributionPeriod
                             {
