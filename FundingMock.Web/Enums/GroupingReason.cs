@@ -18,5 +18,10 @@ namespace FundingMock.Web.Enums
         /// Informational only.
         /// </summary>
         Information,
+
+        /// <summary>
+        /// Contracting
+        /// </summary>
+        Contacting,
     }
 }

@@ -18,5 +18,40 @@ namespace FundingMock.Web.Enums
         /// A financial year (1 April to 31 March).
         /// </summary>
         FY,
+
+        /// <summary>
+        /// Calendar Year
+        /// </summary>
+        CY,
+
+        /// <summary>
+        /// Employer Ownership Fund
+        /// </summary>
+        EOF,
+
+        /// <summary>
+        /// Employer Ownership Pilot
+        /// </summary>
+        EOP,
+
+        /// <summary>
+        /// European Social Fund
+        /// </summary>
+        ESF,
+
+        /// <summary>
+        /// Apprenticeship Levy
+        /// </summary>
+        LEVY,
+
+        /// <summary>
+        /// National Careers Service
+        /// </summary>
+        NCS,
+
+        /// <summary>
+        /// Non-Levy Apprenticeships
+        /// </summary>
+        NONLEVY,
     }
 }

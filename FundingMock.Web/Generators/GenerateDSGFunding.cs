@@ -118,14 +118,6 @@ namespace Sfa.Sfs.Mock.Generators
                     || ukprns.Length == 0
                     || item.Name.Equals(ukprns[0], StringComparison.InvariantCultureIgnoreCase)).ToList() : new List<Org>();
 
-            if (organisationGroupIdentifiers?.Any() == true && organisationGroupIdentifiers?.Any(ogi => ogi.Type == OrganisationTypeIdentifier.RSCRegionName) == true)
-            {
-                foreach (var region in regions)
-                {
-                    // TODO
-                }
-            }
-
             var organisations = las.ToList(); // Shallow copy
             organisations.AddRange(regions);
 
@@ -249,7 +241,7 @@ namespace Sfa.Sfs.Mock.Generators
                         ProviderFundings = providerFundings,
                         StatusChangedDate = new DateTimeOffset(new DateTime(2019, 3, 1)),
                         ExternalPublicationDate = new DateTimeOffset(new DateTime(2019, 3, 7)),
-                        PaymentDate = new DateTimeOffset(new DateTime(2019, 3, 14))
+                        EarliestPaymentAvailableDate = new DateTimeOffset(new DateTime(2019, 3, 14))
                     }
                 };
 
@@ -2720,226 +2712,226 @@ namespace Sfa.Sfs.Mock.Generators
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "April",
-                    Occurence = 1,
+                    Occurrence = 1,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "April",
-                    Occurence = 2,
+                    Occurrence = 2,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "April",
-                    Occurence = 3,
+                    Occurrence = 3,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "May",
-                    Occurence = 1,
+                    Occurrence = 1,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "May",
-                    Occurence = 2,
+                    Occurrence = 2,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "June",
-                    Occurence = 1,
+                    Occurrence = 1,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "June",
-                    Occurence = 2,
+                    Occurrence = 2,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "July",
-                    Occurence = 1,
+                    Occurrence = 1,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "July",
-                    Occurence = 2,
+                    Occurrence = 2,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "August",
-                    Occurence = 1,
+                    Occurrence = 1,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "August",
-                    Occurence = 2,
+                    Occurrence = 2,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "September",
-                    Occurence = 1,
+                    Occurrence = 1,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "September",
-                    Occurence = 2,
+                    Occurrence = 2,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "October",
-                    Occurence = 1,
+                    Occurrence = 1,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "October",
-                    Occurence = 2,
+                    Occurrence = 2,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "November",
-                    Occurence = 1,
+                    Occurrence = 1,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "November",
-                    Occurence = 2,
+                    Occurrence = 2,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "December",
-                    Occurence = 1,
+                    Occurrence = 1,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "December",
-                    Occurence = 2,
+                    Occurrence = 2,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2020,
                     TypeValue = "January",
-                    Occurence = 1,
+                    Occurrence = 1,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2020,
                     TypeValue = "January",
-                    Occurence = 2,
+                    Occurrence = 2,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2020,
                     TypeValue = "Febuary",
-                    Occurence = 1,
+                    Occurrence = 1,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2020,
                     TypeValue = "Febuary",
-                    Occurence = 2,
+                    Occurrence = 2,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2020,
                     TypeValue = "March",
-                    Occurence = 1,
+                    Occurrence = 1,
                     ProfiledValue = periodValue
                 },
                 new FundingLinePeriod
                 {
                     Type = FundingLinePeriodType.CalendarMonth,
-                    PeriodCode = "FY1920",
+                    DistributionPeriodId = "FY1920",
                     Year = 2020,
                     TypeValue = "March",
-                    Occurence = 2,
+                    Occurrence = 2,
                     ProfiledValue = periodValue
                 }
             };

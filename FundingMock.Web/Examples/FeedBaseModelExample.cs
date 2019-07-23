@@ -85,7 +85,7 @@ namespace FundingMock.Web.Examples
                     FundingVersion = fundingVersion,
                     TemplateVersion = "PES-0.9",
                     ExternalPublicationDate = new DateTimeOffset(2019, 9, 1, 0, 0, 0, new TimeSpan(1, 0, 0)),
-                    PaymentDate = DateTimeOffset.Now,
+                    EarliestPaymentAvailableDate = DateTimeOffset.Now,
 
                     Status = FundingStatus.Released,
                     StatusChangedDate = DateTimeOffset.Now,
@@ -105,12 +105,12 @@ namespace FundingMock.Web.Examples
                                         {
                                             new FundingLinePeriod
                                             {
-                                                Occurence = 1,
+                                                Occurrence = 1,
                                                 Year = 2019,
                                                 TypeValue = "October",
                                                 ProfiledValue = 1400,
                                                 Type = FundingLinePeriodType.CalendarMonth,
-                                                PeriodCode = financialYearPeriod1920.Period
+                                                DistributionPeriodId = financialYearPeriod1920.Period
                                             }
                                         },
                                         Calculations = new List<Calculation>

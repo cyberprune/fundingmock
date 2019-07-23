@@ -113,11 +113,6 @@ namespace FundingMock.Web.Examples
                         {
                             Type = OrganisationTypeIdentifier.UKPRN,
                             Value = providerId
-                        },
-                        new OrganisationIdentifier
-                        {
-                            Type = OrganisationTypeIdentifier.AcademyTrustCode,
-                            Value = "2705",
                         }
                     },
                 },
@@ -153,12 +148,12 @@ namespace FundingMock.Web.Examples
                                     {
                                         new FundingLinePeriod
                                         {
-                                            Occurence = 1,
+                                            Occurrence = 1,
                                             Year = 2019,
                                             TypeValue = "October",
                                             ProfiledValue = 700,
                                             Type = FundingLinePeriodType.CalendarMonth,
-                                            PeriodCode = financialYearPeriod1920.Period
+                                            DistributionPeriodId = financialYearPeriod1920.Period
                                         }
                                     },
                                     DistrubutionPeriods = new List<FundingValueByDistributionPeriod>

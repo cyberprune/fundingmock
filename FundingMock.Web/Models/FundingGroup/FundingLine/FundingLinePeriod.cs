@@ -6,6 +6,7 @@ namespace FundingMock.Web.Models
 {
     /// <summary>
     /// A funding line period (e.g. the 1st March payment in 2019), with relevant value data.
+    /// The composite key for the entity is Type, TypeValue, Year and Occurrence
     /// </summary>
     public class FundingLinePeriod
     {
@@ -29,21 +30,23 @@ namespace FundingMock.Web.Models
         public int Year { get; set; }
 
         /// <summary>
-        /// Which occurance this month (note that this is 1 indexed).
+        /// Which occurrance this month (note that this is 1 indexed).
+        /// Use this to support multiple Funding Line Periods/Profiles in a single Type/TypeValue period
+        /// eg April 2020 when three payments are made in this month, the ProfilePeriods array will have three FundingLinePeriods returned in the array with Occurrence set to 1, 2 and 3
         /// </summary>
-        [JsonProperty("occurence")]
-        public int Occurence { get; set; }
+        [JsonProperty("occurrence")]
+        public int Occurrence { get; set; }
 
         /// <summary>
-        /// The amount of the profiled value, in pence. Is ths amount total or per occurrence?
+        /// The amount of the profiled value, in pence
         /// </summary>
         [JsonProperty("profiledValue")]
-        public long ProfiledValue { get; set; }
+        public decimal ProfiledValue { get; set; }
 
         /// <summary>
-        /// The code for the period. Is this Financial Year or Academic Year?
+        /// The funding period code for the funding. eg FY-2020. This will match the distrubution period this profile is paid in.
         /// </summary>
-        [JsonProperty("periodCode")]
-        public string PeriodCode { get; set; }
+        [JsonProperty("distributionPeriodId")]
+        public string DistributionPeriodId { get; set; }
     }
 }

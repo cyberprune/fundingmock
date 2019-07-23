@@ -11,7 +11,7 @@ namespace FundingMock.Web.Models
     public class FundingPeriod
     {
         /// <summary>
-        /// Funding Period ID eg AY2021
+        /// Funding Period ID eg AY-2021
         /// </summary>
         [JsonProperty("id")]
         public string Id => $"{Type}-{Period}";

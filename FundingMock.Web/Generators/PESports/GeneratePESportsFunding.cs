@@ -238,7 +238,7 @@ namespace Sfa.Sfs.Mock.Generators
                         FundingVersion = fundingVersion.Replace("-", "."),
 
                         ExternalPublicationDate = new DateTimeOffset(2019, 9, 1, 0, 0, 0, new TimeSpan(1, 0, 0)),
-                        PaymentDate = DateTimeOffset.Now,
+                        EarliestPaymentAvailableDate = DateTimeOffset.Now,
                         TemplateVersion = "1.0",
                         Status = FundingStatus.Released,
                         StatusChangedDate = DateTimeOffset.Now,
@@ -259,12 +259,12 @@ namespace Sfa.Sfs.Mock.Generators
                                             {
                                                 new FundingLinePeriod
                                                 {
-                                                    Occurence = 1,
+                                                    Occurrence = 1,
                                                     Year = 2019,
                                                     TypeValue = "October",
                                                     ProfiledValue = orgGroup.OctoberTotal,
                                                     Type = FundingLinePeriodType.CalendarMonth,
-                                                    PeriodCode = financialYearPeriod1920.Period
+                                                    DistributionPeriodId = financialYearPeriod1920.Period
                                                 }
                                             },
                                         }
@@ -574,12 +574,12 @@ namespace Sfa.Sfs.Mock.Generators
                                     {
                                         new FundingLinePeriod // ProfiorPeriods
                                         {
-                                            Occurence = 1,
+                                            Occurrence = 1,
                                             Year = 2019,
                                             TypeValue = "October",
                                             ProfiledValue = provider.OctoberPayment, //9450, // "Maintained Schools"  -> G3
                                             Type = FundingLinePeriodType.CalendarMonth,
-                                            PeriodCode = financialYearPeriod1920.Period
+                                            DistributionPeriodId = financialYearPeriod1920.Period
                                         }
                                     },
                                     Calculations = new List<Calculation>

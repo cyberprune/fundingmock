@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using FundingMock.Web.Enums;
 using Newtonsoft.Json;
@@ -81,9 +80,9 @@ namespace FundingMock.Web.Models
         public DateTimeOffset ExternalPublicationDate { get; set; }
 
         /// <summary>
-        /// The date the payment will be made to the provider.
+        /// The earliest date the payment will be made available to pay to the provider.
         /// </summary>
         [JsonProperty("paymentDate", Order = 12)]
-        public DateTimeOffset? PaymentDate { get; set; }
+        public DateTimeOffset? EarliestPaymentAvailableDate { get; set; }
     }
 }
