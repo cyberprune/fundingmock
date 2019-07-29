@@ -6,13 +6,13 @@ namespace FundingMock.Web.Models
     /// <summary>
     /// An organisation.
     /// </summary>
-    public class Organisation
+    public class Provider
     {
         /// <summary>
         /// The ID of the organisation. This is the UKRPN of the provider
         /// </summary>
-        [JsonProperty("mainIdentifierCode")]
-        public string MainIdentifierCode { get; set; }
+        [JsonProperty("identifier")]
+        public string Identifier { get; set; }
 
         /// <summary>
         /// The name of the organisation.
@@ -29,8 +29,8 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// Identifier numbers for this organisation.
         /// </summary>
-        [JsonProperty("identifiers")]
-        public IEnumerable<OrganisationIdentifier> Identifiers { get; set; }
+        [JsonProperty("otherIdentifiers")]
+        public IEnumerable<ProviderIdentifier> OtherIdentifiers { get; set; }
 
         /// <summary>
         /// ID on the provider lookup API.
@@ -51,9 +51,9 @@ namespace FundingMock.Web.Models
         public string ProviderSubType { get; set; }
 
         /// <summary>
-        /// Organisation Details. This property is optional
+        /// Provider Details. This property is optional
         /// </summary>
-        [JsonProperty("organisationDetails")]
-        public OrganisationDetails OrganisationDetails { get; set; }
+        [JsonProperty("providerDetails")]
+        public ProviderDetails ProviderDetails { get; set; }
     }
 }

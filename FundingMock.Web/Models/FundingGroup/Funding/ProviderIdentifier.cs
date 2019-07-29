@@ -1,20 +1,20 @@
-﻿using Newtonsoft.Json;
+﻿using System.ComponentModel.DataAnnotations;
 using FundingMock.Web.Enums;
-using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace FundingMock.Web.Models
 {
     /// <summary>
-    /// A key/vaue pairing representing a organisation identifier.
+    /// A key/vaue pairing representing a provider identifier.
     /// </summary>
-    public class OrganisationIdentifier
+    public class ProviderIdentifier
     {
         /// <summary>
-        /// The type of organisation identifier (e.g. UKPRN). 
+        /// The type of provider identifier (e.g. UKPRN). 
         /// </summary>
-        [EnumDataType(typeof(OrganisationTypeIdentifier))]
+        [EnumDataType(typeof(ProviderTypeIdentifier))]
         [JsonProperty("type")]
-        public OrganisationTypeIdentifier Type { get; set; }
+        public ProviderTypeIdentifier Type { get; set; }
 
         /// <summary>
         /// The value of this identifier type (e.g. if the type is UKPRN, then the value may be 12345678. 

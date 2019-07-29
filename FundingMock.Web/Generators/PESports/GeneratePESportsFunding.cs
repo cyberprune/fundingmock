@@ -51,8 +51,8 @@ namespace Sfa.Sfs.Mock.Generators
         /// <param name="templateLineIds">Optional - Filter the lines to these ids only.</param>
         /// <returns>An array of FeedResponseContentModel objects./returns>
         public static FeedResponseContentModel[] GenerateFeed(int? fundingPeriodStartYear, int? fundingPeriodEndYear,
-            string[] fundingPeriodCodes, OrganisationIdentifier[] organisationGroupIdentifiers, OrganisationGroupTypeIdentifier[] organisationGroupTypes,
-            OrganisationIdentifier[] organisationIdentifiers, OrganisationGroupTypeIdentifier[] organisationTypes, VariationReason[] variationReasons,
+            string[] fundingPeriodCodes, ProviderIdentifier[] organisationGroupIdentifiers, OrganisationGroupTypeIdentifier[] organisationGroupTypes,
+            ProviderIdentifier[] organisationIdentifiers, OrganisationGroupTypeIdentifier[] organisationTypes, VariationReason[] variationReasons,
             string[] ukprns, GroupingReason[] groupingReasons, FundingStatus[] statuses, DateTime? minStatusChangeDate,
             FundingLineType[] fundingLineTypes, string[] templateLineIds)
         {
@@ -140,12 +140,12 @@ namespace Sfa.Sfs.Mock.Generators
             foreach (var providerType in providerTypes)
             {
                 if ((providerType == "MaintainedSchools" || providerType == "NonMaintainedSpecialSchools")
-                    && organisationGroupTypes?.Any() == true && organisationGroupTypes?.Contains(OrganisationGroupTypeIdentifier.Provider) == false)
+                    && organisationGroupTypes?.Any() == true && organisationGroupTypes?.Contains(OrganisationGroupTypeIdentifier.LocalAuthorityCode) == false)
                 {
                     continue;
                 }
                 else if (providerType == "Academies"
-                    && organisationGroupTypes?.Any() == true && organisationGroupTypes?.Contains(OrganisationGroupTypeIdentifier.AcademyTrust) == false)
+                    && organisationGroupTypes?.Any() == true && organisationGroupTypes?.Contains(OrganisationGroupTypeIdentifier.AcademyTrustCode) == false)
                 {
                     continue;
                 }
@@ -191,7 +191,7 @@ namespace Sfa.Sfs.Mock.Generators
         /// <returns>A list of feed response models.</returns>
         private static List<FeedResponseContentModel> ProcessOrgGroups(List<OrgGroup> orgGroups, string providerType, FundingPeriod financialYearPeriod1920,
             FundingPeriod financialYearPeriod2021, FundingPeriod period, FundingStream stream, string schemaVersion, string fundingVersion,
-            OrganisationIdentifier[] organisationGroupIdentifiers, OrganisationIdentifier[] organisationIdentifiers, OrganisationGroupTypeIdentifier[] organisationTypes,
+            ProviderIdentifier[] organisationGroupIdentifiers, ProviderIdentifier[] organisationIdentifiers, OrganisationGroupTypeIdentifier[] organisationTypes,
             VariationReason[] variationReasons, string[] ukprns, FundingLineType[] fundingLineTypes, string[] templateLineIds)
         {
             var returnList = new List<FeedResponseContentModel>();
@@ -212,19 +212,19 @@ namespace Sfa.Sfs.Mock.Generators
                 foreach (var orgGroup in orgGroups)
                 {
                     orgGroup.Providers = orgGroup.Providers.Where(provider =>
-                        organisationIdentifiers.Any(oi => oi.Type != OrganisationTypeIdentifier.LACode || oi.Value == provider.LaEstablishmentNo)).ToList();
+                        organisationIdentifiers.Any(oi => oi.Type != ProviderTypeIdentifier.LACode || oi.Value == provider.LaEstablishmentNo)).ToList();
                 }
             }
 
             foreach (var orgGroup in orgGroups)
             {
-                var orgType = providerType == "NonMaintainedSpecialSchools" || providerType == "Academies" ?
-                    (providerType == "NonMaintainedSpecialSchools" ? OrganisationGroupTypeIdentifier.Provider : OrganisationGroupTypeIdentifier.AcademyTrust) : OrganisationGroupTypeIdentifier.LocalAuthority;
+                OrganisationGroupTypeIdentifier orgTypeIdentifier = providerType == "NonMaintainedSpecialSchools" || providerType == "Academies" ?
+                    (providerType == "NonMaintainedSpecialSchools" ? OrganisationGroupTypeIdentifier.LocalAuthorityCode : OrganisationGroupTypeIdentifier.AcademyTrustCode) : OrganisationGroupTypeIdentifier.LocalAuthorityCode;
 
                 var ukprn = $"MOCKUKPRN{orgGroup.Code}";
 
-                var groupingOrg = ConvertToOrganisationGroup(orgGroup, ukprn, orgType);
-                var id = $"{stream.Code}_{period.Period}_{groupingOrg.MainIdentifierType}_{ukprn}_{fundingVersion}";
+                var groupingOrg = ConvertToOrganisationGroup(orgGroup, ukprn, orgTypeIdentifier, OrganisationGroupTypeCode.Provider, OrganisationGroupTypeClassification.LegalEntity);
+                var id = $"{stream.Code}_{period.Period}_{groupingOrg.GroupTypeCode}_{ukprn}_{fundingVersion}";
 
                 var data = new FeedBaseModel
                 {
@@ -255,34 +255,46 @@ namespace Sfa.Sfs.Mock.Generators
                                             TemplateLineId = 1,
                                             Type = FundingLineType.Payment,
                                             Value = orgGroup.OctoberTotal,
-                                            ProfilePeriods = new List<FundingLinePeriod>
+
+                                            DistributionPeriods = new List<DistributionPeriod>
                                             {
-                                                new FundingLinePeriod
+                                                new DistributionPeriod
                                                 {
-                                                    Occurrence = 1,
-                                                    Year = 2019,
-                                                    TypeValue = "October",
-                                                    ProfiledValue = orgGroup.OctoberTotal,
-                                                    Type = FundingLinePeriodType.CalendarMonth,
-                                                    DistributionPeriodId = financialYearPeriod1920.Period
+                                                    DistributionPeriodId = financialYearPeriod1920.Period,
+                                                    Value = orgGroup.OctoberTotal,
+                                                    ProfilePeriods = new List<FundingLinePeriod>
+                                                            {
+                                                                new FundingLinePeriod
+                                                                {
+                                                                    Occurrence = 1,
+                                                                    Year = 2019,
+                                                                    TypeValue = "October",
+                                                                    ProfiledValue = orgGroup.OctoberTotal,
+                                                                    Type = FundingLinePeriodType.CalendarMonth,
+                                                                    DistributionPeriodId = financialYearPeriod1920.Period
+                                                                }
+                                                            },
+                                                },
+                                                new DistributionPeriod
+                                                {
+                                                    DistributionPeriodId = financialYearPeriod2021.Period,
+                                                    Value = orgGroup.AprilTotal,
+                                                    ProfilePeriods = new List<FundingLinePeriod>
+                                                    {
+                                                        new FundingLinePeriod
+                                                        {
+                                                            Occurrence = 1,
+                                                            Year = 2019,
+                                                            TypeValue = "October",
+                                                            ProfiledValue = orgGroup.OctoberTotal,
+                                                            Type = FundingLinePeriodType.CalendarMonth,
+                                                            DistributionPeriodId = financialYearPeriod1920.Period
+                                                        }
+                                                    },
                                                 }
-                                            },
+                                            }
                                         }
                                     },
-                            DistributionPeriods = new List<FundingValueByDistributionPeriod>
-                            {
-                                new FundingValueByDistributionPeriod
-                                {
-                                    DistributionPeriodCode = financialYearPeriod1920.Period,
-                                    Value = orgGroup.OctoberTotal,
-
-                                },
-                                new FundingValueByDistributionPeriod
-                                {
-                                    DistributionPeriodCode = financialYearPeriod2021.Period,
-                                    Value = orgGroup.AprilTotal,
-                                }
-                            }
                         }
                     },
                 };
@@ -341,7 +353,7 @@ namespace Sfa.Sfs.Mock.Generators
         /// <param name="ukprn"></param>
         /// <param name="organisationType"></param>
         /// <returns>An organsation group response objct.</returns>
-        private static OrganisationGroup ConvertToOrganisationGroup(OrgGroup orgGroup, string ukprn, OrganisationGroupTypeIdentifier organisationType)
+        private static OrganisationGroup ConvertToOrganisationGroup(OrgGroup orgGroup, string ukprn, OrganisationGroupTypeIdentifier organisationType, OrganisationGroupTypeCode organisationGroupTypeCode, OrganisationGroupTypeClassification organisationGroupTypeCategory)
         {
             var identifiers = new List<OrganisationIdentifier>
             {
@@ -352,7 +364,7 @@ namespace Sfa.Sfs.Mock.Generators
                 }
             };
 
-            if (organisationType == OrganisationGroupTypeIdentifier.LocalAuthority)
+            if (organisationType == OrganisationGroupTypeIdentifier.LocalAuthorityCode)
             {
                 identifiers.Add(new OrganisationIdentifier
                 {
@@ -363,7 +375,9 @@ namespace Sfa.Sfs.Mock.Generators
 
             return new OrganisationGroup()
             {
-                MainIdentifierType = organisationType,
+                GroupTypeIdentifier = organisationType,
+                GroupTypeClassification = organisationGroupTypeCategory,
+                GroupTypeCode = organisationGroupTypeCode,
                 Name = orgGroup.Name,
                 SearchableName = FundingController.SanitiseName(orgGroup.Name),
                 Identifiers = identifiers
@@ -390,7 +404,7 @@ namespace Sfa.Sfs.Mock.Generators
             }
 
             // If we are asking for anything but local authorities, there won't be any results
-            if (organisationTypes?.Any() == true && organisationTypes?.Contains(OrganisationGroupTypeIdentifier.LocalAuthority) == false)
+            if (organisationTypes?.Any() == true && organisationTypes?.Contains(OrganisationGroupTypeIdentifier.LocalAuthorityCode) == false)
             {
                 return returnList;
             }
@@ -494,34 +508,34 @@ namespace Sfa.Sfs.Mock.Generators
         {
             var ukprn = $"MOCKUKPRN{provider.LaEstablishmentNo}";
 
-            var identifiers = new List<OrganisationIdentifier>
+            var identifiers = new List<ProviderIdentifier>
             {
-                new OrganisationIdentifier
+                new ProviderIdentifier
                 {
-                    Type = OrganisationTypeIdentifier.UKPRN,
+                    Type = ProviderTypeIdentifier.UKPRN,
                     Value = ukprn
                 }
             };
 
             if (providerType != "NonMaintainedSpecialSchools" && providerType != "Academies")
             {
-                identifiers.Add(new OrganisationIdentifier
+                identifiers.Add(new ProviderIdentifier
                 {
-                    Type = OrganisationTypeIdentifier.LACode,
+                    Type = ProviderTypeIdentifier.LACode,
                     Value = provider.LaEstablishmentNo
                 });
             }
             else
             {
-                identifiers.Add(new OrganisationIdentifier
+                identifiers.Add(new ProviderIdentifier
                 {
-                    Type = OrganisationTypeIdentifier.URN,
+                    Type = ProviderTypeIdentifier.URN,
                     Value = code
                 });
 
-                identifiers.Add(new OrganisationIdentifier
+                identifiers.Add(new ProviderIdentifier
                 {
-                    Type = OrganisationTypeIdentifier.DfeNumber,
+                    Type = ProviderTypeIdentifier.DfeNumber,
                     Value = code
                 });
             }
@@ -534,11 +548,11 @@ namespace Sfa.Sfs.Mock.Generators
                 FundingVersion = fundingVersion.Replace("-", "."),
                 FundingPeriodId = period.Period,
                 FundingStreamCode = stream.Code,
-                Organisation = new Organisation
+                Provider = new FundingMock.Web.Models.Provider
                 {
                     Name = provider.Name,
                     SearchableName = FundingController.SanitiseName(provider.Name),
-                    OrganisationDetails = new OrganisationDetails()
+                    ProviderDetails = new ProviderDetails()
                     {
                         DateClosed = null,
                         DateOpened = new DateTimeOffset(2012, 12, 2, 0, 0, 0, 0, TimeSpan.Zero),
@@ -548,16 +562,13 @@ namespace Sfa.Sfs.Mock.Generators
                         CloseReason = null,
                         TrustName = null,
                         TrustStatus = TrustStatus.NotApplicable,
-                        Address = new OrganisationAddress
-                        {
-                            Postcode = "MOCK POSTCODE",
-                            Town = "MOCK TOWN"
-                        }
+                        Postcode = "MOCK POSTCODE",
+                        Town = "MOCK TOWN",
                     },
                     ProviderType = providerType,
                     ProviderSubType = "Provider SubType",
                     ProviderVersionId = "1.0",
-                    Identifiers = identifiers,
+                    OtherIdentifiers = identifiers,
                 },
                 FundingValue = new FundingValue
                 {
@@ -570,18 +581,6 @@ namespace Sfa.Sfs.Mock.Generators
                                     TemplateLineId = 1,
                                     Type = FundingLineType.Payment,
                                     Value = provider.OctoberPayment, //9450, // "Maintained Schools"  -> G3
-                                    ProfilePeriods = new List<FundingLinePeriod>
-                                    {
-                                        new FundingLinePeriod // ProfiorPeriods
-                                        {
-                                            Occurrence = 1,
-                                            Year = 2019,
-                                            TypeValue = "October",
-                                            ProfiledValue = provider.OctoberPayment, //9450, // "Maintained Schools"  -> G3
-                                            Type = FundingLinePeriodType.CalendarMonth,
-                                            DistributionPeriodId = financialYearPeriod1920.Period
-                                        }
-                                    },
                                     Calculations = new List<Calculation>
                                     {
                                         new Calculation
@@ -605,20 +604,6 @@ namespace Sfa.Sfs.Mock.Generators
                                     }
                                 }
                             },
-                    DistributionPeriods = new List<FundingValueByDistributionPeriod>
-                    {
-                        new FundingValueByDistributionPeriod
-                        {
-                            DistributionPeriodCode = financialYearPeriod1920.Period,
-                            Value = provider.OctoberPayment, //9450,  // "Maintained Schools" -> G3
-                           
-                        },
-                        new FundingValueByDistributionPeriod
-                        {
-                            DistributionPeriodCode = financialYearPeriod2021.Period,
-                            Value = 6750, // "Maintained Schools" -> H3
-                        }
-                    }
                 }
             };
         }

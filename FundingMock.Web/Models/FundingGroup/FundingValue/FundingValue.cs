@@ -19,17 +19,5 @@ namespace FundingMock.Web.Models
         /// </summary>
         [JsonProperty("fundingLines")]
         public IEnumerable<FundingLine> FundingLines { get; set; }
-
-        /// <summary>
-        /// An aggregate of distribution periods for this provider (aggregates from child Funding Lines)
-        /// </summary>
-        [JsonProperty("distributionPeriods")]
-        public IEnumerable<FundingValueByDistributionPeriod> DistributionPeriods { get; set; }
-
-        /// <summary>
-        /// The periods that this funding line where paid in / are due to be paid in.
-        /// </summary>
-        [JsonProperty("profilePeriods", NullValueHandling = NullValueHandling.Ignore)]
-        public IEnumerable<FundingLinePeriod> ProfilePeriods { get; set; }
     }
 }

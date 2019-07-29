@@ -37,7 +37,7 @@ namespace FundingMock.Web.Models
         /// Optional - Group identifiers to filter by.
         /// </summary>
         [JsonProperty("organisationGroupIdentifiers")]
-        public OrganisationIdentifier[] OrganisationGroupIdentifiers { get; set; }
+        public ProviderIdentifier[] OrganisationGroupIdentifiers { get; set; }
 
         /// <summary>
         /// Optional - Group types to limit to.
@@ -49,7 +49,7 @@ namespace FundingMock.Web.Models
         /// Optional - Restrict returned identifiers by id.
         /// </summary>
         [JsonProperty("organisationIdentifiers")]
-        public OrganisationIdentifier[] OrganisationIdentifiers { get; set; }
+        public ProviderIdentifier[] OrganisationIdentifiers { get; set; }
 
         /// <summary>
         /// Optional - Organisation types to limit to.

@@ -7,71 +7,81 @@ namespace FundingMock.Web.Enums
     /// Valid list of organisation group types.
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum OrganisationGroupTypeIdentifier
+    public enum OrganisationGroupTypeCode
     {
         /// <summary>
         /// Local Authority (e.g. Warwickshire).
         /// </summary>
-        LocalAuthorityCode,
+        LocalAuthority,
 
         /// <summary>
         /// Academy Trust (e.g. Star Foundation).
         /// </summary>
-        AcademyTrustCode,
+        AcademyTrust,
 
         /// <summary>
         /// Regional Schools Commissioner Region (e.g. Lancashire and West Yorkshire).
         /// </summary>
-        RSCRegionCode,
+        RSCRegion,
 
         /// <summary>
         /// Government Office Region, (e.g. North West).
         /// </summary>
-        GovernmentOfficeRegionCode,
+        GovernmentOfficeRegion,
 
         /// <summary>
         /// District (e.g. Hyndburn).
         /// </summary>
-        DistrictCode,
+        District,
 
         /// <summary>
         /// Ward (e.g. Milnshaw).
         /// </summary>
-        WardCode,
+        Ward,
 
         /// <summary>
         /// Census Ward.
         /// </summary>
-        CensusWardCode,
+        CensusWard,
 
         /// <summary>
         /// Middle Super Output Area (e.g. Mansfield 002).
         /// </summary>
-        MiddleSuperOutputAreaCode,
+        MiddleSuperOutputArea,
 
         /// <summary>
         /// Lower Super Output Area (e.g. Mansfield 002A).
         /// </summary>
-        LowerSuperOutputAreaCode,
+        LowerSuperOutputArea,
 
         /// <summary>
         /// Parlimentry constituency (e.g. Mansfield).
         /// </summary>
-        ParliamentaryConstituencyCode,
+        ParliamentaryConstituency,
+
+        /// <summary>
+        /// Provider
+        /// </summary>
+        Provider,
 
         /// <summary>
         /// Region
         /// </summary>
-        RegionCode,
+        Region,
 
         /// <summary>
         /// Country eg GB
         /// </summary>
-        CountryCode,
+        Country,
 
         /// <summary>
         /// 
         /// </summary>
-        LocalGovernmentGroupCode,
+        LocalGovernmentGroup,
+
+        /// <summary>
+        /// Non maintained special school
+        /// </summary>
+        NMSS,
     }
 }

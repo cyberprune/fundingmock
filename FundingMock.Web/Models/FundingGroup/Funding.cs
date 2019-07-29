@@ -11,10 +11,10 @@ namespace FundingMock.Web.Models
     public abstract class Funding
     {
         /// <summary>
-        /// Unique identifier of this funding group / business event (in format 'FundingStreamCode-FundingPeriodCode-OrganisationGroupPrimaryIdentifierType-OrganisationGroupPrimaryIdentifierCode-FundingVersion').
+        /// Unique identifier of this funding group / business event (in format 'FundingStreamCode-FundingPeriodId-OrganisationGroupGroupTypeCode-OrganisationGroupIdentifierValue-FundingVersion').
         /// </summary>
         [JsonProperty("id", Order = 1)]
-        public string Id => $"{FundingStream.Code}-{FundingPeriod.Period}-{OrganisationGroup.MainIdentifierType}-{OrganisationGroup.MainIdentifierCode}-{FundingVersion}";
+        public string Id => $"{FundingStream.Code}-{FundingPeriod.Id}-{GroupingReason}-{OrganisationGroup.GroupTypeCode}-{OrganisationGroup.IdentifierValue}-{FundingVersion}";
 
         /// <summary>
         /// The version of the template (e.g. this is Version 2 of PE and sport template).
@@ -82,7 +82,7 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// The earliest date the payment will be made available to pay to the provider.
         /// </summary>
-        [JsonProperty("paymentDate", Order = 12)]
+        [JsonProperty("earliestPaymentAvailableDate", Order = 12)]
         public DateTimeOffset? EarliestPaymentAvailableDate { get; set; }
     }
 }

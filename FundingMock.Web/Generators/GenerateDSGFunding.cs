@@ -55,8 +55,8 @@ namespace Sfa.Sfs.Mock.Generators
         /// <param name="templateLineIds">Optional - Filter the lines to these ids only.</param>
         /// <returns>An array of FeedResponseContentModel objects.</returns>
         public static FeedResponseContentModel[] GenerateFeed(int? fundingPeriodStartYear, int? fundingPeriodEndYear,
-            string[] fundingPeriodCodes, OrganisationIdentifier[] organisationGroupIdentifiers, OrganisationGroupTypeIdentifier[] organisationGroupTypes,
-            OrganisationIdentifier[] organisationIdentifiers, OrganisationGroupTypeIdentifier[] organisationTypes, VariationReason[] variationReasons,
+            string[] fundingPeriodCodes, ProviderIdentifier[] organisationGroupIdentifiers, OrganisationGroupTypeIdentifier[] organisationGroupTypes,
+            ProviderIdentifier[] organisationIdentifiers, OrganisationGroupTypeIdentifier[] organisationTypes, VariationReason[] variationReasons,
             string[] ukprns, GroupingReason[] groupingReasons, FundingStatus[] statuses, DateTime? minStatusChangeDate,
             FundingLineType[] fundingLineTypes, string[] templateLineIds)
         {
@@ -96,14 +96,14 @@ namespace Sfa.Sfs.Mock.Generators
             var spreadsheet = GetSpreadsheet();
 
             var allLas = GetLAs(spreadsheet);
-            var las = organisationGroupTypes?.Any() != true || organisationGroupTypes?.Contains(OrganisationGroupTypeIdentifier.LocalAuthority) != false ?
+            var las = organisationGroupTypes?.Any() != true || organisationGroupTypes?.Contains(OrganisationGroupTypeIdentifier.LocalAuthorityCode) != false ?
                 allLas.Where(item =>
                     ukprns == null
                     || ukprns.Length == 0
                     || item.Code == ukprns[0]
                     || item.Name.Equals(ukprns[0], StringComparison.InvariantCultureIgnoreCase)).ToList() : new List<Org>();
 
-            if (organisationGroupIdentifiers?.Any() == true && organisationGroupIdentifiers?.Any(ogi => ogi.Type == OrganisationTypeIdentifier.LACode) == true)
+            if (organisationGroupIdentifiers?.Any() == true && organisationGroupIdentifiers?.Any(ogi => ogi.Type == ProviderTypeIdentifier.LACode) == true)
             {
                 foreach (var la in las)
                 {
@@ -112,7 +112,7 @@ namespace Sfa.Sfs.Mock.Generators
             }
 
             var allRegions = GetRegions(spreadsheet);
-            var regions = organisationGroupTypes?.Any() != true || organisationGroupTypes?.Contains(OrganisationGroupTypeIdentifier.Region) != false ?
+            var regions = organisationGroupTypes?.Any() != true || organisationGroupTypes?.Contains(OrganisationGroupTypeIdentifier.RegionCode) != false ?
                 allRegions.Where(item =>
                     ukprns == null
                     || ukprns.Length == 0
@@ -121,7 +121,7 @@ namespace Sfa.Sfs.Mock.Generators
             var organisations = las.ToList(); // Shallow copy
             organisations.AddRange(regions);
 
-            if (organisationGroupTypes?.Any() != true || organisationGroupTypes?.Contains(OrganisationGroupTypeIdentifier.LocalGovernmentGroup) != false)
+            if (organisationGroupTypes?.Any() != true || organisationGroupTypes?.Contains(OrganisationGroupTypeIdentifier.LocalGovernmentGroupCode) != false)
             {
                 if (groupingReasons?.Any() != true || groupingReasons?.Contains(GroupingReason.Information) == true)
                 {
@@ -180,8 +180,8 @@ namespace Sfa.Sfs.Mock.Generators
                 var groupingOrg = new OrganisationGroup
                 {
                     Name = organisation.Name,
-                    MainIdentifierType = organisation.Type == Type.LA ? OrganisationGroupTypeIdentifier.LocalAuthority
-                        : (organisation.Type == Type.LocalGovernmentGroup ? OrganisationGroupTypeIdentifier.LocalGovernmentGroup : OrganisationGroupTypeIdentifier.Region),
+                    GroupTypeIdentifier = organisation.Type == Type.LA ? OrganisationGroupTypeIdentifier.LocalAuthorityCode
+                        : (organisation.Type == Type.LocalGovernmentGroup ? OrganisationGroupTypeIdentifier.LocalGovernmentGroupCode : OrganisationGroupTypeIdentifier.RegionCode),
                     SearchableName = FundingController.SanitiseName(organisation.Name),
                     Identifiers = identifiers
                 };
@@ -199,7 +199,7 @@ namespace Sfa.Sfs.Mock.Generators
                 switch (organisation.Type)
                 {
                     case Type.LA:
-                        if ((organisationTypes?.Any() != true || organisationTypes?.Contains(OrganisationGroupTypeIdentifier.LocalAuthority) == true) &&
+                        if ((organisationTypes?.Any() != true || organisationTypes?.Contains(OrganisationGroupTypeIdentifier.LocalAuthorityCode) == true) &&
                             (groupingReasons?.Any() != true || groupingReasons?.Contains(GroupingReason.Payment) == true))
                         {
                             providerFundings = new List<string>
@@ -211,7 +211,7 @@ namespace Sfa.Sfs.Mock.Generators
                         break;
                     case Type.Region:
                     case Type.LocalGovernmentGroup:
-                        if ((organisationTypes?.Any() != true || organisationTypes?.Contains(OrganisationGroupTypeIdentifier.Region) == true || organisationTypes?.Contains(OrganisationGroupTypeIdentifier.LocalGovernmentGroup) == true) &&
+                        if ((organisationTypes?.Any() != true || organisationTypes?.Contains(OrganisationGroupTypeIdentifier.RegionCode) == true || organisationTypes?.Contains(OrganisationGroupTypeIdentifier.LocalGovernmentGroupCode) == true) &&
                             (groupingReasons?.Any() != true || groupingReasons?.Contains(GroupingReason.Information) == true))
                         {
                             providerFundings.AddRange(GetLasForRegion(organisation.Name).Select(la => $"{stream.Code}_{period.Period}_{la.UKPRN}_{fundingVersion}").ToList());
@@ -322,22 +322,22 @@ namespace Sfa.Sfs.Mock.Generators
 
             var organisation = organisations.First();
 
-            var identifiers = new List<OrganisationIdentifier>();
+            var identifiers = new List<ProviderIdentifier>();
 
             if (organisation.Type == Type.LA)
             {
                 identifiers.Add(
-                    new OrganisationIdentifier
+                    new ProviderIdentifier
                     {
-                        Type = OrganisationTypeIdentifier.LACode,
+                        Type = ProviderTypeIdentifier.LACode,
                         Value = organisation.Code
                     }
                 );
 
                 identifiers.Add(
-                    new OrganisationIdentifier
+                    new ProviderIdentifier
                     {
-                        Type = OrganisationTypeIdentifier.UKPRN,
+                        Type = ProviderTypeIdentifier.UKPRN,
                         Value = organisation.UKPRN
                     }
                 );
@@ -371,13 +371,13 @@ namespace Sfa.Sfs.Mock.Generators
             {
                 Id = id,
                 FundingVersion = "1.0",
-                Organisation = new Organisation
+                Provider = new FundingMock.Web.Models.Provider
                 {
                     Name = organisation.Name,
                     SearchableName = FundingController.SanitiseName(organisation.Name),
                     ProviderType = organisation.Type.ToString(),
                     ProviderVersionId = "TBC",
-                    Identifiers = identifiers
+                    OtherIdentifiers = identifiers
                 },
                 FundingPeriodId = period.Period,
                 FundingStreamCode = stream.Code,
@@ -1213,7 +1213,6 @@ namespace Sfa.Sfs.Mock.Generators
                                 TemplateLineId = templateLineId++,
                                 Type = FundingLineType.Payment,
                                 Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 11),
-                                ProfilePeriods = periods,
                                 FundingLines = new List<FundingLine>
                                 {
                                     new FundingLine
@@ -2688,15 +2687,6 @@ namespace Sfa.Sfs.Mock.Generators
                                 }
                             }
                         },
-                DistributionPeriods = new List<FundingValueByDistributionPeriod>
-                {
-                    new FundingValueByDistributionPeriod
-                    {
-                        DistributionPeriodCode = "FY1920",
-                        Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 11),
-
-                    }
-                }
             };
         }
 

@@ -34,10 +34,12 @@ namespace FundingMock.Web.Examples
 
             var groupingOrg = new OrganisationGroup()
             {
-                MainIdentifierType = OrganisationGroupTypeIdentifier.LocalAuthority,
+                GroupTypeIdentifier = OrganisationGroupTypeIdentifier.LocalAuthorityCode,
+                GroupTypeClassification = OrganisationGroupTypeClassification.LegalEntity,
+                GroupTypeCode = OrganisationGroupTypeCode.LocalAuthority,
                 Name = "Camden",
                 SearchableName = "Camden",
-                MainIdentifierCode = "202",
+                IdentifierValue = "202",
                 Identifiers = new List<OrganisationIdentifier>
                 {
                     new OrganisationIdentifier
@@ -52,8 +54,6 @@ namespace FundingMock.Web.Examples
                     }
                 }
             };
-
-            var id = $"{stream.Code}_{period.Period}_{groupingOrg.MainIdentifierType}_{groupingOrg.Name}_{fundingVersion}";
 
             var financialYearPeriod1920 = new FundingPeriod
             {
@@ -101,17 +101,9 @@ namespace FundingMock.Web.Examples
                                         TemplateLineId = 1,
                                         Type = FundingLineType.Payment,
                                         Value = 1400,
-                                        ProfilePeriods = new List<FundingLinePeriod>
+                                        DistributionPeriods = new List<DistributionPeriod>()
                                         {
-                                            new FundingLinePeriod
-                                            {
-                                                Occurrence = 1,
-                                                Year = 2019,
-                                                TypeValue = "October",
-                                                ProfiledValue = 1400,
-                                                Type = FundingLinePeriodType.CalendarMonth,
-                                                DistributionPeriodId = financialYearPeriod1920.Period
-                                            }
+
                                         },
                                         Calculations = new List<Calculation>
                                         {
@@ -136,21 +128,6 @@ namespace FundingMock.Web.Examples
                                         }
                                     }
                                 },
-
-                        DistributionPeriods = new List<FundingValueByDistributionPeriod>
-                        {
-                            new FundingValueByDistributionPeriod
-                            {
-                                DistributionPeriodCode = financialYearPeriod1920.Period,
-                                Value = 1400,
-
-                            },
-                            new FundingValueByDistributionPeriod
-                            {
-                                DistributionPeriodCode = financialYearPeriod2021.Period,
-                                Value = 1000,
-                            }
-                        },
                         TotalValue = 2400
                     },
                     ProviderFundings = new List<string>

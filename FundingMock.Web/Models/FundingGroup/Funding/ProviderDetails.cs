@@ -1,14 +1,14 @@
-﻿using Newtonsoft.Json;
-using FundingMock.Web.Enums;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using FundingMock.Web.Enums;
+using Newtonsoft.Json;
 
 namespace FundingMock.Web.Models
 {
     /// <summary>
-    /// (Optional) details about an organisation. Passed through from the provider API.
+    /// (Optional) details about an provider. Passed through from the provider API.
     /// </summary>
-    public class OrganisationDetails
+    public class ProviderDetails
     {
         /// <summary>
         /// Date Opened.
@@ -62,9 +62,15 @@ namespace FundingMock.Web.Models
         public string TrustName { get; set; }
 
         /// <summary>
-        /// 
+        /// Town
         /// </summary>
-        [JsonProperty("address")]
-        public OrganisationAddress Address { get; set; }
+        [JsonProperty("town")]
+        public string Town { get; set; }
+
+        /// <summary>
+        /// Postcode
+        /// </summary>
+        [JsonProperty("postcode")]
+        public string Postcode { get; set; }
     }
 }

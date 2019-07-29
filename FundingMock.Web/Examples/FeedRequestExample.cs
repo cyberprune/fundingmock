@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using FundingMock.Web.Enums;
+﻿using FundingMock.Web.Enums;
 using FundingMock.Web.Models;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -27,8 +25,8 @@ namespace FundingMock.Web.Examples
 
                 OrganisationIdentifiers = null,
                 OrganisationGroupIdentifiers = null,
-                OrganisationGroupTypes = new OrganisationGroupTypeIdentifier[] { OrganisationGroupTypeIdentifier.Region },
-                OrganisationTypes = new OrganisationGroupTypeIdentifier[] { OrganisationGroupTypeIdentifier.LocalAuthority }
+                OrganisationGroupTypes = new OrganisationGroupTypeIdentifier[] { OrganisationGroupTypeIdentifier.RegionCode },
+                OrganisationTypes = new OrganisationGroupTypeIdentifier[] { OrganisationGroupTypeIdentifier.LocalAuthorityCode }
             };
         }
     }

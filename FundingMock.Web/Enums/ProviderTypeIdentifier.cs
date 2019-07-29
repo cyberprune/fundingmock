@@ -4,10 +4,10 @@ using Newtonsoft.Json.Converters;
 namespace FundingMock.Web.Enums
 {
     /// <summary>
-    /// Valid list of the different unique ways to identify an organisation.
+    /// Valid list of the different unique ways to identifier an organisation.
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum OrganisationTypeIdentifier
+    public enum ProviderTypeIdentifier
     {
         /// <summary>
         /// UK Provider Reference Number - the unique identifier allocated to providers by the UK Register of Learning Providers (UKRLP) - 8 digits.

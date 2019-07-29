@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FundingMock.Web.Enums;
 using FundingMock.Web.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -34,10 +35,12 @@ namespace FundingMock.Web.Examples
 
             var groupingOrg = new OrganisationGroup()
             {
-                MainIdentifierType = OrganisationGroupTypeIdentifier.LocalAuthority,
+                GroupTypeIdentifier = OrganisationGroupTypeIdentifier.LocalAuthorityCode,
+                GroupTypeClassification = OrganisationGroupTypeClassification.LegalEntity,
+                GroupTypeCode = OrganisationGroupTypeCode.LocalAuthority,
                 Name = "Camden",
                 SearchableName = "Camden",
-                MainIdentifierCode = "203",
+                IdentifierValue = "203",
                 Identifiers = new List<OrganisationIdentifier>
                 {
                     new OrganisationIdentifier
@@ -71,8 +74,7 @@ namespace FundingMock.Web.Examples
                 EndDate = new DateTimeOffset(2021, 3, 30, 0, 0, 0, ukOffset)
             };
 
-
-            return new LogicalBaseModel
+            LogicalBaseModel logicalBaseModel = new LogicalBaseModel
             {
                 SchemaUri = "http://example.org/#schema",
                 SchemaVersion = schemaVersion,
@@ -101,47 +103,45 @@ namespace FundingMock.Web.Examples
                                             TemplateLineId = 1,
                                             Type = FundingLineType.Payment,
                                             Value = 1400,
-                                            ProfilePeriods = new List<FundingLinePeriod>
+                                            DistributionPeriods = new List<DistributionPeriod>
                                             {
-                                                new FundingLinePeriod
+                                                new DistributionPeriod
                                                 {
-                                                    Occurrence = 1,
-                                                    Year = 2019,
-                                                    TypeValue = "October",
-                                                    ProfiledValue = 1400,
-                                                    Type = FundingLinePeriodType.CalendarMonth,
-                                                    DistributionPeriodId = financialYearPeriod1920.Period
+                                                    DistributionPeriodId = financialYearPeriod1920.Period,
+                                                    Value = 2800,
+                                                    ProfilePeriods = new List<FundingLinePeriod>
+                                                    {
+                                                        new FundingLinePeriod
+                                                        {
+                                                            Occurrence = 1,
+                                                            Year = 2019,
+                                                            TypeValue = "October",
+                                                            ProfiledValue = 2800,
+                                                            Type = FundingLinePeriodType.CalendarMonth,
+                                                            DistributionPeriodId = financialYearPeriod1920.Period
+                                                        }
+                                                    },
+                                                },
+                                                new DistributionPeriod
+                                                {
+                                                    DistributionPeriodId = financialYearPeriod2021.Period,
+                                                    Value = 2000,
+                                                    ProfilePeriods = new List<FundingLinePeriod>
+                                                    {
+                                                        new FundingLinePeriod
+                                                        {
+                                                            Occurrence = 1,
+                                                            Year = 2020,
+                                                            TypeValue = "October",
+                                                            ProfiledValue = 2000,
+                                                            Type = FundingLinePeriodType.CalendarMonth,
+                                                            DistributionPeriodId = financialYearPeriod2021.Period
+                                                        }
+                                                    },
                                                 }
                                             },
-                                            DistrubutionPeriods = new List<FundingValueByDistributionPeriod>
-                                            {
-                                                new FundingValueByDistributionPeriod
-                                                {
-                                                    DistributionPeriodCode = financialYearPeriod1920.Period,
-                                                    Value = 1400,
-                                                },
-                                                new FundingValueByDistributionPeriod
-                                                {
-                                                    DistributionPeriodCode = financialYearPeriod2021.Period,
-                                                    Value = 1000,
-                                                }
-                                            }
                                         }
                                     },
-                        DistributionPeriods = new List<FundingValueByDistributionPeriod>
-                            {
-                                new FundingValueByDistributionPeriod
-                                {
-                                    DistributionPeriodCode = financialYearPeriod1920.Period,
-                                    Value = 1400,
-
-                                },
-                                new FundingValueByDistributionPeriod
-                                {
-                                    DistributionPeriodCode = financialYearPeriod2021.Period,
-                                    Value = 1000,
-                                }
-                            },
                         TotalValue = 2400
                     },
                     ProviderFundings = new List<ProviderFunding>
@@ -153,21 +153,28 @@ namespace FundingMock.Web.Examples
 
                                 FundingPeriodId = period.Period,
                                 FundingStreamCode = stream.Code,
-                                Organisation = new Organisation
+                                Provider = new Provider
                                 {
                                     Name = "Example School 1",
                                     SearchableName = "ExampleSchool1",
                                     ProviderType = "School",
-                                    Identifiers = new List<OrganisationIdentifier>
+                                    Identifier = "87654321",
+                                    ProviderDetails = new ProviderDetails()
                                     {
-                                        new OrganisationIdentifier
+
+                                    },
+                                    ProviderSubType = "School subtype 1",
+                                    ProviderVersionId = "1819-1.0-pesports",
+                                    OtherIdentifiers = new List<ProviderIdentifier>
+                                    {
+                                        new ProviderIdentifier
                                         {
-                                            Type = OrganisationTypeIdentifier.URN,
+                                            Type = ProviderTypeIdentifier.URN,
                                             Value = "123453"
                                         },
-                                        new OrganisationIdentifier
+                                        new ProviderIdentifier
                                         {
-                                            Type = OrganisationTypeIdentifier.UKPRN,
+                                            Type = ProviderTypeIdentifier.UKPRN,
                                             Value = "87654321"
                                         }
                                     }
@@ -184,16 +191,41 @@ namespace FundingMock.Web.Examples
                                                     TemplateLineId = 1,
                                                     Type = FundingLineType.Payment,
                                                     Value = 700,
-                                                    ProfilePeriods = new List<FundingLinePeriod>
+                                                    DistributionPeriods = new List<DistributionPeriod>
                                                     {
-                                                        new FundingLinePeriod
+                                                        new DistributionPeriod
                                                         {
-                                                            Occurrence = 1,
-                                                            Year = 2019,
-                                                            TypeValue = "October",
-                                                            ProfiledValue = 700,
-                                                            Type = FundingLinePeriodType.CalendarMonth,
-                                                            DistributionPeriodId = financialYearPeriod1920.Period
+                                                            DistributionPeriodId = financialYearPeriod1920.Period,
+                                                            Value = 1400,
+                                                            ProfilePeriods = new List<FundingLinePeriod>
+                                                            {
+                                                                new FundingLinePeriod
+                                                                {
+                                                                    Occurrence = 1,
+                                                                    Year = 2019,
+                                                                    TypeValue = "October",
+                                                                    ProfiledValue = 1400,
+                                                                    Type = FundingLinePeriodType.CalendarMonth,
+                                                                    DistributionPeriodId = financialYearPeriod1920.Period
+                                                                }
+                                                            },
+                                                        },
+                                                        new DistributionPeriod
+                                                        {
+                                                            DistributionPeriodId = financialYearPeriod2021.Period,
+                                                            Value = 1000,
+                                                            ProfilePeriods = new List<FundingLinePeriod>
+                                                            {
+                                                                new FundingLinePeriod
+                                                                {
+                                                                    Occurrence = 1,
+                                                                    Year = 2020,
+                                                                    TypeValue = "October",
+                                                                    ProfiledValue = 1000,
+                                                                    Type = FundingLinePeriodType.CalendarMonth,
+                                                                    DistributionPeriodId = financialYearPeriod2021.Period
+                                                                }
+                                                            },
                                                         }
                                                     },
                                                     Calculations = new List<Calculation>
@@ -239,20 +271,6 @@ namespace FundingMock.Web.Examples
                                                     },
                                                 }
                                             },
-                                    DistributionPeriods = new List<FundingValueByDistributionPeriod>
-                                    {
-                                        new FundingValueByDistributionPeriod
-                                        {
-                                            DistributionPeriodCode = financialYearPeriod1920.Period,
-                                            Value = 700,
-
-                                        },
-                                        new FundingValueByDistributionPeriod
-                                        {
-                                            DistributionPeriodCode = financialYearPeriod2021.Period,
-                                            Value = 500,
-                                        }
-                                    }
                                 },
                             },
                             new ProviderFunding
@@ -262,24 +280,40 @@ namespace FundingMock.Web.Examples
 
                                 FundingPeriodId = period.Period,
                                 FundingStreamCode = stream.Code,
-                                Organisation = new Organisation
+                                Provider = new Provider
                                 {
                                     Name = "Example School 2",
                                     SearchableName = "ExampleSchool2",
                                     ProviderType = "School",
-                                    Identifiers = new List<OrganisationIdentifier>
+                                    ProviderSubType = "School subtype",
+                                    OtherIdentifiers = new List<ProviderIdentifier>
                                     {
-                                        new OrganisationIdentifier
+                                        new ProviderIdentifier
                                         {
-                                            Type = OrganisationTypeIdentifier.URN,
+                                            Type = ProviderTypeIdentifier.URN,
                                             Value = "123453"
                                         },
-                                        new OrganisationIdentifier
+                                        new ProviderIdentifier
                                         {
-                                            Type = OrganisationTypeIdentifier.UKPRN,
+                                            Type = ProviderTypeIdentifier.UKPRN,
                                             Value = "87654322"
                                         }
-                                    }
+                                    },
+                                    Identifier = "87654322",
+                                    ProviderVersionId = "1.0",
+                                    ProviderDetails = new ProviderDetails()
+                                    {
+                                        CloseReason = ProviderCloseReason.ChangeInStatus,
+                                        DateClosed = DateTime.Now,
+                                        DateOpened = DateTime.Now.AddYears(-10),
+                                        OpenReason = ProviderOpenReason.FormerIndependent,
+                                        PhaseOfEducation = "Primary",
+                                        Postcode = "SSS222",
+                                        Status = "Open",
+                                        Town = "Town",
+                                        TrustName = "Logical Trust",
+                                        TrustStatus = TrustStatus.SupportedByAMultiAcademyTrust,
+                                    },
                                 },
                                 FundingValue = new FundingValue
                                 {
@@ -293,39 +327,63 @@ namespace FundingMock.Web.Examples
                                                     TemplateLineId = 1,
                                                     Type = FundingLineType.Payment,
                                                     Value = 700,
-                                                    ProfilePeriods = new List<FundingLinePeriod>
+                                                    DistributionPeriods = new List<DistributionPeriod>
                                                     {
-                                                        new FundingLinePeriod
+                                                        new DistributionPeriod
                                                         {
-                                                            Occurrence = 1,
-                                                            Year = 2019,
-                                                            TypeValue = "October",
-                                                            ProfiledValue = 700,
-                                                            Type = FundingLinePeriodType.CalendarMonth,
-                                                            DistributionPeriodId = financialYearPeriod1920.Period
+                                                            DistributionPeriodId = financialYearPeriod1920.Period,
+                                                            Value = 1400,
+                                                            ProfilePeriods = new List<FundingLinePeriod>
+                                                            {
+                                                                new FundingLinePeriod
+                                                                {
+                                                                    Occurrence = 1,
+                                                                    Year = 2019,
+                                                                    TypeValue = "October",
+                                                                    ProfiledValue = 1400,
+                                                                    Type = FundingLinePeriodType.CalendarMonth,
+                                                                    DistributionPeriodId = financialYearPeriod1920.Period
+                                                                }
+                                                            },
+                                                        },
+                                                        new DistributionPeriod
+                                                        {
+                                                            DistributionPeriodId = financialYearPeriod2021.Period,
+                                                            Value = 1000,
+                                                            ProfilePeriods = new List<FundingLinePeriod>
+                                                            {
+                                                                new FundingLinePeriod
+                                                                {
+                                                                    Occurrence = 1,
+                                                                    Year = 2020,
+                                                                    TypeValue = "October",
+                                                                    ProfiledValue = 1000,
+                                                                    Type = FundingLinePeriodType.CalendarMonth,
+                                                                    DistributionPeriodId = financialYearPeriod2021.Period
+                                                                }
+                                                            },
                                                         }
-                                                    }
+                                                    },
                                                 }
                                             },
-                                    DistributionPeriods = new List<FundingValueByDistributionPeriod>
-                                    {
-                                        new FundingValueByDistributionPeriod
-                                        {
-                                            DistributionPeriodCode = financialYearPeriod1920.Period,
-                                            Value = 700,
-
-                                        },
-                                        new FundingValueByDistributionPeriod
-                                        {
-                                            DistributionPeriodCode = financialYearPeriod2021.Period,
-                                            Value = 500,
-                                        }
-                                    },
                                 }
                             }
                         }
                 }
             };
+
+            // Set all variation reasons for verification
+            var allVariationReasons = Enum.GetValues(typeof(VariationReason));
+            List<VariationReason> variationReasons = new List<VariationReason>();
+            foreach (var variationReason in allVariationReasons)
+            {
+                variationReasons.Add((VariationReason)variationReason);
+            }
+
+            logicalBaseModel.Funding.ProviderFundings.First().VariationReasons = variationReasons;
+
+
+            return logicalBaseModel;
         }
     }
 }

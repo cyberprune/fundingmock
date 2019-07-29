@@ -32,7 +32,10 @@ namespace FundingMock.Web.Examples
 
             var groupingOrg = new OrganisationGroup()
             {
-                MainIdentifierType = OrganisationGroupTypeIdentifier.LocalAuthority,
+                GroupTypeIdentifier = OrganisationGroupTypeIdentifier.LocalAuthorityCode,
+                GroupTypeClassification = OrganisationGroupTypeClassification.LegalEntity,
+                GroupTypeCode = OrganisationGroupTypeCode.LocalAuthority,
+                IdentifierValue = "202",
                 Name = "Camden",
                 SearchableName = "Camden",
                 Identifiers = new List<OrganisationIdentifier>
@@ -50,7 +53,7 @@ namespace FundingMock.Web.Examples
                 }
             };
 
-            var id = $"{stream.Code}_{period.Period}_{groupingOrg.MainIdentifierType}_{groupingOrg.Name}_{fundingVersion}";
+            var id = $"{stream.Code}_{period.Period}_{groupingOrg.GroupTypeCode}_{groupingOrg.Name}_{fundingVersion}";
 
             var host = "http://example.org";
 

@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using FundingMock.Web.Enums;
+using Newtonsoft.Json;
 
 namespace FundingMock.Web.Models
 {
@@ -22,14 +25,8 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// The organisation for which the funding is for.
         /// </summary>
-        [JsonProperty("organisation")]
-        public Organisation Organisation { get; set; }
-
-        /// <summary>
-        /// Optional variation details. Null if not appplicable (i.e. its version 1 of funding).
-        /// </summary>
-        [JsonProperty("variations", NullValueHandling = NullValueHandling.Ignore)]
-        public Variations Variations { get; set; }
+        [JsonProperty("provider")]
+        public Provider Provider { get; set; }
 
         /// <summary>
         /// The funding stream the funding relates to.
@@ -48,5 +45,25 @@ namespace FundingMock.Web.Models
         /// </summary>
         [JsonProperty("fundingValue")]
         public FundingValue FundingValue { get; set; }
+
+        /// <summary>
+        /// Optional reasons for the provider variation. These reasons are in addition to open and close reason of the organisation.
+        /// This field can contain zero or more items.
+        /// </summary>
+        [EnumDataType(typeof(VariationReason))]
+        [JsonProperty("variationReasons")]
+        public IEnumerable<VariationReason> VariationReasons { get; set; }
+
+        /// <summary>
+        /// Collection of successor providers
+        /// </summary>
+        [JsonProperty("successors")]
+        public IEnumerable<ProviderInformationModel> Successors { get; set; }
+
+        /// <summary>
+        /// Collection of predecessor providers
+        /// </summary>
+        [JsonProperty("predecessors")]
+        public IEnumerable<ProviderInformationModel> Predecessors { get; set; }
     }
 }
