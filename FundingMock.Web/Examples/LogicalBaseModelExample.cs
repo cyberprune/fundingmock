@@ -12,11 +12,11 @@ namespace FundingMock.Web.Examples
         public object GetExamples()
         {
             var ukOffset = new TimeSpan(0, 0, 0);
-            var fundingVersion = "1.0";
+            var fundingVersion = "1_0";
 
             var period = new FundingPeriod
             {
-                Period = "AY1920",
+                Period = "1920",
                 Name = "Academic year 2019-20",
                 Type = PeriodType.AY,
                 StartDate = new DateTimeOffset(2019, 9, 1, 0, 0, 0, ukOffset),
@@ -148,7 +148,6 @@ namespace FundingMock.Web.Examples
                         {
                             new ProviderFunding
                             {
-                                Id = $"{stream.Code}_{period.Period}_87654321_{fundingVersion}",
                                 FundingVersion = fundingVersion,
 
                                 FundingPeriodId = period.Period,
@@ -275,7 +274,6 @@ namespace FundingMock.Web.Examples
                             },
                             new ProviderFunding
                             {
-                                Id = $"{stream.Code}_{period.Period}_87654322_{fundingVersion}",
                                 FundingVersion = fundingVersion,
 
                                 FundingPeriodId = period.Period,

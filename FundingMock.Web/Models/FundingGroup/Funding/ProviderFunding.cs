@@ -11,10 +11,10 @@ namespace FundingMock.Web.Models
     public class ProviderFunding
     {
         /// <summary>
-        /// A unique id for this funding. In format TODO fill in.
+        /// A unique id for this funding.
         /// </summary>
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id => $"{FundingStreamCode}-{FundingPeriodId}-{Provider.Identifier}-{ConvertVersionForId(FundingVersion)}";
 
         /// <summary>
         /// Version number of the published data. If there are changes to the funding for this organisation in this period, this number would increase.
@@ -65,5 +65,10 @@ namespace FundingMock.Web.Models
         /// </summary>
         [JsonProperty("predecessors")]
         public IEnumerable<ProviderInformationModel> Predecessors { get; set; }
+
+        private string ConvertVersionForId(string version)
+        {
+            return version.Replace(".", "_");
+        }
     }
 }

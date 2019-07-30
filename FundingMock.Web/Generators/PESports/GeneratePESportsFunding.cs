@@ -544,7 +544,6 @@ namespace Sfa.Sfs.Mock.Generators
 
             return new ProviderFunding
             {
-                Id = $"{stream.Code}_{period.Period}_{ukprn}_{fundingVersion}",
                 FundingVersion = fundingVersion.Replace("-", "."),
                 FundingPeriodId = period.Period,
                 FundingStreamCode = stream.Code,

@@ -354,8 +354,6 @@ namespace Sfa.Sfs.Mock.Generators
                 EndDate = new DateTimeOffset(2020, 3, 31, 0, 0, 0, ukOffset)
             };
 
-            var templateVersion = "1.0";
-
             var stream = new FundingStream
             {
                 Code = "DSG",
@@ -369,7 +367,6 @@ namespace Sfa.Sfs.Mock.Generators
 
             return new ProviderFunding
             {
-                Id = id,
                 FundingVersion = "1.0",
                 Provider = new FundingMock.Web.Models.Provider
                 {

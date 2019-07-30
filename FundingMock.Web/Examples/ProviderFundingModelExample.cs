@@ -77,7 +77,6 @@ namespace FundingMock.Web.Examples
 
             return new ProviderFunding
             {
-                Id = id,
                 FundingVersion = fundingVersion,
                 FundingPeriodId = period.Period,
                 FundingStreamCode = stream.Code,
