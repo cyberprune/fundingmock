@@ -23,11 +23,9 @@ namespace FundingMock.Web.Examples
                 EndDate = new DateTimeOffset(2020, 8, 31, 0, 0, 0, ukOffset)
             };
 
-            var templateVersion = "2.1";
-
             var stream = new FundingStream
             {
-                Code = "PESports",
+                Code = "PES",
                 Name = "PE + Sport Premium",
             };
 
@@ -91,7 +89,7 @@ namespace FundingMock.Web.Examples
                     Status = FundingStatus.Released,
                     StatusChangedDate = DateTimeOffset.Now,
                     GroupingReason = GroupingReason.Payment,
-                    TemplateVersion = "dsg1.0",
+                    TemplateVersion = "1.0",
                     FundingValue = new FundingValue
                     {
                         FundingLines = new List<FundingLine>

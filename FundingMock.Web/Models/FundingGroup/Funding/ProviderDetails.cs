@@ -23,13 +23,13 @@ namespace FundingMock.Web.Models
         public DateTimeOffset? DateClosed { get; set; }
 
         /// <summary>
-        /// Status of the organisation (TODO find examples).
+        /// Status of the organisation
         /// </summary>
         [JsonProperty("status")]
         public string Status { get; set; }
 
         /// <summary>
-        /// TODO: Find out if this is required in the logical model
+        /// Phase of Education
         /// </summary>
         [JsonProperty("phaseOfEducation")]
         public string PhaseOfEducation { get; set; }
@@ -49,14 +49,14 @@ namespace FundingMock.Web.Models
         public ProviderCloseReason? CloseReason { get; set; }
 
         /// <summary>
-        /// TODO: Find out if this is required in the logical model
+        /// Trust Status
         /// </summary>
         [EnumDataType(typeof(TrustStatus))]
         [JsonProperty("trustStatus")]
         public TrustStatus TrustStatus { get; set; }
 
         /// <summary>
-        /// TODO: Find out if this is required in the logical model
+        /// Trust Name
         /// </summary>
         [JsonProperty("trustName")]
         public string TrustName { get; set; }
@@ -72,5 +72,126 @@ namespace FundingMock.Web.Models
         /// </summary>
         [JsonProperty("postcode")]
         public string Postcode { get; set; }
+
+        /// <summary>
+        /// Companies House Number
+        /// </summary>
+        [JsonProperty("companiesHouseNumber")]
+        public string CompaniesHouseNumber { get; set; }
+
+        /// <summary>
+        /// Group ID
+        /// </summary>
+        [JsonProperty("groupIdNumber")]
+        public string GroupIDNumber { get; set; }
+
+        /// <summary>
+        /// RSC Region Name
+        /// </summary>
+        [JsonProperty("rscRegionName")]
+        public string RSCRegionName { get; set; }
+
+        /// <summary>
+        /// RSC Region Code
+        /// </summary>
+        [JsonProperty("rscRegionCode")]
+        public string RSCRegionCode { get; set; }
+
+        /// <summary>
+        /// Government Office Region Name
+        /// </summary>
+        [JsonProperty("governmentOfficeRegionName")]
+        public string GovernmentOfficeRegionName { get; set; }
+
+        /// <summary>
+        /// Government Office Region Code
+        /// </summary>
+        [JsonProperty("governmentOfficeRegionCode")]
+        public string GovernmentOfficeRegionCode { get; set; }
+
+        /// <summary>
+        /// District Name
+        /// </summary>
+        [JsonProperty("districtName")]
+        public string DistrictName { get; set; }
+
+        /// <summary>
+        /// District Code
+        /// </summary>
+        [JsonProperty("districtCode")]
+        public string DistrictCode { get; set; }
+
+        /// <summary>
+        /// Ward Name
+        /// </summary>
+        [JsonProperty("wardName")]
+        public string WardName { get; set; }
+
+        /// <summary>
+        /// Ward Code
+        /// </summary>
+        [JsonProperty("wardCode")]
+        public string WardCode { get; set; }
+
+        /// <summary>
+        /// Census Ward Name
+        /// </summary>
+        [JsonProperty("censusWardName")]
+        public string CensusWardName { get; set; }
+
+        /// <summary>
+        /// Census Ward Code
+        /// </summary>
+        [JsonProperty("censusWardCode")]
+        public string CensusWardCode { get; set; }
+
+        /// <summary>
+        /// Middle Super Output Area Name
+        /// </summary>
+        [JsonProperty("middleSuperOutputAreaName")]
+        public string MiddleSuperOutputAreaName { get; set; }
+
+        /// <summary>
+        /// Middle Super Output Area Code
+        /// </summary>
+        [JsonProperty("middleSuperOutputAreaCode")]
+        public string MiddleSuperOutputAreaCode { get; set; }
+
+        /// <summary>
+        /// Lower Super Output Area Name
+        /// </summary>
+        [JsonProperty("lowerSuperOutputAreaName")]
+        public string LowerSuperOutputAreaName { get; set; }
+
+        /// <summary>
+        /// Lower Super Output Area Code
+        /// </summary>
+        [JsonProperty("lowerSuperOutputAreaCode")]
+        public string LowerSuperOutputAreaCode { get; set; }
+
+        /// <summary>
+        /// Parliamentary Constituency Name
+        /// </summary>
+        [JsonProperty("parliamentaryConstituencyName")]
+        public string ParliamentaryConstituencyName { get; set; }
+
+        /// <summary>
+        /// Parliamentary Constituency Code
+        /// </summary>
+        [JsonProperty("parliamentaryConstituencyCode")]
+        public string ParliamentaryConstituencyCode { get; set; }
+
+        /// <summary>
+        /// Country Code
+        /// </summary>
+        [JsonProperty("countryCode")]
+        public string CountryCode { get; set; }
+
+        /// <summary>
+        /// Country Name
+        /// </summary>
+        [JsonProperty("countryName")]
+        public string CountryName { get; set; }
+
     }
 }
