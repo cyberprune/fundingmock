@@ -25,8 +25,8 @@ namespace FundingMock.Web.Examples
 
                 OrganisationIdentifiers = null,
                 OrganisationGroupIdentifiers = null,
-                OrganisationGroupTypes = new OrganisationGroupTypeIdentifier[] { OrganisationGroupTypeIdentifier.RegionCode },
-                OrganisationTypes = new OrganisationGroupTypeIdentifier[] { OrganisationGroupTypeIdentifier.LocalAuthorityCode }
+                OrganisationGroupTypes = new OrganisationGroupTypeIdentifier[] { OrganisationGroupTypeIdentifier.RSCRegionCode },
+                OrganisationTypes = new OrganisationGroupTypeIdentifier[] { OrganisationGroupTypeIdentifier.LACode }
             };
         }
     }

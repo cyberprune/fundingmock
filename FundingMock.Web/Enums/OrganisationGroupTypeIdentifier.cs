@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace FundingMock.Web.Enums
@@ -10,68 +11,111 @@ namespace FundingMock.Web.Enums
     public enum OrganisationGroupTypeIdentifier
     {
         /// <summary>
-        /// Local Authority (e.g. Warwickshire).
+        /// UKPRN
         /// </summary>
-        LocalAuthorityCode,
+        [EnumMember(Value = "UKPRN")]
+        UKPRN,
 
         /// <summary>
-        /// Academy Trust (e.g. Star Foundation).
+        /// LACode
         /// </summary>
-        AcademyTrustCode,
+        [EnumMember(Value = "LACode")]
+        LACode,
 
         /// <summary>
-        /// Regional Schools Commissioner Region (e.g. Lancashire and West Yorkshire).
+        /// UPIN
         /// </summary>
+        [EnumMember(Value = "UPIN")]
+        UPIN,
+
+        /// <summary>
+        /// URN
+        /// </summary>
+        [EnumMember(Value = "URN")]
+        URN,
+
+        /// <summary>
+        /// UID
+        /// </summary>
+        [EnumMember(Value = "UID")]
+        UID,
+
+        /// <summary>
+        /// CompaniesHouseNumber
+        /// </summary>
+        [EnumMember(Value = "CompaniesHouseNumber")]
+        CompaniesHouseNumber,
+
+        /// <summary>
+        /// GroupID
+        /// </summary>
+        [EnumMember(Value = "GroupID")]
+        GroupId,
+
+        /// <summary>
+        /// RSCRegionCode
+        /// </summary>
+        [EnumMember(Value = "RSCRegionCode")]
         RSCRegionCode,
 
         /// <summary>
-        /// Government Office Region, (e.g. North West).
+        /// GovernmentOfficeRegionCode
         /// </summary>
+        [EnumMember(Value = "GovernmentOfficeRegionCode")]
         GovernmentOfficeRegionCode,
 
         /// <summary>
-        /// District (e.g. Hyndburn).
+        /// DistrictCode
         /// </summary>
+        [EnumMember(Value = "DistrictCode")]
         DistrictCode,
 
         /// <summary>
-        /// Ward (e.g. Milnshaw).
+        /// WardCode
         /// </summary>
+        [EnumMember(Value = "WardCode")]
         WardCode,
 
         /// <summary>
-        /// Census Ward.
+        /// CensusWardCode
         /// </summary>
+        [EnumMember(Value = "CensusWardCode")]
         CensusWardCode,
 
         /// <summary>
-        /// Middle Super Output Area (e.g. Mansfield 002).
+        /// MiddleSuperOutputAreaCode
         /// </summary>
+        [EnumMember(Value = "MiddleSuperOutputAreaCode")]
         MiddleSuperOutputAreaCode,
 
         /// <summary>
-        /// Lower Super Output Area (e.g. Mansfield 002A).
+        /// LowerSuperOutputAreaCode
         /// </summary>
+        [EnumMember(Value = "LowerSuperOutputAreaCode")]
         LowerSuperOutputAreaCode,
 
         /// <summary>
-        /// Parlimentry constituency (e.g. Mansfield).
+        /// ParliamentaryConstituencyCode
         /// </summary>
+        [EnumMember(Value = "ParliamentaryConstituencyCode")]
         ParliamentaryConstituencyCode,
 
         /// <summary>
-        /// Region
+        /// DfeNumber
         /// </summary>
-        RegionCode,
+        [EnumMember(Value = "DfeNumber")]
+        DfeNumber,
 
         /// <summary>
-        /// Country eg GB
+        /// AcademyTrustCode
         /// </summary>
+        [EnumMember(Value = "AcademyTrustCode")]
+        AcademyTrustCode,
+
+        /// <summary>
+        /// CountryCode
+        /// </summary>
+        [EnumMember(Value = "CountryCode")]
         CountryCode,
-
-        /// <summary>
-        /// 
-        /// </summary>
-        LocalGovernmentGroupCode,
     }
 }

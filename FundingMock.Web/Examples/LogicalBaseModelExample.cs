@@ -33,22 +33,22 @@ namespace FundingMock.Web.Examples
 
             var groupingOrg = new OrganisationGroup()
             {
-                GroupTypeIdentifier = OrganisationGroupTypeIdentifier.LocalAuthorityCode,
+                GroupTypeIdentifier = OrganisationGroupTypeIdentifier.LACode,
                 GroupTypeClassification = OrganisationGroupTypeClassification.LegalEntity,
                 GroupTypeCode = OrganisationGroupTypeCode.LocalAuthority,
                 Name = "Camden",
                 SearchableName = "Camden",
-                IdentifierValue = "203",
+                IdentifierValue = "12345678",
                 Identifiers = new List<OrganisationIdentifier>
                 {
                     new OrganisationIdentifier
                     {
-                        Type = OrganisationTypeIdentifier.LACode,
+                        Type = OrganisationGroupTypeIdentifier.LACode,
                         Value = "203"
                     },
                     new OrganisationIdentifier
                     {
-                        Type = OrganisationTypeIdentifier.UKPRN,
+                        Type = OrganisationGroupTypeIdentifier.UKPRN,
                         Value = "12345678"
                     }
                 }
@@ -74,7 +74,7 @@ namespace FundingMock.Web.Examples
 
             LogicalBaseModel logicalBaseModel = new LogicalBaseModel
             {
-                SchemaUri = "http://example.org/#schema",
+                SchemaUri = "https://fundingschemas.blob.core.windows.net/schemas/logicalmodel-1.0.json#schema",
                 SchemaVersion = schemaVersion,
                 Funding = new FundingProvider
                 {
@@ -148,7 +148,7 @@ namespace FundingMock.Web.Examples
                             {
                                 FundingVersion = fundingVersion,
 
-                                FundingPeriodId = period.Period,
+                                FundingPeriodId = period.Id,
                                 FundingStreamCode = stream.Code,
                                 Provider = new Provider
                                 {
@@ -158,7 +158,7 @@ namespace FundingMock.Web.Examples
                                     Identifier = "87654321",
                                     ProviderDetails = new ProviderDetails()
                                     {
-
+                                        LocalAuthorityName = "Camden",
                                     },
                                     ProviderSubType = "School subtype 1",
                                     ProviderVersionId = "1819-1.0-pesports",
@@ -274,7 +274,7 @@ namespace FundingMock.Web.Examples
                             {
                                 FundingVersion = fundingVersion,
 
-                                FundingPeriodId = period.Period,
+                                FundingPeriodId = period.Id,
                                 FundingStreamCode = stream.Code,
                                 Provider = new Provider
                                 {
@@ -310,6 +310,27 @@ namespace FundingMock.Web.Examples
                                         TrustName = "Logical Trust",
                                         TrustStatus = TrustStatus.SupportedByAMultiAcademyTrust,
                                     },
+                                },
+                                Successors = new List<ProviderInformationModel>()
+                                {
+                                    new ProviderInformationModel()
+                                    {
+                                        ProviderVersionId = "pesport-2.0",
+                                        Ukprn = "12345623",
+                                    },
+                                    new ProviderInformationModel()
+                                    {
+                                        ProviderVersionId = "pesport-2.0",
+                                        Ukprn = "2349793",
+                                    }
+                                },
+                                Predecessors = new List<ProviderInformationModel>()
+                                {
+                                    new ProviderInformationModel()
+                                    {
+                                        ProviderVersionId = "pesport-2.0",
+                                        Ukprn = "3245",
+                                    }
                                 },
                                 FundingValue = new FundingValue
                                 {
@@ -363,7 +384,7 @@ namespace FundingMock.Web.Examples
                                                 }
                                             },
                                 }
-                            }
+                            },
                         }
                 }
             };

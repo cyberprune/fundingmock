@@ -35,6 +35,12 @@ namespace FundingMock.Web.Models
         public string PhaseOfEducation { get; set; }
 
         /// <summary>
+        /// Local Authority Name
+        /// </summary>
+        [JsonProperty("localAuthorityName")]
+        public string LocalAuthorityName { get; set; }
+
+        /// <summary>
         /// Optional open reason from the list of GIAS Open Reasons
         /// </summary>
         [EnumDataType(typeof(ProviderOpenReason))]

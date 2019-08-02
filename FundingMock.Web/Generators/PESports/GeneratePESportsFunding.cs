@@ -140,7 +140,7 @@ namespace Sfa.Sfs.Mock.Generators
             foreach (var providerType in providerTypes)
             {
                 if ((providerType == "MaintainedSchools" || providerType == "NonMaintainedSpecialSchools")
-                    && organisationGroupTypes?.Any() == true && organisationGroupTypes?.Contains(OrganisationGroupTypeIdentifier.LocalAuthorityCode) == false)
+                    && organisationGroupTypes?.Any() == true && organisationGroupTypes?.Contains(OrganisationGroupTypeIdentifier.LACode) == false)
                 {
                     continue;
                 }
@@ -219,7 +219,7 @@ namespace Sfa.Sfs.Mock.Generators
             foreach (var orgGroup in orgGroups)
             {
                 OrganisationGroupTypeIdentifier orgTypeIdentifier = providerType == "NonMaintainedSpecialSchools" || providerType == "Academies" ?
-                    (providerType == "NonMaintainedSpecialSchools" ? OrganisationGroupTypeIdentifier.LocalAuthorityCode : OrganisationGroupTypeIdentifier.AcademyTrustCode) : OrganisationGroupTypeIdentifier.LocalAuthorityCode;
+                    (providerType == "NonMaintainedSpecialSchools" ? OrganisationGroupTypeIdentifier.LACode : OrganisationGroupTypeIdentifier.AcademyTrustCode) : OrganisationGroupTypeIdentifier.LACode;
 
                 var ukprn = $"MOCKUKPRN{orgGroup.Code}";
 
@@ -359,16 +359,16 @@ namespace Sfa.Sfs.Mock.Generators
             {
                 new OrganisationIdentifier
                 {
-                    Type = OrganisationTypeIdentifier.UKPRN,
+                    Type = OrganisationGroupTypeIdentifier.UKPRN,
                     Value = ukprn
                 }
             };
 
-            if (organisationType == OrganisationGroupTypeIdentifier.LocalAuthorityCode)
+            if (organisationType == OrganisationGroupTypeIdentifier.LACode)
             {
                 identifiers.Add(new OrganisationIdentifier
                 {
-                    Type = OrganisationTypeIdentifier.LACode,
+                    Type = OrganisationGroupTypeIdentifier.LACode,
                     Value = orgGroup.Code
                 });
             }
@@ -404,7 +404,7 @@ namespace Sfa.Sfs.Mock.Generators
             }
 
             // If we are asking for anything but local authorities, there won't be any results
-            if (organisationTypes?.Any() == true && organisationTypes?.Contains(OrganisationGroupTypeIdentifier.LocalAuthorityCode) == false)
+            if (organisationTypes?.Any() == true && organisationTypes?.Contains(OrganisationGroupTypeIdentifier.LACode) == false)
             {
                 return returnList;
             }

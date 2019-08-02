@@ -32,7 +32,7 @@ namespace FundingMock.Web.Examples
 
             var groupingOrg = new OrganisationGroup()
             {
-                GroupTypeIdentifier = OrganisationGroupTypeIdentifier.LocalAuthorityCode,
+                GroupTypeIdentifier = OrganisationGroupTypeIdentifier.LACode,
                 GroupTypeClassification = OrganisationGroupTypeClassification.LegalEntity,
                 GroupTypeCode = OrganisationGroupTypeCode.LocalAuthority,
                 IdentifierValue = "202",
@@ -42,12 +42,12 @@ namespace FundingMock.Web.Examples
                 {
                     new OrganisationIdentifier
                     {
-                        Type = OrganisationTypeIdentifier.LACode,
+                        Type = OrganisationGroupTypeIdentifier.LACode,
                         Value = "203"
                     },
                     new OrganisationIdentifier
                     {
-                        Type = OrganisationTypeIdentifier.UKPRN,
+                        Type = OrganisationGroupTypeIdentifier.UKPRN,
                         Value = "12345678"
                     }
                 }

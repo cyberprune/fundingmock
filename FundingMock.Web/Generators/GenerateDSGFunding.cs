@@ -96,7 +96,7 @@ namespace Sfa.Sfs.Mock.Generators
             var spreadsheet = GetSpreadsheet();
 
             var allLas = GetLAs(spreadsheet);
-            var las = organisationGroupTypes?.Any() != true || organisationGroupTypes?.Contains(OrganisationGroupTypeIdentifier.LocalAuthorityCode) != false ?
+            var las = organisationGroupTypes?.Any() != true || organisationGroupTypes?.Contains(OrganisationGroupTypeIdentifier.LACode) != false ?
                 allLas.Where(item =>
                     ukprns == null
                     || ukprns.Length == 0
@@ -112,7 +112,7 @@ namespace Sfa.Sfs.Mock.Generators
             }
 
             var allRegions = GetRegions(spreadsheet);
-            var regions = organisationGroupTypes?.Any() != true || organisationGroupTypes?.Contains(OrganisationGroupTypeIdentifier.RegionCode) != false ?
+            var regions = organisationGroupTypes?.Any() != true || organisationGroupTypes?.Contains(OrganisationGroupTypeIdentifier.RSCRegionCode) != false ?
                 allRegions.Where(item =>
                     ukprns == null
                     || ukprns.Length == 0
@@ -121,7 +121,7 @@ namespace Sfa.Sfs.Mock.Generators
             var organisations = las.ToList(); // Shallow copy
             organisations.AddRange(regions);
 
-            if (organisationGroupTypes?.Any() != true || organisationGroupTypes?.Contains(OrganisationGroupTypeIdentifier.LocalGovernmentGroupCode) != false)
+            if (organisationGroupTypes?.Any() != true || organisationGroupTypes?.Contains(OrganisationGroupTypeIdentifier.GovernmentOfficeRegionCode) != false)
             {
                 if (groupingReasons?.Any() != true || groupingReasons?.Contains(GroupingReason.Information) == true)
                 {
@@ -163,7 +163,7 @@ namespace Sfa.Sfs.Mock.Generators
                     identifiers.Add(
                         new OrganisationIdentifier
                         {
-                            Type = OrganisationTypeIdentifier.LACode,
+                            Type = OrganisationGroupTypeIdentifier.LACode,
                             Value = organisation.Code
                         }
                     );
@@ -171,7 +171,7 @@ namespace Sfa.Sfs.Mock.Generators
                     identifiers.Add(
                         new OrganisationIdentifier
                         {
-                            Type = OrganisationTypeIdentifier.UKPRN,
+                            Type = OrganisationGroupTypeIdentifier.UKPRN,
                             Value = organisation.UKPRN
                         }
                     );
@@ -180,8 +180,8 @@ namespace Sfa.Sfs.Mock.Generators
                 var groupingOrg = new OrganisationGroup
                 {
                     Name = organisation.Name,
-                    GroupTypeIdentifier = organisation.Type == Type.LA ? OrganisationGroupTypeIdentifier.LocalAuthorityCode
-                        : (organisation.Type == Type.LocalGovernmentGroup ? OrganisationGroupTypeIdentifier.LocalGovernmentGroupCode : OrganisationGroupTypeIdentifier.RegionCode),
+                    GroupTypeIdentifier = organisation.Type == Type.LA ? OrganisationGroupTypeIdentifier.LACode
+                        : (organisation.Type == Type.LocalGovernmentGroup ? OrganisationGroupTypeIdentifier.GovernmentOfficeRegionCode : OrganisationGroupTypeIdentifier.RSCRegionCode),
                     SearchableName = FundingController.SanitiseName(organisation.Name),
                     Identifiers = identifiers
                 };
@@ -192,14 +192,14 @@ namespace Sfa.Sfs.Mock.Generators
                 var fundingValue = GetFundingValue(spreadsheet, organisation, periods);
 
                 var primaryId = organisation.Type == Type.Region || organisation.Type == Type.LocalGovernmentGroup ? organisation.Name :
-                    groupingOrg.Identifiers.FirstOrDefault(id => id.Type == OrganisationTypeIdentifier.UKPRN)?.Value;
+                    groupingOrg.Identifiers.FirstOrDefault(id => id.Type == OrganisationGroupTypeIdentifier.UKPRN)?.Value;
 
                 var providerFundings = new List<string>();
 
                 switch (organisation.Type)
                 {
                     case Type.LA:
-                        if ((organisationTypes?.Any() != true || organisationTypes?.Contains(OrganisationGroupTypeIdentifier.LocalAuthorityCode) == true) &&
+                        if ((organisationTypes?.Any() != true || organisationTypes?.Contains(OrganisationGroupTypeIdentifier.LACode) == true) &&
                             (groupingReasons?.Any() != true || groupingReasons?.Contains(GroupingReason.Payment) == true))
                         {
                             providerFundings = new List<string>
@@ -211,7 +211,7 @@ namespace Sfa.Sfs.Mock.Generators
                         break;
                     case Type.Region:
                     case Type.LocalGovernmentGroup:
-                        if ((organisationTypes?.Any() != true || organisationTypes?.Contains(OrganisationGroupTypeIdentifier.RegionCode) == true || organisationTypes?.Contains(OrganisationGroupTypeIdentifier.LocalGovernmentGroupCode) == true) &&
+                        if ((organisationTypes?.Any() != true || organisationTypes?.Contains(OrganisationGroupTypeIdentifier.RSCRegionCode) == true || organisationTypes?.Contains(OrganisationGroupTypeIdentifier.GovernmentOfficeRegionCode) == true) &&
                             (groupingReasons?.Any() != true || groupingReasons?.Contains(GroupingReason.Information) == true))
                         {
                             providerFundings.AddRange(GetLasForRegion(organisation.Name).Select(la => $"{stream.Code}_{period.Period}_{la.UKPRN}_{fundingVersion}").ToList());
