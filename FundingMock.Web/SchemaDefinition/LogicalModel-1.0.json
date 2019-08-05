@@ -3,7 +3,7 @@
   "$id": "https://fundingschemas.blob.core.windows.net/schemas/logicalmodel-1.0.json",
   "title": "Corporate funding schema",
   "description": "A Department of Education view of funding allocation",
-  "version": "0.8",
+  "version": "1.0",
   "type": "object",
   "properties": {
     "$schema": {
