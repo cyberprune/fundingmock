@@ -5,17 +5,17 @@ using Newtonsoft.Json;
 namespace FundingMock.Web.Models
 {
     /// <summary>
-    /// A funding line period (e.g. the 1st March payment in 2019), with relevant value data.
+    /// A funding line profile period (e.g. the 1st March payment in 2019), with relevant value data.
     /// The composite key for the entity is Type, TypeValue, Year and Occurrence
     /// </summary>
-    public class FundingLinePeriod
+    public class ProfilePeriod
     {
         /// <summary>
         /// The type of the period (e.g. CalendarMonth).
         /// </summary>
-        [EnumDataType(typeof(FundingLinePeriodType))]
+        [EnumDataType(typeof(ProfilePeriodType))]
         [JsonProperty("type")]
-        public FundingLinePeriodType Type { get; set; }
+        public ProfilePeriodType Type { get; set; }
 
         /// <summary>
         /// The value identifier for this period (e.g. if type is 'Calendar Month', this could be 'April').

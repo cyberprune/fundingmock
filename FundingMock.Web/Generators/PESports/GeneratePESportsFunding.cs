@@ -54,7 +54,7 @@ namespace Sfa.Sfs.Mock.Generators
             string[] fundingPeriodCodes, ProviderIdentifier[] organisationGroupIdentifiers, OrganisationGroupTypeIdentifier[] organisationGroupTypes,
             ProviderIdentifier[] organisationIdentifiers, OrganisationGroupTypeIdentifier[] organisationTypes, VariationReason[] variationReasons,
             string[] ukprns, GroupingReason[] groupingReasons, FundingStatus[] statuses, DateTime? minStatusChangeDate,
-            FundingLineType[] fundingLineTypes, string[] templateLineIds)
+            OrganisationGroupingReason[] fundingLineTypes, string[] templateLineIds)
         {
             var totalList = new List<FeedResponseContentModel>();
 
@@ -192,7 +192,7 @@ namespace Sfa.Sfs.Mock.Generators
         private static List<FeedResponseContentModel> ProcessOrgGroups(List<OrgGroup> orgGroups, string providerType, FundingPeriod financialYearPeriod1920,
             FundingPeriod financialYearPeriod2021, FundingPeriod period, FundingStream stream, string schemaVersion, string fundingVersion,
             ProviderIdentifier[] organisationGroupIdentifiers, ProviderIdentifier[] organisationIdentifiers, OrganisationGroupTypeIdentifier[] organisationTypes,
-            VariationReason[] variationReasons, string[] ukprns, FundingLineType[] fundingLineTypes, string[] templateLineIds)
+            VariationReason[] variationReasons, string[] ukprns, OrganisationGroupingReason[] fundingLineTypes, string[] templateLineIds)
         {
             var returnList = new List<FeedResponseContentModel>();
 
@@ -253,7 +253,7 @@ namespace Sfa.Sfs.Mock.Generators
                                         {
                                             Name = "Total funding line",
                                             TemplateLineId = 1,
-                                            Type = FundingLineType.Payment,
+                                            Type = OrganisationGroupingReason.Payment,
                                             Value = orgGroup.OctoberTotal,
 
                                             DistributionPeriods = new List<DistributionPeriod>
@@ -262,15 +262,15 @@ namespace Sfa.Sfs.Mock.Generators
                                                 {
                                                     DistributionPeriodId = financialYearPeriod1920.Period,
                                                     Value = orgGroup.OctoberTotal,
-                                                    ProfilePeriods = new List<FundingLinePeriod>
+                                                    ProfilePeriods = new List<ProfilePeriod>
                                                             {
-                                                                new FundingLinePeriod
+                                                                new ProfilePeriod
                                                                 {
                                                                     Occurrence = 1,
                                                                     Year = 2019,
                                                                     TypeValue = "October",
                                                                     ProfiledValue = orgGroup.OctoberTotal,
-                                                                    Type = FundingLinePeriodType.CalendarMonth,
+                                                                    Type = ProfilePeriodType.CalendarMonth,
                                                                     DistributionPeriodId = financialYearPeriod1920.Period
                                                                 }
                                                             },
@@ -279,15 +279,15 @@ namespace Sfa.Sfs.Mock.Generators
                                                 {
                                                     DistributionPeriodId = financialYearPeriod2021.Period,
                                                     Value = orgGroup.AprilTotal,
-                                                    ProfilePeriods = new List<FundingLinePeriod>
+                                                    ProfilePeriods = new List<ProfilePeriod>
                                                     {
-                                                        new FundingLinePeriod
+                                                        new ProfilePeriod
                                                         {
                                                             Occurrence = 1,
                                                             Year = 2019,
                                                             TypeValue = "October",
                                                             ProfiledValue = orgGroup.OctoberTotal,
-                                                            Type = FundingLinePeriodType.CalendarMonth,
+                                                            Type = ProfilePeriodType.CalendarMonth,
                                                             DistributionPeriodId = financialYearPeriod1920.Period
                                                         }
                                                     },
@@ -578,7 +578,7 @@ namespace Sfa.Sfs.Mock.Generators
                                 {
                                     Name = "Total Allocation", // 
                                     TemplateLineId = 1,
-                                    Type = FundingLineType.Payment,
+                                    Type = OrganisationGroupingReason.Payment,
                                     Value = provider.OctoberPayment, //9450, // "Maintained Schools"  -> G3
                                     Calculations = new List<Calculation>
                                     {

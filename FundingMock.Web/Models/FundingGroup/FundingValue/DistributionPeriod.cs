@@ -24,6 +24,6 @@ namespace FundingMock.Web.Models
         /// The periods that this funding line where paid in / are due to be paid in.
         /// </summary>
         [JsonProperty("profilePeriods", NullValueHandling = NullValueHandling.Ignore)]
-        public IEnumerable<FundingLinePeriod> ProfilePeriods { get; set; }
+        public IEnumerable<ProfilePeriod> ProfilePeriods { get; set; }
     }
 }

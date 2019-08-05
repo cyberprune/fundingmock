@@ -137,7 +137,7 @@ namespace FundingMock.Web.Examples
                                     Name = "Total funding line",
                                     FundingLineCode= "TotalFundingLine",
                                     TemplateLineId = 1,
-                                    Type = FundingLineType.Payment,
+                                    Type = OrganisationGroupingReason.Payment,
                                     Value = 700,
                                     DistributionPeriods = new List<DistributionPeriod>
                                     {
@@ -145,15 +145,15 @@ namespace FundingMock.Web.Examples
                                         {
                                             DistributionPeriodId = financialYearPeriod1920.Period,
                                             Value = 200,
-                                            ProfilePeriods = new List<FundingLinePeriod>
+                                            ProfilePeriods = new List<ProfilePeriod>
                                             {
-                                                new FundingLinePeriod
+                                                new ProfilePeriod
                                                 {
                                                     Occurrence = 1,
                                                     Year = 2019,
                                                     TypeValue = "October",
                                                     ProfiledValue = 200,
-                                                    Type = FundingLinePeriodType.CalendarMonth,
+                                                    Type = ProfilePeriodType.CalendarMonth,
                                                     DistributionPeriodId = financialYearPeriod1920.Period
                                                 }
                                             }
@@ -162,15 +162,15 @@ namespace FundingMock.Web.Examples
                                         {
                                             DistributionPeriodId = financialYearPeriod2021.Period,
                                             Value = 500,
-                                            ProfilePeriods = new List<FundingLinePeriod>
+                                            ProfilePeriods = new List<ProfilePeriod>
                                             {
-                                                new FundingLinePeriod
+                                                new ProfilePeriod
                                                 {
                                                     Occurrence = 1,
                                                     Year = 2020,
                                                     TypeValue = "April",
                                                     ProfiledValue = 500,
-                                                    Type = FundingLinePeriodType.CalendarMonth,
+                                                    Type = ProfilePeriodType.CalendarMonth,
                                                     DistributionPeriodId = financialYearPeriod2021.Period
                                                 }
                                             },

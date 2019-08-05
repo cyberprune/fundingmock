@@ -15,7 +15,7 @@ namespace FundingMock.Web.Models
         /// </summary>
         public FundingLine()
         {
-            Type = FundingLineType.Information;
+            Type = OrganisationGroupingReason.Information;
         }
 
         /// <summary>
@@ -46,9 +46,9 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// The type of the funding line (e.g. paid on this basis, or informational only).
         /// </summary>
-        [EnumDataType(typeof(FundingLineType))]
+        [EnumDataType(typeof(OrganisationGroupingReason))]
         [JsonProperty("type")]
-        public FundingLineType Type { get; set; }
+        public OrganisationGroupingReason Type { get; set; }
 
         /// <summary>
         /// Distrubution periods for this funding line

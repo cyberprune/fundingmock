@@ -97,7 +97,7 @@ namespace FundingMock.Web.Models
         /// Optional - Only get funding lines with these types back.
         /// </summary>
         [JsonProperty("fundingLineTypes")]
-        public FundingLineType[] FundingLineTypes { get; set; }
+        public OrganisationGroupingReason[] FundingLineTypes { get; set; }
 
         /// <summary>
         /// Optional - Only get funding lines with these ids.

@@ -4,19 +4,14 @@ using Newtonsoft.Json.Converters;
 namespace FundingMock.Web.Enums
 {
     /// <summary>
-    /// The funding line type (actual payment or informational only).
+    /// A period that a funding line covers.
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum FundingLineType
+    public enum ProfilePeriodType
     {
         /// <summary>
-        /// An actual payment.
+        /// A calendar month.
         /// </summary>
-        Payment,
-
-        /// <summary>
-        /// ,
-        /// </summary>
-        Information,
+        CalendarMonth,
     }
 }

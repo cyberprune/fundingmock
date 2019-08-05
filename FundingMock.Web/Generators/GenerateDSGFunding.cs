@@ -58,7 +58,7 @@ namespace Sfa.Sfs.Mock.Generators
             string[] fundingPeriodCodes, ProviderIdentifier[] organisationGroupIdentifiers, OrganisationGroupTypeIdentifier[] organisationGroupTypes,
             ProviderIdentifier[] organisationIdentifiers, OrganisationGroupTypeIdentifier[] organisationTypes, VariationReason[] variationReasons,
             string[] ukprns, GroupingReason[] groupingReasons, FundingStatus[] statuses, DateTime? minStatusChangeDate,
-            FundingLineType[] fundingLineTypes, string[] templateLineIds)
+            OrganisationGroupingReason[] fundingLineTypes, string[] templateLineIds)
         {
             var totalList = new List<FeedResponseContentModel>();
 
@@ -592,7 +592,7 @@ namespace Sfa.Sfs.Mock.Generators
         /// <param name="org">The organisation details.</param>
         /// <param name="periods">The periods in a DSG file.</param>
         /// <returns>A funding value object.</returns>
-        private static FundingValue GetFundingValue(DataSet spreadsheet, Org org, List<FundingLinePeriod> periods)
+        private static FundingValue GetFundingValue(DataSet spreadsheet, Org org, List<ProfilePeriod> periods)
         {
             uint templateLineId = 1;
             uint templateCalculationId = 1;
@@ -607,7 +607,7 @@ namespace Sfa.Sfs.Mock.Generators
                             {
                                 Name = "PriorToRecoupment",
                                 TemplateLineId = templateLineId++,
-                                Type = FundingLineType.Information,
+                                Type = OrganisationGroupingReason.Information,
                                 Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 7),
                                 FundingLines = new List<FundingLine>
                                 {
@@ -615,7 +615,7 @@ namespace Sfa.Sfs.Mock.Generators
                                     {
                                         Name = "School Block",
                                         TemplateLineId = templateLineId++,
-                                        Type = FundingLineType.Information,
+                                        Type = OrganisationGroupingReason.Information,
                                         Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 3),
                                         FundingLines = new List<FundingLine>
                                         {
@@ -741,7 +741,7 @@ namespace Sfa.Sfs.Mock.Generators
                                     {
                                         Name = "Central School Services Block",
                                         TemplateLineId = templateLineId++,
-                                        Type = FundingLineType.Information,
+                                        Type = OrganisationGroupingReason.Information,
                                         Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 4),
                                         FundingLines = new List<FundingLine>
                                         {
@@ -814,7 +814,7 @@ namespace Sfa.Sfs.Mock.Generators
                                     {
                                         Name = "High Needs block funding",
                                         TemplateLineId = templateLineId++,
-                                        Type = FundingLineType.Information,
+                                        Type = OrganisationGroupingReason.Information,
                                         Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 5),
                                         FundingLines = new List<FundingLine>
                                         {
@@ -971,7 +971,7 @@ namespace Sfa.Sfs.Mock.Generators
                                     {
                                         Name = "Early Years Block",
                                         TemplateLineId = templateLineId++,
-                                        Type = FundingLineType.Information,
+                                        Type = OrganisationGroupingReason.Information,
                                         Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 6),
                                         FundingLines = new List<FundingLine>
                                         {
@@ -1208,7 +1208,7 @@ namespace Sfa.Sfs.Mock.Generators
                                 Name = "PostDeductionForRecoupmentAndHighNeeds",
                                 FundingLineCode = "DSG-001",
                                 TemplateLineId = templateLineId++,
-                                Type = FundingLineType.Payment,
+                                Type = OrganisationGroupingReason.Payment,
                                 Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 11),
                                 FundingLines = new List<FundingLine>
                                 {
@@ -1216,7 +1216,7 @@ namespace Sfa.Sfs.Mock.Generators
                                     {
                                         Name = "School Block",
                                         TemplateLineId = templateLineId++,
-                                        Type = FundingLineType.Information,
+                                        Type = OrganisationGroupingReason.Information,
                                         Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 7),
                                         FundingLines = new List<FundingLine>
                                         {
@@ -1345,7 +1345,7 @@ namespace Sfa.Sfs.Mock.Generators
                                     {
                                         Name = "Central School Services Block",
                                         TemplateLineId = templateLineId++,
-                                        Type = FundingLineType.Information,
+                                        Type = OrganisationGroupingReason.Information,
                                         Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 8),
                                         FundingLines = new List<FundingLine>
                                         {
@@ -1417,7 +1417,7 @@ namespace Sfa.Sfs.Mock.Generators
                                     {
                                         Name = "High Needs block funding",
                                         TemplateLineId = 0,
-                                        Type = FundingLineType.Information,
+                                        Type = OrganisationGroupingReason.Information,
                                         Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 9),
                                         FundingLines = new List<FundingLine>
                                         {
@@ -2457,7 +2457,7 @@ namespace Sfa.Sfs.Mock.Generators
                                     {
                                         Name = "Early Years Block",
                                         TemplateLineId = 0,
-                                        Type = FundingLineType.Information,
+                                        Type = OrganisationGroupingReason.Information,
                                         Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 10),
                                         FundingLines = new List<FundingLine>
                                         {
@@ -2692,229 +2692,229 @@ namespace Sfa.Sfs.Mock.Generators
         /// </summary>
         /// <param name="periodValue">The period value (in pence).</param>
         /// <returns>A list of funding line periods.</returns>
-        private static List<FundingLinePeriod> GetPeriods(long periodValue)
+        private static List<ProfilePeriod> GetPeriods(long periodValue)
         {
-            return new List<FundingLinePeriod>
+            return new List<ProfilePeriod>
             {
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "April",
                     Occurrence = 1,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "April",
                     Occurrence = 2,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "April",
                     Occurrence = 3,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "May",
                     Occurrence = 1,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "May",
                     Occurrence = 2,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "June",
                     Occurrence = 1,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "June",
                     Occurrence = 2,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "July",
                     Occurrence = 1,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "July",
                     Occurrence = 2,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "August",
                     Occurrence = 1,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "August",
                     Occurrence = 2,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "September",
                     Occurrence = 1,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "September",
                     Occurrence = 2,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "October",
                     Occurrence = 1,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "October",
                     Occurrence = 2,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "November",
                     Occurrence = 1,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "November",
                     Occurrence = 2,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "December",
                     Occurrence = 1,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2019,
                     TypeValue = "December",
                     Occurrence = 2,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2020,
                     TypeValue = "January",
                     Occurrence = 1,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2020,
                     TypeValue = "January",
                     Occurrence = 2,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2020,
                     TypeValue = "Febuary",
                     Occurrence = 1,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2020,
                     TypeValue = "Febuary",
                     Occurrence = 2,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2020,
                     TypeValue = "March",
                     Occurrence = 1,
                     ProfiledValue = periodValue
                 },
-                new FundingLinePeriod
+                new ProfilePeriod
                 {
-                    Type = FundingLinePeriodType.CalendarMonth,
+                    Type = ProfilePeriodType.CalendarMonth,
                     DistributionPeriodId = "FY1920",
                     Year = 2020,
                     TypeValue = "March",

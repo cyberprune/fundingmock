@@ -54,7 +54,7 @@ namespace FundingMock.Web.Controllers
             ProviderIdentifier[] organisationIdentifiers = null, OrganisationGroupTypeIdentifier[] organisationTypes = null,
             VariationReason[] variationReasons = null, string[] ukprns = null, GroupingReason[] groupingReasons = null,
             FundingStatus[] statuses = null, DateTime? minStatusChangeDate = null, string[] fundingStreamCodes = null,
-            FundingLineType[] fundingLineTypes = null, string[] templateLineIds = null)
+            OrganisationGroupingReason[] fundingLineTypes = null, string[] templateLineIds = null)
         {
             return GetFeedPage(null, pageSize, fundingPeriodStartYear, fundingPeriodEndYear, fundingPeriodCodes, organisationGroupIdentifiers,
                 organisationGroupTypes, organisationIdentifiers, organisationTypes, variationReasons, ukprns, groupingReasons, statuses,
@@ -92,7 +92,7 @@ namespace FundingMock.Web.Controllers
             ProviderIdentifier[] organisationIdentifiers = null, OrganisationGroupTypeIdentifier[] organisationTypes = null,
             VariationReason[] variationReasons = null, string[] ukprns = null, GroupingReason[] groupingReasons = null,
             FundingStatus[] statuses = null, DateTime? minStatusChangeDate = null, string[] fundingStreamCodes = null,
-            FundingLineType[] fundingLineTypes = null, string[] templateLineIds = null)
+            OrganisationGroupingReason[] fundingLineTypes = null, string[] templateLineIds = null)
         {
             var schemeAndHost = "http://mock.web";
 
