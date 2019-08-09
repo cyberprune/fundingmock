@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System;
 using FundingMock.Web.Enums;
-using System;
+using Newtonsoft.Json;
 
 namespace FundingMock.Web.Models
 {
@@ -97,7 +97,7 @@ namespace FundingMock.Web.Models
         /// Optional - Only get funding lines with these types back.
         /// </summary>
         [JsonProperty("fundingLineTypes")]
-        public OrganisationGroupingReason[] FundingLineTypes { get; set; }
+        public FundingLineType[] FundingLineTypes { get; set; }
 
         /// <summary>
         /// Optional - Only get funding lines with these ids.

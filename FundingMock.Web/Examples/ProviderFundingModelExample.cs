@@ -137,7 +137,7 @@ namespace FundingMock.Web.Examples
                                     Name = "Total funding line",
                                     FundingLineCode= "TotalFundingLine",
                                     TemplateLineId = 1,
-                                    Type = OrganisationGroupingReason.Payment,
+                                    Type = FundingLineType.Payment,
                                     Value = 700,
                                     DistributionPeriods = new List<DistributionPeriod>
                                     {

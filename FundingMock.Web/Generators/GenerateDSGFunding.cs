@@ -58,7 +58,7 @@ namespace Sfa.Sfs.Mock.Generators
             string[] fundingPeriodCodes, ProviderIdentifier[] organisationGroupIdentifiers, OrganisationGroupTypeIdentifier[] organisationGroupTypes,
             ProviderIdentifier[] organisationIdentifiers, OrganisationGroupTypeIdentifier[] organisationTypes, VariationReason[] variationReasons,
             string[] ukprns, GroupingReason[] groupingReasons, FundingStatus[] statuses, DateTime? minStatusChangeDate,
-            OrganisationGroupingReason[] fundingLineTypes, string[] templateLineIds)
+            FundingLineType[] fundingLineTypes, string[] templateLineIds)
         {
             var totalList = new List<FeedResponseContentModel>();
 
@@ -607,7 +607,7 @@ namespace Sfa.Sfs.Mock.Generators
                             {
                                 Name = "PriorToRecoupment",
                                 TemplateLineId = templateLineId++,
-                                Type = OrganisationGroupingReason.Information,
+                                Type = FundingLineType.Information,
                                 Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 7),
                                 FundingLines = new List<FundingLine>
                                 {
@@ -615,7 +615,7 @@ namespace Sfa.Sfs.Mock.Generators
                                     {
                                         Name = "School Block",
                                         TemplateLineId = templateLineId++,
-                                        Type = OrganisationGroupingReason.Information,
+                                        Type = FundingLineType.Information,
                                         Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 3),
                                         FundingLines = new List<FundingLine>
                                         {
@@ -741,7 +741,7 @@ namespace Sfa.Sfs.Mock.Generators
                                     {
                                         Name = "Central School Services Block",
                                         TemplateLineId = templateLineId++,
-                                        Type = OrganisationGroupingReason.Information,
+                                        Type = FundingLineType.Information,
                                         Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 4),
                                         FundingLines = new List<FundingLine>
                                         {
@@ -814,7 +814,7 @@ namespace Sfa.Sfs.Mock.Generators
                                     {
                                         Name = "High Needs block funding",
                                         TemplateLineId = templateLineId++,
-                                        Type = OrganisationGroupingReason.Information,
+                                        Type = FundingLineType.Information,
                                         Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 5),
                                         FundingLines = new List<FundingLine>
                                         {
@@ -971,7 +971,7 @@ namespace Sfa.Sfs.Mock.Generators
                                     {
                                         Name = "Early Years Block",
                                         TemplateLineId = templateLineId++,
-                                        Type = OrganisationGroupingReason.Information,
+                                        Type = FundingLineType.Information,
                                         Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 6),
                                         FundingLines = new List<FundingLine>
                                         {
@@ -1208,7 +1208,7 @@ namespace Sfa.Sfs.Mock.Generators
                                 Name = "PostDeductionForRecoupmentAndHighNeeds",
                                 FundingLineCode = "DSG-001",
                                 TemplateLineId = templateLineId++,
-                                Type = OrganisationGroupingReason.Payment,
+                                Type = FundingLineType.Payment,
                                 Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 11),
                                 FundingLines = new List<FundingLine>
                                 {
@@ -1216,7 +1216,7 @@ namespace Sfa.Sfs.Mock.Generators
                                     {
                                         Name = "School Block",
                                         TemplateLineId = templateLineId++,
-                                        Type = OrganisationGroupingReason.Information,
+                                        Type = FundingLineType.Information,
                                         Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 7),
                                         FundingLines = new List<FundingLine>
                                         {
@@ -1345,7 +1345,7 @@ namespace Sfa.Sfs.Mock.Generators
                                     {
                                         Name = "Central School Services Block",
                                         TemplateLineId = templateLineId++,
-                                        Type = OrganisationGroupingReason.Information,
+                                        Type = FundingLineType.Information,
                                         Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 8),
                                         FundingLines = new List<FundingLine>
                                         {
@@ -1417,7 +1417,7 @@ namespace Sfa.Sfs.Mock.Generators
                                     {
                                         Name = "High Needs block funding",
                                         TemplateLineId = 0,
-                                        Type = OrganisationGroupingReason.Information,
+                                        Type = FundingLineType.Information,
                                         Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 9),
                                         FundingLines = new List<FundingLine>
                                         {
@@ -2457,7 +2457,7 @@ namespace Sfa.Sfs.Mock.Generators
                                     {
                                         Name = "Early Years Block",
                                         TemplateLineId = 0,
-                                        Type = OrganisationGroupingReason.Information,
+                                        Type = FundingLineType.Information,
                                         Value = GetDataFromMillions(spreadsheet, 1, org.SpreadsheetRowNumber, 10),
                                         FundingLines = new List<FundingLine>
                                         {

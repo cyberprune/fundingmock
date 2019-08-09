@@ -16,7 +16,7 @@ namespace FundingMock.Web.Examples
                 GroupingReasons = new GroupingReason[] { GroupingReason.Information },
                 MinStatusChangeDate = new System.DateTime(2000, 1, 1),
                 VariationReasons = null,
-                FundingLineTypes = new OrganisationGroupingReason[] { OrganisationGroupingReason.Information, OrganisationGroupingReason.Payment },
+                FundingLineTypes = new FundingLineType[] { FundingLineType.Information, FundingLineType.Payment },
                 FundingPeriodStartYear = 2018,
                 FundingPeriodEndYear = 2020,
                 FundingPeriodCodes = new string[] { "FY1920" },
