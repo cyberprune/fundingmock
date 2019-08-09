@@ -25,7 +25,7 @@ namespace FundingMock.Web.Examples
 
             var stream = new FundingStream
             {
-                Code = "PES",
+                Code = "PSG",
                 Name = "PE + Sport Premium",
             };
 

@@ -26,7 +26,7 @@ namespace FundingMock.Web.Examples
 
             var stream = new FundingStream
             {
-                Code = "PESports",
+                Code = "PSG",
                 Name = "PE + Sport Premium",
             };
 
@@ -83,7 +83,7 @@ namespace FundingMock.Web.Examples
                     FundingPeriod = period,
                     OrganisationGroup = groupingOrg,
                     FundingVersion = fundingVersion,
-                    TemplateVersion = "PES-0.9",
+                    TemplateVersion = "0.9",
                     ExternalPublicationDate = new DateTimeOffset(2019, 9, 1, 0, 0, 0, new TimeSpan(1, 0, 0)),
                     EarliestPaymentAvailableDate = DateTimeOffset.Now,
 

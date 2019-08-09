@@ -256,7 +256,7 @@
         },
         "fundingStreamCode": {
           "type": "string",
-          "description": "The funding stream the funding relates to (e.g. PESport, DSG, GAG)"
+          "description": "The funding stream the funding relates to (e.g. PSGport, DSG, GAG)"
         },
         "fundingPeriodId": {
           "type": "string",
