@@ -11,11 +11,11 @@ namespace FundingMock.Web.Examples
         public object GetExamples()
         {
             var ukOffset = new TimeSpan(0, 0, 0);
-            var fundingVersion = "1-0";
+            var fundingVersion = "1_0";
 
             var period = new FundingPeriod
             {
-                Period = "AY1920",
+                Period = "AY-1920",
                 Name = "Academic year 2019-20",
                 Type = PeriodType.AY,
                 StartDate = new DateTimeOffset(2019, 9, 1, 0, 0, 0, ukOffset),
@@ -26,7 +26,7 @@ namespace FundingMock.Web.Examples
 
             var stream = new FundingStream
             {
-                Code = "PESports",
+                Code = "PSG",
                 Name = "PE + Sport Premium",
             };
 
@@ -54,12 +54,9 @@ namespace FundingMock.Web.Examples
                 }
             };
 
-
-            var id = $"{stream.Code}_{period.Period}_{providerId}_{fundingVersion}";
-
             var financialYearPeriod1920 = new FundingPeriod
             {
-                Period = "FY1920",
+                Period = "1920",
                 Name = "Financial Year 2019-20",
                 Type = PeriodType.FY,
                 StartDate = new DateTimeOffset(2019, 4, 1, 0, 0, 0, ukOffset),
@@ -68,7 +65,7 @@ namespace FundingMock.Web.Examples
 
             var financialYearPeriod2021 = new FundingPeriod
             {
-                Period = "FY2021",
+                Period = "2021",
                 Name = "Financial Year 2020-21",
                 Type = PeriodType.FY,
                 StartDate = new DateTimeOffset(2020, 4, 1, 0, 0, 0, ukOffset),
@@ -83,6 +80,7 @@ namespace FundingMock.Web.Examples
                 Provider = new Provider
                 {
                     Name = "Example School 1",
+                    Identifier = providerId,
                     SearchableName = "ExampleSchool1",
                     ProviderDetails = new ProviderDetails()
                     {
@@ -96,6 +94,27 @@ namespace FundingMock.Web.Examples
                         TrustStatus = TrustStatus.SupportedByASingleAacademyTrust,
                         Postcode = "MOCK POSTCODE",
                         Town = "MOCK TOWN",
+                        CensusWardCode = "Census Ward Code 1",
+                        CensusWardName = "Census Ward Name",
+                        CompaniesHouseNumber = "6237225",
+                        CountryCode = "E",
+                        CountryName = "England",
+                        DistrictCode = "DC",
+                        DistrictName = "District Name",
+                        GovernmentOfficeRegionCode = "GRCC2",
+                        GovernmentOfficeRegionName = "Gov Office Region 2",
+                        GroupIDNumber = "GroupID2522",
+                        LocalAuthorityName = "Camden",
+                        LowerSuperOutputAreaCode = "L66",
+                        LowerSuperOutputAreaName = "Lower 66",
+                        MiddleSuperOutputAreaCode = "MSOA56",
+                        MiddleSuperOutputAreaName = "MSOA Fifty Six",
+                        ParliamentaryConstituencyCode = "BOS",
+                        ParliamentaryConstituencyName = "Bermondsey and Old Southwark",
+                        RSCRegionCode = "NW",
+                        RSCRegionName = "North West",
+                        WardCode = "WC522257",
+                        WardName = "South Bermondsey",
                     },
                     ProviderType = "Academies",
                     ProviderSubType = "Academy alternative provision converter",
@@ -195,6 +214,18 @@ namespace FundingMock.Web.Examples
                                                     Format = ReferenceDataValueFormat.Number,
                                                     TemplateReferenceId = 1,
                                                 }
+                                            },
+                                            Calculations = new List<Calculation>()
+                                            {
+                                                new Calculation()
+                                                {
+                                                    Name = "Test Rate",
+                                                    Type = CalculationType.Rate,
+                                                    TemplateCalculationId = 152,
+                                                    Value = "26.82",
+                                                    ValueFormat = CalculationValueFormat.Number,
+                                                    FormulaText = "Something * something else",
+                                                },
                                             }
                                         },
                                         new Calculation
@@ -215,6 +246,16 @@ namespace FundingMock.Web.Examples
                                                     TemplateReferenceId = 2,
                                                 }
                                             }
+                                        },
+                                        new Calculation
+                                        {
+                                            Name = "Weighting",
+                                            Type = CalculationType.Weighting,
+                                            TemplateCalculationId = 126,
+                                            Value = "25.732653",
+                                            ValueFormat = CalculationValueFormat.Percentage,
+                                            FormulaText = "",
+                                            AggregationType = AggregationType.Average,
                                         }
                                     }
                                 }
