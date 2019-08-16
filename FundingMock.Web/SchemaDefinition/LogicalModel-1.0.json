@@ -704,7 +704,7 @@
         "aggregationType": {
           "type": "string",
           "description": "How the reference data should aggregate",
-          "enum": [ "None", "Avergage", "Sum" ]
+          "enum": [ "None", "Average", "Sum" ]
         }
       },
       "additionalProperties": false,
@@ -742,7 +742,7 @@
         "aggregationType": {
           "type": "string",
           "description": "How the calculation should aggregate",
-          "enum": [ "None", "Avergage", "Sum" ]
+          "enum": [ "None", "Average", "Sum" ]
         }
       },
       "additionalProperties": false,

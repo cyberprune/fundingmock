@@ -4,7 +4,7 @@ using Newtonsoft.Json.Converters;
 namespace FundingMock.Web.Enums
 {
     /// <summary>
-    /// 
+    /// Aggregation Type
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
     public enum AggregationType
