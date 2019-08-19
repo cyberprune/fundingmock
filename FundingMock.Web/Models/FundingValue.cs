@@ -12,7 +12,7 @@ namespace FundingMock.Web.Models
         /// The funding value amount in pence. Rolled up from all child Funding Lines where Type = Payment
         /// </summary>
         [JsonProperty("totalValue")]
-        public decimal TotalValue { get; set; }
+        public int TotalValue { get; set; }
 
         /// <summary>
         /// The lines that make up this funding. 

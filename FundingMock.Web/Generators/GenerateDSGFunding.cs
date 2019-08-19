@@ -489,7 +489,7 @@ namespace Sfa.Sfs.Mock.Generators
         /// <param name="rowIdx"></param>
         /// <param name="columnIdx"></param>
         /// <returns></returns>
-        private static long GetDataFromMillions(DataSet spreadsheet, int sheetNumber, int rowIdx, int columnIdx)
+        private static int GetDataFromMillions(DataSet spreadsheet, int sheetNumber, int rowIdx, int columnIdx)
         {
             var table = spreadsheet.Tables[sheetNumber];
 
@@ -504,7 +504,7 @@ namespace Sfa.Sfs.Mock.Generators
             {
                 case "Double":
                     var transposed = (double)valObj * 1e8; // 1e8 rather then 1e6 as want in millions of pence, not pounds
-                    return Convert.ToInt64(transposed);
+                    return Convert.ToInt32(transposed);
             }
 
             // Some data (all of HN deductions + some rate values for early years) isn't there for regions
