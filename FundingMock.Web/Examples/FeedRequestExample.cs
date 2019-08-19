@@ -19,7 +19,7 @@ namespace FundingMock.Web.Examples
                 FundingLineTypes = new FundingLineType[] { FundingLineType.Information, FundingLineType.Payment },
                 FundingPeriodStartYear = 2018,
                 FundingPeriodEndYear = 2020,
-                FundingPeriodCodes = new string[] { "FY1920" },
+                FundingPeriodCodes = new string[] { "FY-1920" },
                 FundingStreamCodes = new string[] { "DSG" },
                 TemplateLineIds = null,
 

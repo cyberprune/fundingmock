@@ -15,7 +15,7 @@ namespace FundingMock.Web.Examples
 
             var period = new FundingPeriod
             {
-                Period = "AY1920",
+                Period = "1920",
                 Name = "Academic year 2019-20",
                 Type = FundingPeriodType.AY,
                 StartDate = new DateTimeOffset(2019, 9, 1, 0, 0, 0, ukOffset),
@@ -26,7 +26,7 @@ namespace FundingMock.Web.Examples
 
             var stream = new FundingStream
             {
-                Code = "PESports",
+                Code = "PSG",
                 Name = "PE + Sport Premium",
             };
 

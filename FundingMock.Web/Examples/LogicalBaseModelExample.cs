@@ -56,7 +56,7 @@ namespace FundingMock.Web.Examples
 
             var financialYearPeriod1920 = new FundingPeriod
             {
-                Period = "FY1920",
+                Period = "1920",
                 Name = "Financial Year 2019-20",
                 Type = FundingPeriodType.FY,
                 StartDate = new DateTimeOffset(2019, 4, 1, 0, 0, 0, ukOffset),
@@ -65,7 +65,7 @@ namespace FundingMock.Web.Examples
 
             var financialYearPeriod2021 = new FundingPeriod
             {
-                Period = "FY2021",
+                Period = "2021",
                 Name = "Financial Year 2020-21",
                 Type = FundingPeriodType.FY,
                 StartDate = new DateTimeOffset(2020, 4, 1, 0, 0, 0, ukOffset),
