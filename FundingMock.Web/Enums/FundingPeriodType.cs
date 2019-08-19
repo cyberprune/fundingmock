@@ -7,7 +7,7 @@ namespace FundingMock.Web.Enums
     /// The periods of time a period can relate to.
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum PeriodType
+    public enum FundingPeriodType
     {
         /// <summary>
         /// An academic year (early September till end of July).

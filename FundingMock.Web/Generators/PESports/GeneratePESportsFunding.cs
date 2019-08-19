@@ -99,7 +99,7 @@ namespace Sfa.Sfs.Mock.Generators
             {
                 Period = "AY1920",
                 Name = "Academic year 2019-20",
-                Type = PeriodType.AY,
+                Type = FundingPeriodType.AY,
                 StartDate = new DateTimeOffset(2019, 9, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2020, 8, 31, 0, 0, 0, ukOffset)
             };
@@ -116,7 +116,7 @@ namespace Sfa.Sfs.Mock.Generators
             {
                 Period = "FY1920",
                 Name = "Financial Year 2019-20",
-                Type = PeriodType.FY,
+                Type = FundingPeriodType.FY,
                 StartDate = new DateTimeOffset(2019, 4, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2020, 3, 30, 0, 0, 0, ukOffset)
             };
@@ -125,7 +125,7 @@ namespace Sfa.Sfs.Mock.Generators
             {
                 Period = "FY2021",
                 Name = "Financial Year 2020-21",
-                Type = PeriodType.FY,
+                Type = FundingPeriodType.FY,
                 StartDate = new DateTimeOffset(2020, 4, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2021, 3, 30, 0, 0, 0, ukOffset)
             };
@@ -440,7 +440,7 @@ namespace Sfa.Sfs.Mock.Generators
             {
                 Period = "AY1920",
                 Name = "Academic year 2019-20",
-                Type = PeriodType.AY,
+                Type = FundingPeriodType.AY,
                 StartDate = new DateTimeOffset(2019, 9, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2020, 8, 31, 0, 0, 0, ukOffset)
             };
@@ -457,7 +457,7 @@ namespace Sfa.Sfs.Mock.Generators
             {
                 Period = "FY1920",
                 Name = "Financial Year 2019-20",
-                Type = PeriodType.FY,
+                Type = FundingPeriodType.FY,
                 StartDate = new DateTimeOffset(2019, 4, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2020, 3, 30, 0, 0, 0, ukOffset)
             };
@@ -466,7 +466,7 @@ namespace Sfa.Sfs.Mock.Generators
             {
                 Period = "FY2021",
                 Name = "Financial Year 2020-21",
-                Type = PeriodType.FY,
+                Type = FundingPeriodType.FY,
                 StartDate = new DateTimeOffset(2020, 4, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2021, 3, 30, 0, 0, 0, ukOffset)
             };

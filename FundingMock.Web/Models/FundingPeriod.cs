@@ -31,9 +31,9 @@ namespace FundingMock.Web.Models
         /// <summary>
         /// The type of the period (AY or FY).
         /// </summary>
-        [EnumDataType(typeof(PeriodType))]
+        [EnumDataType(typeof(FundingPeriodType))]
         [JsonProperty("type")]
-        public PeriodType Type { get; set; }
+        public FundingPeriodType Type { get; set; }
 
         /// <summary>
         /// The start date for the period.

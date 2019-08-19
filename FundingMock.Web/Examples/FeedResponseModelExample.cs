@@ -17,7 +17,7 @@ namespace FundingMock.Web.Examples
             {
                 Period = "AY1920",
                 Name = "Academic year 2019-20",
-                Type = PeriodType.AY,
+                Type = FundingPeriodType.AY,
                 StartDate = new DateTimeOffset(2019, 9, 1, 0, 0, 0, ukOffset),
                 EndDate = new DateTimeOffset(2020, 8, 31, 0, 0, 0, ukOffset)
             };
