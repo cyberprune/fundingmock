@@ -78,10 +78,5 @@ namespace FundingMock.Web.Enums
         /// 
         /// </summary>
         LocalGovernmentGroup,
-
-        /// <summary>
-        /// Non maintained special school
-        /// </summary>
-        NMSS,
     }
 }
