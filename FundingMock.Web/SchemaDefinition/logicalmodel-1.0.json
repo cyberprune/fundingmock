@@ -666,7 +666,7 @@
         "type": {
           "type": "string",
           "description": "The type of calculation.",
-          "enum": [ "Cash", "Rate", "PupilNumber", "Weighting", "Scope", "Information", "Drilldown", "PerPupilFunding", "LumpSum", "ProviderLedFunding" ]
+          "enum": [ "Cash", "Rate", "PupilNumber", "Weighting", "Scope", "Information", "Drilldown", "PerPupilFunding", "LumpSum", "ProviderLedFunding", "Number" ]
         },
         "name": {
           "type": "string",
