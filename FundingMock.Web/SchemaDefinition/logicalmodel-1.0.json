@@ -58,8 +58,8 @@
         },
         "groupTypeClassification": {
           "type": "string",
-          "description": "The Classification of organisation group type (e.g. LegalEntity and GeographicalBoundry)",
-          "enum": [ "LegalEntity", "GeographicalBoundry" ]
+          "description": "The Classification of organisation group type (e.g. LegalEntity and GeographicalBoundary)",
+          "enum": [ "LegalEntity", "GeographicalBoundary" ]
         },
 
         "name": {
