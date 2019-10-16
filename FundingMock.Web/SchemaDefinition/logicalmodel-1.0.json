@@ -30,7 +30,7 @@
         "code": {
           "type": "string",
           "description": "The identifier code for the organisation GroupType (e.g. UKPRN, AcademyTrustCode)",
-          "enum": [ "UKPRN", "LACode", "UPIN", "URN", "UID", "CompaniesHouseNumber", "GroupID", "RSCRegionCode", "GovernmentOfficeRegionCode", "DistrictCode", "WardCode", "CensusWardCode", "MiddleSuperOutputAreaCode", "LowerSuperOutputAreaCode", "ParliamentaryConstituencyCode", "DfeNumber", "AcademyTrustCode", "CountryCode" ]
+          "enum": [ "UKPRN", "LACode", "UPIN", "URN", "UID", "CompaniesHouseNumber", "GroupID", "RSCRegionCode", "GovernmentOfficeRegionCode", "DistrictCode", "WardCode", "CensusWardCode", "MiddleSuperOutputAreaCode", "LowerSuperOutputAreaCode", "ParliamentaryConstituencyCode", "DfeNumber", "AcademyTrustCode", "CountryCode", "LocalAuthorityClassificationTypeCode" ]
         },
         "value": {
           "type": "string",
